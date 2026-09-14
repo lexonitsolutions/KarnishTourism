@@ -3,7 +3,9 @@ import "./globals.css";
 export const metadata = {
   title: "Karnish Tourism — Travel Agency",
   icons: {
-    icon: "/images/favicon.ico",
+    icon: "/images/karnish-logo.png",
+    shortcut: "/images/karnish-logo.png",
+    apple: "/images/karnish-logo.png",
   },
 };
 
