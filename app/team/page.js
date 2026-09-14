@@ -29,7 +29,7 @@ export default function Team() {
           <div className="container">
             {/* Logo */}
             <div className="logo-wrapper">
-              <a className="logo" href="/"><img src="/images/karnish-logo.png" className="logo-img" alt="Karnish Tourism LLC" style={{ width: '84px', height: '84px', objectFit: 'contain' }} /></a>
+              <a className="logo" href="/"><img src="/images/karnish-logo.png" className="logo-img karnish-logo" alt="Karnish Tourism LLC" /></a>
             </div>
             {/* Button */}
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"> <span className="navbar-toggler-icon"><i className="ti-menu"></i></span> </button>

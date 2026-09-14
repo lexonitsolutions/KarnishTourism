@@ -96,10 +96,11 @@
 
 @media (max-width: 991.98px) {
   .activity-search-bar {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     border-radius: 16px;
     padding: 8px;
-    gap: 0;
+    gap: 6px;
   }
 }
 
@@ -140,14 +141,11 @@
     border-radius: 10px;
     width: 100%;
     padding: 9px 10px;
+    background: var(--clr-bg-light, #f4f5f8);
   }
 
-  .activity-search-bar .as-field:not(:last-of-type)::after {
+  .activity-search-bar .as-field::after {
     display: none;
-  }
-
-  .activity-search-bar .as-field:not(:last-of-type) {
-    border-bottom: 1px solid rgba(15, 36, 84, 0.06);
   }
 }
 
@@ -201,12 +199,11 @@
 
 @media (max-width: 991.98px) {
   .activity-search-bar .as-panel {
-    position: static;
-    box-shadow: none;
-    border: 1px solid rgba(15, 36, 84, 0.08);
-    margin-top: 8px;
-    width: 100%;
+    left: 0;
+    right: 0;
+    min-width: 0;
     max-width: none;
+    width: auto;
   }
 }
 
@@ -268,9 +265,10 @@
 
 @media (max-width: 991.98px) {
   .activity-search-bar .as-submit {
+    grid-column: 1 / -1;
     width: 100%;
     padding: 13px 24px;
-    margin-top: 8px;
+    margin-top: 2px;
     border-radius: 12px;
   }
 }
@@ -899,4 +897,28 @@
 .activity-pagination .ap-ellipsis {
   color: var(--clr-body);
   padding: 0 4px;
+}
+
+/* ---------- Logo (Karnish Tourism) ----------
+   style.css's mobile navbar is fixed at height:90px with 24px top+bottom
+   padding on .logo-wrapper (48px), leaving only 42px for the logo itself —
+   the vendor's own mobile logo-img rule (width:140px) was designed for a
+   plain wordmark, not this circular badge logo, and overflowed the navbar.
+   This file loads after style.css, so same-specificity rules here win. */
+.karnish-logo {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+}
+
+@media (max-width: 991.98px) {
+  .logo-wrapper {
+    padding: 12px 16px;
+  }
+
+  .karnish-logo,
+  .nav-scroll .karnish-logo {
+    width: 56px;
+    height: 56px;
+  }
 }
