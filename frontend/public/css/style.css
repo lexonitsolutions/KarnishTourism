@@ -1604,13 +1604,14 @@ header .star2 {
     top: 40%;
     right: 0px;
     width: 240px;
+    animation: durustar2-fly 12s infinite ease-in-out;
 }
 header .star3 {
     position: absolute;
     bottom: -2%;
     left: 40%;
     width: 180px;
-    animation: durustar3 6s infinite ease-in-out;
+    animation: durustar3 10s infinite ease-in-out;
     transition-delay: 2s;
 }
 header .star4 {
@@ -1632,15 +1633,32 @@ header .star4 {
         scale: 0.2;
     }
 }
-@keyframes durustar3 {
+@keyframes durustar2-fly {
     0% {
-        transform: translateY(0px) scale(0.8);
+        transform: translate(0px, 0px) rotate(-3deg);
+    }
+    25% {
+        transform: translate(-18px, -12px) rotate(-1deg);
     }
     50% {
-        transform: translateY(-20px) scale(1);
+        transform: translate(-35px, -22px) rotate(1deg);
+    }
+    75% {
+        transform: translate(-18px, -10px) rotate(-1deg);
     }
     100% {
-        transform: translateY(0px) scale(0.8);
+        transform: translate(0px, 0px) rotate(-3deg);
+    }
+}
+@keyframes durustar3 {
+    0% {
+        transform: translateY(0px) scale(0.85) rotate(2deg);
+    }
+    50% {
+        transform: translateY(-25px) scale(1) rotate(-1deg);
+    }
+    100% {
+        transform: translateY(0px) scale(0.85) rotate(2deg);
     }
 }
 /* author & date */

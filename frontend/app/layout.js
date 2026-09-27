@@ -63,26 +63,8 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{
             __html: `
               #smooth-wrapper {
-                will-change: opacity, transform;
-              }
-              html.karnish-page-leaving #smooth-wrapper {
-                opacity: 0 !important;
-                transform: translateY(-8px) scale(0.996) !important;
-                transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1), transform 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
-              }
-              /* Only conceal smooth-wrapper on home page when intro is actively pending */
-              html.karnish-intro-active:not(.karnish-intro-revealing):not(.karnish-intro-done) #smooth-wrapper,
-              html.karnish-intro-active:not(.karnish-intro-revealing):not(.karnish-intro-done) .progress-wrap {
-                visibility: hidden !important;
-                opacity: 0 !important;
-              }
-              html.karnish-intro-revealing #smooth-wrapper,
-              html.karnish-intro-revealing .progress-wrap,
-              html.karnish-intro-done:not(.karnish-page-leaving) #smooth-wrapper,
-              html.karnish-intro-done:not(.karnish-page-leaving) .progress-wrap {
                 visibility: visible !important;
                 opacity: 1 !important;
-                transform: none !important;
               }
               /* Permanently hide custom cursor dot under pointer */
               .cursor, .cursor-active, .services .cursor, .services .cursor-active {

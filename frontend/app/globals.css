@@ -30,11 +30,8 @@ html.karnish-intro-active body {
 }
 
 /* Ensure white intro screen displays first with NO dashboard peek */
-html.karnish-intro-active #smooth-wrapper {
-  visibility: hidden !important;
-}
-html.karnish-intro-active.karnish-intro-revealing #smooth-wrapper {
-  visibility: visible !important;
+html.karnish-intro-active .karnish-intro-overlay {
+  display: block !important;
 }
 
 /* ==========================================================================
@@ -83,11 +80,9 @@ html.karnish-page-entering:not(.karnish-intro-active) #smooth-wrapper {
   }
 }
 
-/* Page Exit Animation (smooth fade-out and subtle lift when navigating) */
+/* Page Exit Animation */
 html.karnish-page-leaving #smooth-wrapper {
-  opacity: 0 !important;
-  transform: translateY(-8px) scale(0.996) !important;
-  transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1), transform 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Fullscreen Overlay Container */
@@ -2018,6 +2013,313 @@ a.kt-care-channel-item:hover .kt-badge-wa {
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
   }
 }
+
+/* ==========================================================================
+   Card Hover Slow-Motion Rising Image Animation
+   ========================================================================== */
+.services .item.card-rise-item {
+  position: relative;
+  overflow: hidden !important;
+  cursor: pointer;
+  z-index: 1;
+  height: calc(100% - 25px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-radius: 24px;
+  background: var(--clr-bg-white);
+  border: 1px solid rgba(15, 36, 84, 0.07);
+  box-shadow: 0 10px 30px rgba(15, 36, 84, 0.05), 0 20px 50px rgba(15, 36, 84, 0.04);
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0);
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.45s ease !important;
+}
+
+/* Hover state: smooth float with rich ambient shadow */
+.services .item.card-rise-item:hover {
+  transform: translateY(-8px) scale(1.01) !important;
+  box-shadow: 0 22px 50px rgba(15, 36, 84, 0.25) !important;
+  border-color: rgba(32, 149, 174, 0.35) !important;
+  z-index: 10 !important;
+}
+
+/* The rising image container: sits at bottom, hidden and shifted down by 100% */
+.services .item .card-rise-img-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.75s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.5s ease;
+  will-change: transform, opacity;
+}
+
+.services .item .card-rise-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.15) translateY(10%);
+  transition: transform 0.95s cubic-bezier(0.2, 0.9, 0.3, 1);
+  will-change: transform;
+}
+
+/* Semi-transparent luxury dark overlay so text and icon pop with crystal clarity */
+.services .item .card-rise-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 36, 84, 0.68) 0%,
+    rgba(11, 26, 60, 0.86) 55%,
+    rgba(8, 18, 42, 0.95) 100%
+  );
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* Hover state: slow motion rising up */
+.services .item.card-rise-item:hover .card-rise-img-wrap {
+  transform: translateY(0%);
+  opacity: 1;
+  transition: transform 0.75s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.35s ease;
+}
+
+.services .item.card-rise-item:hover .card-rise-img-wrap img {
+  transform: scale(1.03) translateY(0%);
+  transition: transform 0.95s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* Foreground content elevated above rising image */
+.services .item.card-rise-item .icon,
+.services .item.card-rise-item h5,
+.services .item.card-rise-item p {
+  position: relative;
+  z-index: 3;
+  transition: color 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1), text-shadow 0.4s ease;
+}
+
+/* Arrow mark completely removed from cards */
+.services .item.card-rise-item .arrow,
+.services .item.card-rise-item:hover .arrow {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+.services .item.card-rise-item:hover .icon {
+  color: #38d9f5 !important; /* Luminous cyan/teal */
+  transform: translateY(-4px) scale(1.1);
+  text-shadow: 0 0 20px rgba(56, 217, 245, 0.7);
+}
+
+.services .item.card-rise-item:hover h5 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+}
+
+.services .item.card-rise-item:hover p {
+  color: #e2ecf8 !important;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* ==========================================================================
+   Smooth Hover-Expand Transition for FAQ / Leadership Accordion
+   Preserves 100% original template design while adding fluid height expansion
+   ========================================================================== */
+.faqs .accordion-box .block .acc-content {
+  display: grid !important;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.faqs .accordion-box .block.active-block .acc-content {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.faqs .accordion-box .block .acc-content > div {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.faqs .accordion-box .block .content p {
+  color: var(--clr-body, #5e6282);
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   Services Section - Car Drifting in Desert Video Background
+   ========================================================================== */
+.services.services-video-section {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 95px;
+  width: 100%;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.services.services-video-section:before,
+.services.services-video-section:after {
+  display: none !important;
+}
+
+.services-video-bg-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.services-video-radius-mask {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 0 !important;
+  overflow: hidden;
+  background: #111a2e; /* Fallback tone while video loads */
+}
+
+.services-video-element {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.92) contrast(1.1);
+}
+
+.services-video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 24, 52, 0.72) 0%,
+    rgba(10, 24, 52, 0.28) 26%,
+    rgba(10, 24, 52, 0.36) 60%,
+    rgba(10, 24, 52, 0.84) 100%
+  );
+  backdrop-filter: blur(0.4px);
+  -webkit-backdrop-filter: blur(0.4px);
+}
+
+.services.services-video-section .container {
+  position: relative;
+  z-index: 3;
+}
+
+.services.services-video-section .section-title .rotate-text {
+  color: #ffffff !important;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.92), 0 2px 8px rgba(10, 24, 52, 0.95);
+}
+
+.services.services-video-section .circle-button.in-bord:after {
+  background: rgba(15, 36, 84, 0.58) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.services.services-video-section .circle-button .rotate-circle text {
+  fill: #ffffff !important;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.services.services-video-section .circle-button .in-circle {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 991px) {
+  .services-video-radius-mask {
+    border-radius: 0 !important;
+  }
+  .services-video-bg-wrap {
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .services-video-radius-mask {
+    border-radius: 0 !important;
+  }
+  .services-video-bg-wrap {
+    padding: 0 !important;
+  }
+  .services.services-video-section {
+    padding-bottom: 60px;
+  }
+}
+
+/* ==========================================================================
+   Page UI Fixes (Safe for ScrollSmoother)
+   ========================================================================== */
+/* Team Card Button: Phone icon only, no arrow switch */
+.team .item .wrapper .icon .arrow .hover-icon {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.team .item:hover .wrapper .icon .arrow .default-icon {
+  opacity: 1 !important;
+  transform: scale(1.15) !important;
+}
+
+.team .item:hover .wrapper .icon .arrow {
+  background: var(--clr-primary) !important;
+}
+
+/* Footer Containment & Watermark Alignment */
+.footer {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.footer .bg-text-style5 {
+  bottom: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  user-select: none !important;
+  pointer-events: none !important;
+}
+
+
+
+
 
 
 
