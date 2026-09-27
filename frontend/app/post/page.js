@@ -1,19 +1,11 @@
 "use client";
 
 import Script from "next/script";
+import Navbar from "../components/Navbar";
 
 export default function Post() {
   return (
     <>
-      {/* Preloader */}
-      <div className="loader-wrap">
-        <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
-          <path id="svg" d="M0,1005S175,995,500,995s500,5,500,5V0H0Z"></path>
-        </svg>
-        <div className="loader-wrap-heading">
-          <div className="load-text"> <span>L</span> <span>o</span> <span>a</span> <span>d</span> <span>i</span> <span>n</span> <span>g</span> </div>
-        </div>
-      </div>
       {/* Cursor */}
       <div className="cursor"></div>
       {/* Progress scroll totop */}
@@ -25,28 +17,7 @@ export default function Post() {
       {/* Smooth-wrapper */}
       <div id="smooth-wrapper">
         {/* Navbar */}
-        <nav className="navbar navbar-expand-lg">
-          <div className="container">
-            {/* Logo */}
-            <div className="logo-wrapper">
-              <a className="logo" href="/"><img src="/images/karnish-logo.png" className="logo-img karnish-logo" alt="Karnish Tourism LLC" /></a>
-            </div>
-            {/* Button */}
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"> <span className="navbar-toggler-icon"><i className="ti-menu"></i></span> </button>
-            {/* Menu */}
-            <div className="collapse navbar-collapse" id="navbar">
-              <ul className="navbar-nav ms-auto">
-                <li className="nav-item"><a className="nav-link" href="/"><span className="rolling-text">Home</span></a></li>
-                <li className="nav-item"><a className="nav-link" href="/about"><span className="rolling-text">About</span></a></li>
-                <li className="nav-item"><a className="nav-link" href="/tours"><span className="rolling-text">Tours</span></a></li>
-                <li className="nav-item"><a className="nav-link" href="/destination"><span className="rolling-text">Destinations</span></a></li>
-                <li className="nav-item"><a className="nav-link" href="/activities"><span className="rolling-text">Activities</span></a></li>
-                <li className="nav-item"><a className="nav-link" href="/services"><span className="rolling-text">Services</span></a></li>
-                <li className="nav-item"><a className="nav-link" href="/contact"><span className="rolling-text">Contact</span></a></li>
-              </ul>
-            </div>
-          </div>
-        </nav>
+        <Navbar />
         <div id="smooth-content">
           <main className="o-hidden">
             {/* Header Banner */}
@@ -277,8 +248,6 @@ export default function Post() {
       <Script id="script-smoother-script" src="/js/smoother-script.js" strategy="afterInteractive" />
       <Script id="script-springer" src="/js/springer.min.js" strategy="afterInteractive" />
       <Script id="script-lenis" src="/js/lenis.min.js" strategy="afterInteractive" />
-      <Script id="script-three" src="/js/three.min.js" strategy="afterInteractive" />
-      <Script id="script-hover-effect" src="/js/hover-effect.umd.js" strategy="afterInteractive" />
       <Script id="script-custom" src="/js/custom.js" strategy="afterInteractive" />
     </>
   );

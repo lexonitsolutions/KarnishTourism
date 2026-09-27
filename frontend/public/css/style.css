@@ -1399,24 +1399,19 @@ blockquote.vert-move {
     transition: transform 0.2s linear, -webkit-transform 0.2s linear;
 }
 .cursor {
-    pointer-events: none;
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
     position: fixed;
-    padding: 0.3rem;
-    background-color: var(--clr-bg-white);
-    border-radius: 50%;
-    mix-blend-mode: difference;
-    -webkit-transition: opacity 0.4s ease, -webkit-transform 0.3s ease;
-    transition: opacity 0.4s ease, -webkit-transform 0.3s ease;
-    -o-transition: transform 0.3s ease, opacity 0.4s ease;
-    transition: transform 0.3s ease, opacity 0.4s ease;
-    transition: transform 0.3s ease, opacity 0.4s ease, -webkit-transform 0.3s ease;
-    z-index: 99999;
+    z-index: -9999;
 }
 .cursor-active {
-    -webkit-transform: translate(-50%, -50%) scale(8);
-    -ms-transform: translate(-50%, -50%) scale(8);
-    transform: translate(-50%, -50%) scale(8);
-    opacity: .1;
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
 }
 
 
@@ -1426,24 +1421,14 @@ body.loaded {
     height: 100% !important;
 }
 .loader-wrap {
-    position: fixed;
-    z-index: 10;
-    height: 100vh;
-    width: 100%;
-    left: 0;
-    top: 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    overflow: hidden;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    background: transparent;
-    z-index: 99999999999999;
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    z-index: -9999 !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
 }
 .loader-wrap svg {
     position: absolute;
@@ -2328,24 +2313,19 @@ header .post .date-comment:last-of-type {
     transition: transform 0.2s linear, -webkit-transform 0.2s linear;
 }
 .services .cursor {
-    pointer-events: none;
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
     position: fixed;
-    padding: 0.3rem;
-    background-color: var(--clr-bg-white);
-    border-radius: 50%;
-    mix-blend-mode: difference;
-    -webkit-transition: opacity 0.4s ease, -webkit-transform 0.3s ease;
-    transition: opacity 0.4s ease, -webkit-transform 0.3s ease;
-    -o-transition: transform 0.3s ease, opacity 0.4s ease;
-    transition: transform 0.3s ease, opacity 0.4s ease;
-    transition: transform 0.3s ease, opacity 0.4s ease, -webkit-transform 0.3s ease;
-    z-index: 99999;
+    z-index: -9999;
 }
 .services .cursor-active {
-    -webkit-transform: translate(-50%, -50%) scale(8);
-    -ms-transform: translate(-50%, -50%) scale(8);
-    transform: translate(-50%, -50%) scale(8);
-    opacity: .1;
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
 }
 .services .circle-button .in-circle {
     position: absolute;
@@ -5434,8 +5414,7 @@ body.mfp-zoom-out-cur {
     color: var(--clr-white) !important;
 }
 .butn-arrow2:hover span.btn-text {
-    color: var(--clr-heading);
-     !important;
+    color: var(--clr-heading) !important;
 }
 .butn-arrow2:hover .arrow-inner i:first-child {
     transform: translateY(0);
