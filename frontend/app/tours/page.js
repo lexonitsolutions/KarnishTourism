@@ -1,247 +1,35 @@
-"use client";
+import Image from "next/image";
+import LandingTourSearch from "./components/LandingTourSearch";
+import LandingSmartFinder from "./components/LandingSmartFinder";
+import LandingDestinationCard from "./components/LandingDestinationCard";
+import SignatureShowcase from "./components/SignatureShowcase";
+import RevealOnScroll from "./components/RevealOnScroll";
+import { getDestination } from "./data";
 
-import Script from "next/script";
-import Navbar from "../components/Navbar";
+export const metadata = {
+  title: "International & Domestic Tour Packages | Karnish Tourism",
+  description: "Explore curated international and domestic holiday packages with transparent pricing and personalised travel support from Karnish Tourism.",
+  alternates: { canonical: "/tours" },
+};
 
-export default function Tours() {
-  return (
-    <>
-      {/* Cursor */}
-      <div className="cursor"></div>
-      {/* Progress scroll totop */}
-      <div className="progress-wrap cursor-pointer">
-        <svg className="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-          <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
-        </svg>
-      </div>
-      {/* Smooth-wrapper */}
-      <div id="smooth-wrapper">
-        {/* Navbar */}
-        <Navbar />
-        <div id="smooth-content">
-          <main className="o-hidden">
-            {/* Header Banner */}
-            <header className="pg-hero section-padding">
-              <div className="container">
-                <div className="row mb-60 justify-content-center">
-                  <div className="col-md-6 text-center">
-                    <div className="section-subtitle">Explore Our Tours</div>
-                    <div className="section-title">Discover <i>unforgettable journeys</i> across the world</div>
-                  </div>
-                </div>
-              </div>
-              <div className="container-fluid">
-                <div className="height1">
-                  <div className="radius-mask">
-                    <div className="bg-img height2" data-background="/images/8.jpg" data-speed="0.5" data-lag="0"></div>
-                  </div>
-                </div>
-              </div>
-            </header>
-            {/* Tours */}
-            <section className="tours section-padding">
-              <div className="container">
-                <div className="row tours-isotope">
-                  <div className="col-md-6 items">
-                    <div className="mb-30">
-                      <div className="section-subtitle">Best Tour Packages</div>
-                      <div className="section-title">Experience the best<br />travel tours<i>.</i></div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 items">
-                    <div className="item">
-                      <div className="tour-media"> <img src="/images/destination-01.jpg" alt="" className="height2" data-speed="0.8" data-lag="0" />
-                        <div className="clicko"><a href="/tour-details"><span className="icon-wrap"><span className="icon"><i className="ti-arrow-top-right"></i></span></span></a></div>
-                      </div>
-                      <div className="tour-content">
-                        <div className="tour-header">
-                          <div className="tour-location"> <i className="ti-location-pin"></i> <span>Maldives, Asia</span> </div>
-                          <h4 className="tour-title">Maldives Paradise</h4>
-                        </div>
-                        <div className="tour-info">
-                          <div className="tour-duration">
-                            <div className="tour-icon"> <i className="fa-light fa-calendar"></i> </div>
-                            <div className="tour-meta"> <small>Duration</small> <span>6 Days - 5 Nights</span> </div>
-                          </div>
-                        </div>
-                        <div className="tour-price-wrap">
-                          <div className="tour-rating"> <i className="fa-solid fa-star"></i> 4.9 </div>
-                          <div className="tour-price"> $499 <span>/ Traveler</span> </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 items">
-                    <div className="item">
-                      <div className="tour-media"> <img src="/images/destination-03.jpg" alt="" className="height2" data-speed="0.8" data-lag="0" />
-                        <div className="clicko"><a href="/tour-details"><span className="icon-wrap"><span className="icon"><i className="ti-arrow-top-right"></i></span></span></a></div>
-                      </div>
-                      <div className="tour-content">
-                        <div className="tour-header">
-                          <div className="tour-location"> <i className="ti-location-pin"></i> <span>Dubai, UAE</span> </div>
-                          <h4 className="tour-title">Dubai Luxury Journey</h4>
-                        </div>
-                        <div className="tour-info">
-                          <div className="tour-duration">
-                            <div className="tour-icon"> <i className="fa-light fa-calendar"></i> </div>
-                            <div className="tour-meta"> <small>Duration</small> <span>5 Days - 4 Nights</span> </div>
-                          </div>
-                        </div>
-                        <div className="tour-price-wrap">
-                          <div className="tour-rating"> <i className="fa-solid fa-star"></i> 4.8 </div>
-                          <div className="tour-price"> $699 <span>/ Traveler</span> </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 items">
-                    <div className="item">
-                      <div className="tour-media"> <img src="/images/destination-02.jpg" alt="" className="height2" data-speed="0.8" data-lag="0" />
-                        <div className="clicko"><a href="/tour-details"><span className="icon-wrap"><span className="icon"><i className="ti-arrow-top-right"></i></span></span></a></div>
-                      </div>
-                      <div className="tour-content">
-                        <div className="tour-header">
-                          <div className="tour-location"> <i className="ti-location-pin"></i> <span>Banff, Canada</span> </div>
-                          <h4 className="tour-title">Canadian Nature Tour</h4>
-                        </div>
-                        <div className="tour-info">
-                          <div className="tour-duration">
-                            <div className="tour-icon"> <i className="fa-light fa-calendar"></i> </div>
-                            <div className="tour-meta"> <small>Duration</small> <span>7 Days - 6 Nights</span> </div>
-                          </div>
-                        </div>
-                        <div className="tour-price-wrap">
-                          <div className="tour-rating"> <i className="fa-solid fa-star"></i> 4.9 </div>
-                          <div className="tour-price"> $799 <span>/ Traveler</span> </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 items">
-                    <div className="item">
-                      <div className="tour-media"> <img src="/images/destination-05.jpg" alt="" className="height2" data-speed="0.8" data-lag="0" />
-                        <div className="clicko"><a href="/tour-details"><span className="icon-wrap"><span className="icon"><i className="ti-arrow-top-right"></i></span></span></a></div>
-                      </div>
-                      <div className="tour-content">
-                        <div className="tour-header">
-                          <div className="tour-location"> <i className="ti-location-pin"></i> <span>Santorini, Greece</span> </div>
-                          <h4 className="tour-title">Greek Paradise Tour</h4>
-                        </div>
-                        <div className="tour-info">
-                          <div className="tour-duration">
-                            <div className="tour-icon"> <i className="fa-light fa-calendar"></i> </div>
-                            <div className="tour-meta"> <small>Duration</small> <span>7 Days - 6 Nights</span> </div>
-                          </div>
-                        </div>
-                        <div className="tour-price-wrap">
-                          <div className="tour-rating"> <i className="fa-solid fa-star"></i> 4.8 </div>
-                          <div className="tour-price"> $899 <span>/ Traveler</span> </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </main>
-          {/* Footer */}
-          <footer className="footer">
-            <div className="container">
-              <div className="row justify-content-center">
-                <div className="col-md-7 mb-45 text-center">
-                  <div className="subscribe">
-                    <div className="section-subtitle wow fadeInRight">Subscribe to travel</div>
-                    <div className="section-title d-rotate wow mb-30"><span className="rotate-text text-white">Travel deals to your inbox<i>!</i></span></div>
-                    <div className="newsletter">
-                      <form action="#">
-                        <input type="email" placeholder="Enter your email address" required />
-                        <button type="submit"><i className="fa-light fa-arrow-right"></i></button>
-                      </form>
-                    </div>
-                    <p>We are committed to protecting your <a href="#0" className="text-decoration-line-bottom">privacy policy.</a></p>
-                  </div>
-                </div>
-              </div>
-              {/* Instagram */}
-              <div className="insta">
-                <div className="container">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="item">
-                        <div className="img">
-                          <a href="#0"> <img src="/images/03_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/01_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/02_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/04.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/05.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/06.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="follow">
-                          <a href="#0" className="text-bg"> <span><i className="fa-brands fa-instagram"></i> / Karnish Tourism</span></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Bottom */}
-            <div className="bottom">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-3 col-md-12">
-                    <p>© All Rights Reserved <a href="https://lexonit.com" target="_blank">lexonit.com</a></p>
-                  </div>
-                  <div className="col-lg-7 col-md-12 text-center">
-                    <div className="links">
-                      <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/tours">Tours</a></li>
-                        <li><a href="/destination">Destinations</a></li>
-                        <li><a href="/blog">Blog</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-12">
-                    <div className="social-icons text-end">
-                      <ul className="list-inline">
-                        <li><a href="#"><i className="fa-brands fa-instagram"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-twitter"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-dribbble"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-text-style5">Karnish Tourism</div>
-          </footer>
-        </div>
-      </div>
-
-      <Script id="script-jquery" src="/js/jquery-3.6.0.min.js" strategy="afterInteractive" />
-      <Script id="script-jquery-migrate" src="/js/jquery-migrate-3.4.0.min.js" strategy="afterInteractive" />
-      <Script id="script-plugins" src="/js/plugins.js" strategy="afterInteractive" />
-      <Script id="script-imagesloaded" src="/js/imagesloaded.pkgd.min.js" strategy="afterInteractive" />
-      <Script id="script-gsap" src="/js/gsap.min.js" strategy="afterInteractive" />
-      <Script id="script-scrollsmoother" src="/js/ScrollSmoother.min.js" strategy="afterInteractive" />
-      <Script id="script-scrolltrigger" src="/js/ScrollTrigger.min.js" strategy="afterInteractive" />
-      <Script id="script-smoother-script" src="/js/smoother-script.js" strategy="afterInteractive" />
-      <Script id="script-springer" src="/js/springer.min.js" strategy="afterInteractive" />
-      <Script id="script-lenis" src="/js/lenis.min.js" strategy="afterInteractive" />
-      <Script id="script-custom" src="/js/custom.js" strategy="afterInteractive" />
-    </>
-  );
+export default function ToursPage() {
+  const international = ["dubai","bali","maldives","switzerland"].map(slug => getDestination("international",slug));
+  const mini = ["thailand","vietnam","europe"].map(slug => getDestination("international",slug));
+  const domestic = ["kashmir","kerala","rajasthan","goa","himachal-pradesh","andaman"].map(slug => getDestination("domestic",slug));
+  const signatureSlugs = [["international","dubai"],["international","bali"],["domestic","kashmir"],["international","switzerland"]];
+  const signature = signatureSlugs.map(([type,slug]) => { const destination = getDestination(type,slug); return { destination, package: destination.packages[1] }; });
+  return <main className="ktl-page">
+    <RevealOnScroll />
+    <section className="ktl-video-hero">
+      <video autoPlay muted loop playsInline preload="auto" poster="/videos/dubai-tourism-poster.jpg" aria-label="Cinematic Dubai travel scenes"><source src="/videos/dubai-tourism.mp4" type="video/mp4" /></video>
+      <div className="ktl-video-overlay" />
+      <div className="ktl-hero-content"><span>Curated journeys · Unforgettable memories</span><h1>Explore the World with<br /><em>Karnish Tourism</em></h1><p>Thoughtfully curated journeys, exceptional stays and unforgettable experiences — designed around the way you love to travel.</p><div>{[["ti-map-alt","Curated Experiences"],["ti-home","Verified Stays"],["ti-direction-alt","Seamless Travel"]].map(([icon,text]) => <span key={text}><i className={icon} /> {text}</span>)}</div></div>
+      <div className="ktl-search-float"><LandingTourSearch /></div>
+    </section>
+    <div className="ktl-after-hero"><div className="ktl-content"><LandingSmartFinder /></div></div>
+    <section className="ktl-content ktl-section ktl-reveal"><div className="ktl-section-head"><div><span>Global escapes</span><h2>Curated International Holidays</h2></div><a href="/tours/international">View All International Destinations <i className="ti-arrow-right" /></a></div><div className="ktl-international-grid">{international.map((item,index) => <LandingDestinationCard destination={item} key={item.id} priority={index < 2} />)}</div><div className="ktl-mini-strip">{mini.map(item => <a className="ktl-mini-card" href={`/tours/international/${item.slug}`} key={item.id}><div className="ktl-mini-image"><Image src={item.image} alt={item.name} fill sizes="90px" /></div><div className="ktl-mini-copy"><strong className="ktl-mini-title">{item.name} Escape</strong><small className="ktl-mini-meta">{item.duration} · From ₹{item.startingPrice.toLocaleString("en-IN")}</small></div><i className="ti-arrow-right ktl-mini-arrow" /></a>)}</div></section>
+    <section className="ktl-domestic-bg"><div className="ktl-content ktl-section ktl-reveal"><div className="ktl-section-head"><div><span>Incredible India</span><h2>Popular Domestic Voyages</h2></div><a href="/tours/domestic">Explore Complete India Collection <i className="ti-arrow-right" /></a></div><div className="ktl-domestic-grid">{domestic.map(item => <LandingDestinationCard destination={item} layout="domestic" key={item.id} />)}</div></div></section>
+    <SignatureShowcase packages={signature} />
+    <section className="ktl-trust ktl-content ktl-section ktl-reveal"><div className="ktl-trust-head"><span>The Karnish difference</span><h2>Why Discerning Voyagers Choose<br />Karnish</h2><p>Every experience is curated with attention to detail, transparent pricing and dependable travel support.</p></div><div className="ktl-trust-grid">{[["ti-receipt","Zero Hidden Charges","Transparent pricing without unexpected costs."],["ti-home","100% Verified Hotels","Carefully selected and trusted accommodation partners."],["ti-headphone-alt","24×7 Trip Assistance","Travel support before, during and after your journey."],["ti-id-badge","Visa & Travel Support","Guidance for documentation, visa requirements and essential travel preparation."]].map(([icon,title,text]) => <article key={title}><i className={icon} /><h3>{title}</h3><p>{text}</p><a href="/about">Discover More <i className="ti-arrow-right" /></a></article>)}</div><div className="ktl-traveller-banner"><div className="ktl-avatars">{["tst1.jpg","tst2.jpg","tst3.jpg"].map(file => <Image src={`/images/${file}`} alt="Karnish traveller" width={42} height={42} key={file} />)}<span>4.9</span></div><p>Trusted by travellers creating unforgettable journeys with Karnish Tourism.</p><a href="/tours/inquiry">Speak with a Destination Specialist</a></div></section>
+  </main>;
 }

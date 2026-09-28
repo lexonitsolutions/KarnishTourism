@@ -1,0 +1,1 @@
+export default function ToursLoading() { return <main className="ktours-loading" aria-label="Loading tours"><div className="ktours-skeleton hero" /><div className="container"><div className="ktours-skeleton title" /><div className="ktours-loading-grid">{[1,2,3].map(item => <div className="ktours-skeleton card" key={item} />)}</div></div></main>; }
