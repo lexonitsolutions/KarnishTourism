@@ -1,6 +1,7 @@
 import "./globals.css";
 import Script from "next/script";
 import RouteTransitionHandler from "./components/RouteTransitionHandler";
+import Preloader from "./components/Preloader";
 
 export const metadata = {
   title: "Karnish Tourism — Travel Agency",
@@ -63,8 +64,11 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{
             __html: `
               #smooth-wrapper {
-                visibility: visible !important;
-                opacity: 1 !important;
+                transition: opacity 0.3s ease;
+              }
+              html.karnish-page-leaving #smooth-wrapper {
+                opacity: 0 !important;
+                transition: opacity 0.2s ease !important;
               }
               /* Permanently hide custom cursor dot under pointer */
               .cursor, .cursor-active, .services .cursor, .services .cursor-active {
@@ -152,6 +156,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body suppressHydrationWarning>
+        <Preloader />
         <RouteTransitionHandler />
         {children}
       </body>

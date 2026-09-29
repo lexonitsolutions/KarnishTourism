@@ -1,9 +1,12 @@
 "use client";
 
-import Script from "next/script";
 import ActivitySearchBar from "./components/ActivitySearchBar";
 import KarnishCinematicIntro from "./components/KarnishCinematicIntro";
 import Navbar from "./components/Navbar";
+import HomeDashboardShowcase from "./components/HomeDashboardShowcase";
+import HomeLegacyScripts from "./components/HomeLegacyScripts";
+import SiteFooter from "./components/SiteFooter";
+import "./homeDashboard.css";
 
 export default function Home() {
   return (
@@ -27,15 +30,23 @@ export default function Home() {
           <main className="o-hidden">
             {/* Parallax Image */}
             <header className="full-height valign">
-              <div className="background bg-img" data-background="assets/img/hero/pattern-bg.png"></div>
+              <div className="background bg-img"></div>
               <div className="container">
                 <div className="row">
                   <div className="col-lg-5 valign">
                     <div className="cont">
                       <h6>Karnish Tourism</h6>
                       <h2 className="text-white"><span>Discover the world <i>with our guide.</i></span></h2>
-                      <p>Turn your dream destinations into reality with our expert guidance. From hidden we create just for you.</p>
-                      <a href="/tours" className="butn-arrow2"> <span className="btn-text">View tours</span> <span className="arrow-wrap"><span className="arrow-inner"><i className="ti-arrow-right"></i><i className="ti-arrow-right"></i></span> </span></a>
+                      <p>Turn your dream destinations into reality with our expert guidance. From hidden gems to iconic luxury escapes, we craft personalized journeys for you.</p>
+                      <div className="kt-hero-proof">
+                        <span className="kt-hero-rating"><i className="fa-solid fa-star" /> 4.9/5</span>
+                        <span className="kt-hero-proof-divider" aria-hidden="true" />
+                        <span>Trusted by 9,500+ discerning voyagers</span>
+                      </div>
+                      <div className="kt-hero-actions">
+                        <a href="/tours" className="butn-arrow2 kt-hero-primary-cta"> <span className="btn-text">Explore Packages</span> <span className="arrow-wrap"><span className="arrow-inner"><i className="ti-arrow-right"></i><i className="ti-arrow-right"></i></span> </span></a>
+                        <a href="/tours#custom-holiday" className="kt-hero-text-link">Plan a custom holiday <i className="ti-arrow-right" /></a>
+                      </div>
                     </div>
                   </div>
                   <div className="col-lg-6 offset-lg-1">
@@ -91,9 +102,14 @@ export default function Home() {
               <div className="star3"><img src="/images/flight-up.png" alt="" /> </div>
               <div className="star4 duru-rotate-on-scroll"> <img src="/images/bg-compass.png" alt="" /></div>
             </header>
+
+            {/* Interactive Search Bar (Nestles cleanly on hero) */}
             <ActivitySearchBar />
+
+            {/* High-Converting Home Dashboard Showcase: Popular Destinations, Offers & Tour Packages */}
+            <HomeDashboardShowcase />
             {/* About 2 */}
-            <div className="about2 section-padding bg-white" data-background="assets/img/bg.png">
+            <div className="about2 section-padding bg-white">
               <div className="container">
                 <div className="row">
                   <div className="col-md-6">
@@ -275,7 +291,7 @@ export default function Home() {
               <div className="container-fluid">
                 <div className="height1">
                   <div className="radius-mask">
-                    <div className="bg-img height2" data-background="assets/img/5.jpg" data-speed="0.5" data-lag="0"></div>
+                    <div className="bg-img height2" data-background="/images/5.jpg" data-speed="0.5" data-lag="0"></div>
                   </div>
                 </div>
               </div>
@@ -427,64 +443,114 @@ export default function Home() {
               </div>
               <div className="bg-text-style4 duru-slide-right">Questions</div>
             </section>
-            {/* Blog */}
+            {/* Travel Journal & Intelligence */}
             <section className="blog-home section-padding">
               <div className="container">
                 <div className="row justify-content-center">
-                  <div className="col-md-12 text-center">
-                    <div className="section-subtitle wow fadeInRight">Travel Blog</div>
-                    <div className="section-title mb-30 d-rotate wow">
-                    <span className="rotate-text">Travel <i>experience</i></span> </div>
+                  <div className="col-md-12 text-center mb-40">
+                    <div className="section-subtitle wow fadeInRight" style={{ color: "#2095ae" }}>
+                      Travel Journal &amp; Intelligence
+                    </div>
+                    <div className="section-title mb-15 d-rotate wow">
+                      <span className="rotate-text">Destination Guides &amp; <i>Visa Updates</i></span>
+                    </div>
+                    <p style={{ maxWidth: "650px", margin: "0 auto", color: "#5e6282", fontSize: "15px" }}>
+                      Expert insights from our consular desk and seasoned travelers: visa fast-tracks, packing masterclasses, and curated holiday itineraries.
+                    </p>
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-md-4 duru-slide-left">
-                    <div className="item bg-img" data-background="assets/img/blog/1.jpg">
+                    <div className="item bg-img" data-background="/images/blog-1.jpg">
                       <div className="content">
-                        <div className="info">
-                          <a href="/blog"> <span><i className="ti-time"></i>28 Dec 2026</span> </a>
+                        <div className="info d-flex justify-content-between align-items-center">
+                          <span style={{ background: "#2095ae", color: "#ffffff", padding: "3px 10px", borderRadius: "10px", fontSize: "10px", fontWeight: "700", textTransform: "uppercase" }}>
+                            Visa Updates
+                          </span>
+                          <a href="/blog/uae-schengen-visa-updates-2026">
+                            <span><i className="ti-time"></i>28 Mar 2026</span>
+                          </a>
                         </div>
-                        <a href="/post">
-                          <h5>Exploring the hidden Maldives paradise</h5>
+                        <a href="/blog/uae-schengen-visa-updates-2026">
+                          <h5>UAE &amp; Schengen Visa Updates 2026: Fast-Track Rules</h5>
                         </a>
-                        <p>Discover a world where turquoise waters meet endless white sands in the heart of the Indian Ocean.</p>
-                        <div className="arrow"> <a href="/post"><i className="ti-arrow-top-right"></i></a> </div>
+                        <p>Essential consular updates on 24-hr Dubai e-visas and European VFS slot booking protocols.</p>
+                        <div className="arrow">
+                          <a href="/blog/uae-schengen-visa-updates-2026"><i className="ti-arrow-top-right"></i></a>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div className="col-md-4 duru-slide-up">
-                    <div className="item bg-img active" data-background="assets/img/blog/2.jpg">
+                    <div className="item bg-img active" data-background="/images/blog-2.jpg">
                       <div className="content">
-                        <div className="info">
-                          <a href="/blog"> <span><i className="ti-time"></i>26 Dec 2026</span> </a>
+                        <div className="info d-flex justify-content-between align-items-center">
+                          <span style={{ background: "#d39948", color: "#ffffff", padding: "3px 10px", borderRadius: "10px", fontSize: "10px", fontWeight: "700", textTransform: "uppercase" }}>
+                            Destination Guide
+                          </span>
+                          <a href="/blog/connoisseurs-guide-to-switzerland">
+                            <span><i className="ti-time"></i>22 Mar 2026</span>
+                          </a>
                         </div>
-                        <a href="/post">
-                          <h5>Journey through Canada’s wild beauty</h5>
+                        <a href="/blog/connoisseurs-guide-to-switzerland">
+                          <h5>The Connoisseur’s Guide to Switzerland</h5>
                         </a>
-                        <p>Discover vast landscapes of towering mountains, crystal-clear lakes, and endless forests across Canada.</p>
-                        <div className="arrow"> <a href="/post"><i className="ti-arrow-top-right"></i></a> </div>
+                        <p>Glacier Express Excellence Class, boutique alpine chalets, and uncrowded valleys.</p>
+                        <div className="arrow">
+                          <a href="/blog/connoisseurs-guide-to-switzerland"><i className="ti-arrow-top-right"></i></a>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div className="col-md-4 duru-slide-right">
-                    <div className="item bg-img" data-background="assets/img/blog/3.jpg">
+                    <div className="item bg-img" data-background="/images/blog-3.jpg">
                       <div className="content">
-                        <div className="info">
-                          <a href="/blog"> <span><i className="ti-time"></i>24 Dec 2026</span> </a>
+                        <div className="info d-flex justify-content-between align-items-center">
+                          <span style={{ background: "#0f2454", color: "#ffffff", padding: "3px 10px", borderRadius: "10px", fontSize: "10px", fontWeight: "700", textTransform: "uppercase" }}>
+                            Travel Tips
+                          </span>
+                          <a href="/blog/forex-currency-travel-tips">
+                            <span><i className="ti-time"></i>18 Mar 2026</span>
+                          </a>
                         </div>
-                        <a href="/post">
-                          <h5>Experience the luxury of modern Dubai</h5>
+                        <a href="/blog/forex-currency-travel-tips">
+                          <h5>Smart Currency &amp; Forex: Avoid Costly Traps Abroad</h5>
                         </a>
-                        <p>Discover a city where futuristic skylines meet golden deserts, blending luxury and innovation.</p>
-                        <div className="arrow"> <a href="/post"><i className="ti-arrow-top-right"></i></a> </div>
+                        <p>Beat the Dynamic Currency Conversion (DCC) trick and avoid airport counter markups.</p>
+                        <div className="arrow">
+                          <a href="/blog/forex-currency-travel-tips"><i className="ti-arrow-top-right"></i></a>
+                        </div>
                       </div>
                     </div>
+                  </div>
+                </div>
+                <div className="row mt-40">
+                  <div className="col-12 text-center">
+                    <a
+                      href="/blog"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        background: "#0f2454",
+                        color: "#ffffff",
+                        padding: "12px 28px",
+                        borderRadius: "25px",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        textDecoration: "none",
+                        transition: "all 0.25s ease",
+                      }}
+                    >
+                      Explore All 5 Categories in Journal <i className="ti-arrow-right" />
+                    </a>
                   </div>
                 </div>
               </div>
             </section>
           </main>
           {/* Footer */}
+          <SiteFooter />
           <footer className="footer">
             <div className="container">
               <div className="row justify-content-center">
@@ -494,8 +560,8 @@ export default function Home() {
                     <div className="section-title d-rotate wow mb-30"><span className="rotate-text text-white">Travel deals to your inbox<i>!</i></span></div>
                     <div className="newsletter">
                       <form action="#">
-                        <input type="email" placeholder="Enter your email address" required />
-                        <button type="submit"><i className="fa-light fa-arrow-right"></i></button>
+                        <input type="email" placeholder="Enter your email address" required suppressHydrationWarning />
+                        <button type="submit" suppressHydrationWarning><i className="fa-light fa-arrow-right"></i></button>
                       </form>
                     </div>
                     <p>We are committed to protecting your <a href="#0" className="text-decoration-line-bottom">privacy policy.</a></p>
@@ -571,17 +637,7 @@ export default function Home() {
         </div>
       </div>
 
-      <Script id="script-jquery" src="/js/jquery-3.6.0.min.js" strategy="afterInteractive" />
-      <Script id="script-jquery-migrate" src="/js/jquery-migrate-3.4.0.min.js" strategy="afterInteractive" />
-      <Script id="script-plugins" src="/js/plugins.js" strategy="afterInteractive" />
-      <Script id="script-imagesloaded" src="/js/imagesloaded.pkgd.min.js" strategy="afterInteractive" />
-      <Script id="script-gsap" src="/js/gsap.min.js" strategy="afterInteractive" />
-      <Script id="script-scrollsmoother" src="/js/ScrollSmoother.min.js" strategy="afterInteractive" />
-      <Script id="script-scrolltrigger" src="/js/ScrollTrigger.min.js" strategy="afterInteractive" />
-      <Script id="script-smoother-script" src="/js/smoother-script.js" strategy="afterInteractive" />
-      <Script id="script-springer" src="/js/springer.min.js" strategy="afterInteractive" />
-      <Script id="script-lenis" src="/js/lenis.min.js" strategy="afterInteractive" />
-      <Script id="script-custom" src="/js/custom.js" strategy="afterInteractive" />
+      <HomeLegacyScripts />
     </>
   );
 }

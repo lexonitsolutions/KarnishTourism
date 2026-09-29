@@ -1,10 +1,12 @@
 import Navbar from "../../components/Navbar";
+import SiteFooter from "../../components/SiteFooter";
 
 export default function ToursShell({ children }) {
   return (
     <div className="ktours-shell">
       <Navbar />
       {children}
+      <SiteFooter />
       <footer className="ktours-footer">
         <div className="container ktours-footer-grid">
           <div>

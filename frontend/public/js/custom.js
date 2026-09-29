@@ -194,10 +194,20 @@
         /* ==========================================================================
            9. DYNAMIC BACKGROUND IMAGE
            ========================================================================== */
-        var pageSection = $(".bg-img, section");
+        var pageSection = $(".bg-img, section, [data-background]");
         pageSection.each(function () {
-            if ($(this).attr("data-background")) {
-                $(this).css("background-image", "url(" + $(this).data("background") + ")");
+            var bg = $(this).attr("data-background");
+            if (bg) {
+                if (bg.indexOf('assets/img/blog/') !== -1) {
+                    bg = bg.replace('assets/img/blog/', '/images/blog-');
+                } else if (bg.indexOf('assets/img/hero/') !== -1) {
+                    bg = '';
+                } else if (bg.indexOf('assets/img/') !== -1) {
+                    bg = bg.replace('assets/img/', '/images/');
+                }
+                if (bg) {
+                    $(this).css("background-image", "url(" + bg + ")");
+                }
             }
         });
 
@@ -405,7 +415,47 @@
         /* ==========================================================================
            17. GSAP SVG PRELOADER
            ========================================================================== */
-        // Managed cleanly by KarnishCinematicIntro overlay without modifying page elements
+        if (typeof gsap !== "undefined" && !window.karnishPreloaderHandled) {
+            const svg = document.getElementById("svg");
+            const loaderWrap = document.querySelector(".loader-wrap");
+            if (svg && loaderWrap && window.getComputedStyle(loaderWrap).display !== "none") {
+                window.karnishPreloaderHandled = true;
+                const tl = gsap.timeline({
+                    onComplete: function () {
+                        if (typeof window.refreshKarnishScroller === "function") {
+                            window.refreshKarnishScroller();
+                        }
+                    }
+                });
+                const curve = "M0 502S175 272 500 272s500 230 500 230V0H0Z";
+                const flat = "M0 2S175 1 500 1s500 1 500 1V0H0Z";
+                tl.to(".loader-wrap-heading .load-text, .loader-wrap-heading .cont", {
+                    delay: 0.8,
+                    y: -100,
+                    opacity: 0,
+                });
+                tl.to(svg, {
+                    duration: 0.5,
+                    attr: {
+                        d: curve
+                    },
+                    ease: "power2.easeIn",
+                }).to(svg, {
+                    duration: 0.5,
+                    attr: {
+                        d: flat
+                    },
+                    ease: "power2.easeOut",
+                });
+                tl.to(".loader-wrap", {
+                    y: -1500,
+                });
+                tl.to(".loader-wrap", {
+                    zIndex: -1,
+                    display: "none",
+                });
+            }
+        }
 
         
         

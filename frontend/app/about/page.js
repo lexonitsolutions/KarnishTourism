@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Script from "next/script";
 import Navbar from "../components/Navbar";
+import SiteFooter from "../components/SiteFooter";
 
 export default function About() {
   const videoRef = useRef(null);
@@ -96,7 +97,7 @@ export default function About() {
                 2. COMPANY MISSION & VISION (Page 2 of Profile)
                 Signature Tourvex Dual Staggered Images + Counters + List
                ============================================================ */}
-            <div className="about2 section-padding" data-scroll-index="1" data-background="assets/img/bg.png">
+            <div className="about2 section-padding" data-scroll-index="1">
               <div className="container">
                 <div className="row align-items-center">
                   {/* Staggered Dual Images */}
@@ -628,6 +629,7 @@ export default function About() {
           </main>
 
           {/* Footer */}
+          <SiteFooter />
           <footer className="footer">
             <div className="container">
               <div className="row justify-content-center">

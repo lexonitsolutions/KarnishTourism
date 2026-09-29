@@ -102,6 +102,11 @@ export default function RouteTransitionHandler() {
         if (isNavigatingRef.current) return;
         isNavigatingRef.current = true;
 
+        // Activate loading preview immediately on click
+        if (typeof window !== "undefined" && window.showKarnishPreloader) {
+          window.showKarnishPreloader();
+        }
+
         // Activate glowing top progress bar
         const bar = progressBarRef.current;
         if (bar) {

@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import Script from "next/script";
 import { useSearchParams } from "next/navigation";
 import Navbar from "../components/Navbar";
+import SiteFooter from "../components/SiteFooter";
 import {
   activities,
   destinationOptions,
@@ -457,6 +458,7 @@ export default function Activities() {
             </Suspense>
           </main>
           {/* Footer */}
+          <SiteFooter />
           <footer className="footer">
             <div className="container">
               <div className="row justify-content-center">

@@ -13,7 +13,9 @@ export default function Navbar() {
   const isHome = pathname === "/" || pathname === "";
   const isAbout = pathname === "/about";
   const isTours = pathname === "/tours" || pathname.startsWith("/tour");
+  const isVisas = pathname === "/visas" || pathname.startsWith("/visas");
   const isServices = pathname === "/services" || pathname.startsWith("/service");
+  const isBlog = pathname === "/blog" || pathname.startsWith("/blog") || pathname.startsWith("/post");
   const isContact = pathname === "/contact";
 
   const handleOpenAuth = (tab = "login") => {
@@ -80,8 +82,18 @@ export default function Navbar() {
                 </a>
               </li>
               <li className="nav-item">
+                <a className={`nav-link ${isVisas ? "active" : ""}`} href="/visas">
+                  <span className="rolling-text">Visas</span>
+                </a>
+              </li>
+              <li className="nav-item">
                 <a className={`nav-link ${isServices ? "active" : ""}`} href="/services">
                   <span className="rolling-text">Services</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className={`nav-link ${isBlog ? "active" : ""}`} href="/blog">
+                  <span className="rolling-text">Blog</span>
                 </a>
               </li>
               <li className="nav-item">

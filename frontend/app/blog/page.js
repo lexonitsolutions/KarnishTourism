@@ -1,306 +1,192 @@
 "use client";
 
-import Script from "next/script";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import Navbar from "../components/Navbar";
+import { BLOG_CATEGORIES, getAllPosts } from "./blogData";
+import "./blog.css";
 
-export default function Blog() {
+export default function BlogHubPage() {
+  const [posts, setPosts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All Stories");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    setPosts(getAllPosts());
+  }, []);
+
+  const filteredPosts = posts.filter((post) => {
+    const matchesCat =
+      selectedCategory === "All Stories" || post.category === selectedCategory;
+    const matchesSearch =
+      searchQuery === "" ||
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.tags?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCat && matchesSearch;
+  });
+
+  const featuredPost = posts.find((p) => p.featured) || posts[0];
+  const gridPosts = filteredPosts.filter((p) => p.slug !== featuredPost?.slug);
+
   return (
-    <>
-      {/* Cursor */}
-      <div className="cursor"></div>
-      {/* Progress scroll totop */}
-      <div className="progress-wrap cursor-pointer">
-        <svg className="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-          <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
-        </svg>
-      </div>
-      {/* Smooth-wrapper */}
-      <div id="smooth-wrapper">
-        {/* Navbar */}
-        <Navbar />
-        <div id="smooth-content">
-          <main className="o-hidden">
-            {/* Header Banner */}
-            <header className="pg-hero section-padding">
-              <div className="container">
-                <div className="row mb-60 justify-content-center">
-                  <div className="col-md-5 text-center">
-                    <div className="section-subtitle">Latest Travel News</div>
-                    <div className="section-title">Stories that inspire your <i>next adventure</i></div>
-                  </div>
-                </div>
-              </div>
-              <div className="container-fluid">
-                <div className="height1">
-                  <div className="radius-mask">
-                    <div className="bg-img height2" data-background="/images/8.jpg" data-speed="0.5" data-lag="0"></div>
-                  </div>
-                </div>
-              </div>
-            </header>
-            {/* Blog */}
-            <section className="blog-home section-padding">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-8 col-md-12">
-                    <div className="row">
-                      <div className="col-md-6">
-                        <div className="item bg-img" data-background="/images/blog-1.jpg">
-                          <div className="content">
-                            <div className="info">
-                              <a href="/blog"> <span><i className="ti-time"></i>28 Dec 2026</span> </a>
-                            </div>
-                            <a href="/post">
-                              <h5>Exploring the hidden Maldives paradise</h5>
-                            </a>
-                            <p>Discover a world where turquoise waters meet endless white sands in the heart of the Indian Ocean.</p>
-                            <div className="arrow"> <a href="/post"><i className="ti-arrow-top-right"></i></a> </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="item bg-img" data-background="/images/blog-2.jpg">
-                          <div className="content">
-                            <div className="info">
-                              <a href="/blog"> <span><i className="ti-time"></i>26 Dec 2026</span> </a>
-                            </div>
-                            <a href="/post">
-                              <h5>Journey through Canada&apos;s wild beauty</h5>
-                            </a>
-                            <p>Discover vast landscapes of towering mountains, crystal-clear lakes, and endless forests across Canada.</p>
-                            <div className="arrow"> <a href="/post"><i className="ti-arrow-top-right"></i></a> </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="item bg-img" data-background="/images/blog-3.jpg">
-                          <div className="content">
-                            <div className="info">
-                              <a href="/blog"> <span><i className="ti-time"></i>24 Dec 2026</span> </a>
-                            </div>
-                            <a href="/post">
-                              <h5>Experience the luxury of modern Dubai</h5>
-                            </a>
-                            <p>Discover a city where futuristic skylines meet golden deserts, blending luxury and innovation.</p>
-                            <div className="arrow"> <a href="/post"><i className="ti-arrow-top-right"></i></a> </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="item bg-img" data-background="/images/blog-4.jpg">
-                          <div className="content">
-                            <div className="info">
-                              <a href="/blog"> <span><i className="ti-time"></i>22 Dec 2026</span> </a>
-                            </div>
-                            <a href="/post">
-                              <h5>Experience the spirit of Africa</h5>
-                            </a>
-                            <p>Discover a continent where vast savannas, stunning landscapes create an unforgettable journey of adventure.</p>
-                            <div className="arrow"> <a href="/post"><i className="ti-arrow-top-right"></i></a> </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="item bg-img" data-background="/images/blog-1.jpg">
-                          <div className="content">
-                            <div className="info">
-                              <a href="/blog"> <span><i className="ti-time"></i>28 Dec 2026</span> </a>
-                            </div>
-                            <a href="/post">
-                              <h5>Exploring the hidden Maldives paradise</h5>
-                            </a>
-                            <p>Discover a world where turquoise waters meet endless white sands in the heart of the Indian Ocean.</p>
-                            <div className="arrow"> <a href="/post"><i className="ti-arrow-top-right"></i></a> </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="item bg-img" data-background="/images/blog-2.jpg">
-                          <div className="content">
-                            <div className="info">
-                              <a href="/blog"> <span><i className="ti-time"></i>26 Dec 2026</span> </a>
-                            </div>
-                            <a href="/post">
-                              <h5>Journey through Canada&apos;s wild beauty</h5>
-                            </a>
-                            <p>Discover vast landscapes of towering mountains, crystal-clear lakes, and endless forests across Canada.</p>
-                            <div className="arrow"> <a href="/post"><i className="ti-arrow-top-right"></i></a> </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* Pagination */}
-                    <div className="row">
-                      <div className="col-md-12 text-center mt-30 mb-30">
-                        <ul className="pagination-wrap">
-                          <li><a href="/blog"><i className="fa-light fa-angle-left"></i></a></li>
-                          <li><a href="/blog">1</a></li>
-                          <li><a href="/blog" className="active">2</a></li>
-                          <li><a href="/blog">3</a></li>
-                          <li><a href="/blog"><i className="fa-light fa-angle-right"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Sidebar */}
-                  <div className="col-lg-4 col-md-12">
-                    <div className="blog-sidebar row">
-                      <div className="col-md-12">
-                        <div className="widget search">
-                          <form>
-                            <input type="text" name="search" placeholder="Type here ..." />
-                            <button type="submit"><i className="fa-light fa-magnifying-glass" aria-hidden="true"></i></button>
-                          </form>
-                        </div>
-                      </div>
-                      <div className="col-md-12">
-                        <div className="widget">
-                          <div className="widget-title">
-                            <h6>Recent Posts</h6>
-                          </div>
-                          <ul className="recent">
-                            <li>
-                              <div className="thum"> <img src="/images/blog-5.jpg" className="img-fluid" alt="" /> </div> <a href="/post">Experience the spirit of South Africa</a>
-                            </li>
-                            <li>
-                              <div className="thum"> <img src="/images/blog-6.jpg" className="img-fluid" alt="" /> </div> <a href="/post">Experience the luxury of modern Dubai</a>
-                            </li>
-                            <li>
-                              <div className="thum"> <img src="/images/blog-7.jpg" className="img-fluid" alt="" /> </div> <a href="/post">Journey through Canada&apos;s wild beauty</a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="col-md-12">
-                        <div className="widget">
-                          <div className="widget-title">
-                            <h6>Categories</h6>
-                          </div>
-                          <ul>
-                            <li><a href="#"><i className="fa-light fa-angle-right"></i>Destinations</a></li>
-                            <li><a href="#"><i className="fa-light fa-angle-right"></i>Nature & Adventure Tours</a></li>
-                            <li><a href="#"><i className="fa-light fa-angle-right"></i>City & Cultural Tours</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="col-md-12">
-                        <div className="widget">
-                          <div className="widget-title">
-                            <h6>Tags</h6>
-                          </div>
-                          <ul className="tags">
-                            <li><a href="#">Destinations</a></li>
-                            <li><a href="#">Adventure</a></li>
-                            <li><a href="#">Tour</a></li>
-                            <li><a href="#">Travel</a></li>
-                            <li><a href="#">Nature</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </main>
-          {/* Footer */}
-          <footer className="footer">
-            <div className="container">
-              <div className="row justify-content-center">
-                <div className="col-md-7 mb-45 text-center">
-                  <div className="subscribe">
-                    <div className="section-subtitle wow fadeInRight">Subscribe to travel</div>
-                    <div className="section-title d-rotate wow mb-30"><span className="rotate-text text-white">Travel deals to your inbox<i>!</i></span></div>
-                    <div className="newsletter">
-                      <form action="#">
-                        <input type="email" placeholder="Enter your email address" required />
-                        <button type="submit"><i className="fa-light fa-arrow-right"></i></button>
-                      </form>
-                    </div>
-                    <p>We are committed to protecting your <a href="#0" className="text-decoration-line-bottom">privacy policy.</a></p>
-                  </div>
-                </div>
-              </div>
-              {/* Instagram */}
-              <div className="insta">
-                <div className="container">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="item">
-                        <div className="img">
-                          <a href="#0"> <img src="/images/03_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/01_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/02_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/04.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/05.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/06.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="follow">
-                          <a href="#0" className="text-bg"> <span><i className="fa-brands fa-instagram"></i> / Karnish Tourism</span></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Bottom */}
-            <div className="bottom">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-3 col-md-12">
-                    <p>© All Rights Reserved <a href="https://lexonit.com" target="_blank">lexonit.com</a></p>
-                  </div>
-                  <div className="col-lg-7 col-md-12 text-center">
-                    <div className="links">
-                      <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/tours">Tours</a></li>
-                        <li><a href="/destination">Destinations</a></li>
-                        <li><a href="/blog">Blog</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-12">
-                    <div className="social-icons text-end">
-                      <ul className="list-inline">
-                        <li><a href="#"><i className="fa-brands fa-instagram"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-twitter"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-dribbble"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-text-style5">Karnish Tourism</div>
-          </footer>
-        </div>
-      </div>
+    <div className="kt-blog-page">
+      <Navbar />
 
-      <Script id="script-jquery" src="/js/jquery-3.6.0.min.js" strategy="afterInteractive" />
-      <Script id="script-jquery-migrate" src="/js/jquery-migrate-3.4.0.min.js" strategy="afterInteractive" />
-      <Script id="script-plugins" src="/js/plugins.js" strategy="afterInteractive" />
-      <Script id="script-imagesloaded" src="/js/imagesloaded.pkgd.min.js" strategy="afterInteractive" />
-      <Script id="script-gsap" src="/js/gsap.min.js" strategy="afterInteractive" />
-      <Script id="script-scrollsmoother" src="/js/ScrollSmoother.min.js" strategy="afterInteractive" />
-      <Script id="script-scrolltrigger" src="/js/ScrollTrigger.min.js" strategy="afterInteractive" />
-      <Script id="script-smoother-script" src="/js/smoother-script.js" strategy="afterInteractive" />
-      <Script id="script-springer" src="/js/springer.min.js" strategy="afterInteractive" />
-      <Script id="script-lenis" src="/js/lenis.min.js" strategy="afterInteractive" />
-      <Script id="script-custom" src="/js/custom.js" strategy="afterInteractive" />
-    </>
+      {/* 1. Hero */}
+      <header className="kt-blog-hero">
+        <Image
+          src="/images/destination-02.jpg"
+          alt="Travel journal and guides"
+          fill
+          priority
+          sizes="100vw"
+          className="kt-blog-hero-bg"
+        />
+        <div className="kt-blog-hero-overlay" />
+        <div className="kt-blog-container">
+          <span className="kt-blog-kicker">
+            <i className="ti-bookmark" /> Karnish Travel Journal &amp; Intelligence
+          </span>
+          <h1>
+            Destination Guides, <em>Visa Updates</em> &amp; Travel Insights
+          </h1>
+          <p>
+            Curated intelligence from seasoned voyagers: consular updates, packing masterclasses, zero-markup currency strategies, and uncrowded alpine itineraries.
+          </p>
+        </div>
+      </header>
+
+      {/* 2. Controls & Categories */}
+      <main className="kt-blog-container">
+        <div className="kt-blog-controls">
+          <div className="kt-blog-tabs">
+            {BLOG_CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                className={`kt-blog-tab ${selectedCategory === cat ? "active" : ""}`}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div className="d-flex align-items-center gap-3">
+            <div className="kt-blog-search">
+              <i className="ti-search" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search guides, visas, tips..."
+              />
+            </div>
+            <a
+              href="/admin/blog"
+              className="kt-blog-tab d-none d-md-inline-flex align-items-center gap-1"
+              title="Editorial Admin CMS"
+            >
+              <i className="ti-settings" /> Admin CMS
+            </a>
+          </div>
+        </div>
+
+        {/* 3. Featured Post (shown if All Stories or matching category) */}
+        {featuredPost &&
+          (selectedCategory === "All Stories" ||
+            featuredPost.category === selectedCategory) &&
+          !searchQuery && (
+            <article className="kt-featured-post">
+              <div className="kt-featured-img-wrap">
+                <Image
+                  src={featuredPost.image}
+                  alt={featuredPost.title}
+                  fill
+                  priority
+                  sizes="(max-width: 992px) 100vw, 600px"
+                />
+                <span className="kt-featured-badge">Featured Story</span>
+              </div>
+              <div className="kt-featured-content">
+                <div className="kt-featured-meta">
+                  <span className="kt-category-pill">{featuredPost.category}</span>
+                  <span>{featuredPost.date}</span>
+                  <span>• {featuredPost.readTime}</span>
+                </div>
+                <h2>
+                  <a href={`/blog/${featuredPost.slug}`}>{featuredPost.title}</a>
+                </h2>
+                <p>{featuredPost.excerpt}</p>
+                <div className="kt-featured-footer">
+                  <div className="kt-author-info">
+                    <div className="kt-author-avatar">
+                      <i className="ti-user" />
+                    </div>
+                    <span>{featuredPost.author}</span>
+                  </div>
+                  <a href={`/blog/${featuredPost.slug}`} className="kt-read-more-btn">
+                    Read Full Story <i className="ti-arrow-right" />
+                  </a>
+                </div>
+              </div>
+            </article>
+          )}
+
+        {/* 4. Article Grid */}
+        {gridPosts.length > 0 ? (
+          <div className="kt-blog-grid">
+            {gridPosts.map((post) => (
+              <article key={post.slug} className="kt-blog-card">
+                <div className="kt-blog-card-img">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 400px"
+                  />
+                  <div className="kt-blog-card-badge">
+                    <span className="kt-category-pill">{post.category}</span>
+                  </div>
+                </div>
+                <div className="kt-blog-card-body">
+                  <div className="kt-blog-card-meta">
+                    <span>{post.date}</span>
+                    <span>• {post.readTime}</span>
+                  </div>
+                  <h3>
+                    <a href={`/blog/${post.slug}`}>{post.title}</a>
+                  </h3>
+                  <p>{post.excerpt}</p>
+                  <div className="kt-blog-card-footer">
+                    <span style={{ color: "#64748b", fontWeight: "500" }}>{post.author}</span>
+                    <a href={`/blog/${post.slug}`} className="kt-read-more-btn">
+                      Read <i className="ti-arrow-right" />
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div style={{ padding: "60px 0", textAlign: "center" }}>
+            <i className="ti-search" style={{ fontSize: "36px", color: "#94a3b8", marginBottom: "12px", display: "block" }} />
+            <h4 style={{ color: "#0f2454" }}>No articles found for &quot;{searchQuery}&quot;</h4>
+            <p style={{ color: "#64748b", fontSize: "14px" }}>Try selecting another category or clearing your search term.</p>
+            <button
+              type="button"
+              className="kt-blog-tab active"
+              onClick={() => {
+                setSelectedCategory("All Stories");
+                setSearchQuery("");
+              }}
+            >
+              Reset Filters
+            </button>
+          </div>
+        )}
+      </main>
+    </div>
   );
 }

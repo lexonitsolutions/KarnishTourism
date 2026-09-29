@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import Navbar from "../components/Navbar";
+import SiteFooter from "../components/SiteFooter";
 
 export default function TeamDetails() {
   return (
@@ -209,6 +210,7 @@ export default function TeamDetails() {
             </section>
           </main>
           {/* Footer */}
+          <SiteFooter />
           <footer className="footer">
             <div className="container">
               <div className="row justify-content-center">

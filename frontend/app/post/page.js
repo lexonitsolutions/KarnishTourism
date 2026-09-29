@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import Navbar from "../components/Navbar";
+import SiteFooter from "../components/SiteFooter";
 
 export default function Post() {
   return (
@@ -152,6 +153,7 @@ export default function Post() {
             </section>
           </main>
           {/* Footer */}
+          <SiteFooter />
           <footer className="footer">
             <div className="container">
               <div className="row justify-content-center">

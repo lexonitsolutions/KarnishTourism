@@ -740,12 +740,18 @@ function SearchBarForm() {
                   <div
                     key={visa}
                     className={`as-mega-item${isSelected ? " active" : ""}`}
-                    onClick={() =>
-                      handleSelectVisa(
-                        visa,
-                        `/services?visa=${encodeURIComponent(visa)}`
-                      )
-                    }
+                    onClick={() => {
+                      const lower = visa.toLowerCase();
+                      let url = `/visas?search=${encodeURIComponent(visa)}`;
+                      if (lower.includes("dubai") || lower.includes("uae")) url = "/visas/uae";
+                      else if (lower.includes("singapore")) url = "/visas/singapore";
+                      else if (lower.includes("usa") || lower.includes("america")) url = "/visas/usa";
+                      else if (lower.includes("uk") || lower.includes("london") || lower.includes("britain")) url = "/visas/uk";
+                      else if (lower.includes("canada")) url = "/visas/canada";
+                      else if (lower.includes("australia")) url = "/visas/australia";
+                      else if (lower.includes("europe") || lower.includes("schengen")) url = "/visas/schengen";
+                      handleSelectVisa(visa, url);
+                    }}
                   >
                     <span>{visa}</span>
                     <span className="as-mega-badge">eVisa / Service</span>
