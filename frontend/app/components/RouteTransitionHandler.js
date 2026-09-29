@@ -22,22 +22,17 @@ export default function RouteTransitionHandler() {
     // Remove any leaving state
     document.documentElement.classList.remove("karnish-page-leaving");
 
-    const isHome = pathname === "/" || pathname === "";
-    if (!isHome) {
-      document.documentElement.classList.add("karnish-intro-done");
-      document.documentElement.classList.remove("karnish-intro-active");
-      document.documentElement.classList.remove("karnish-intro-revealing");
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-    }
+    document.documentElement.classList.add("karnish-intro-done");
+    document.documentElement.classList.remove("karnish-intro-active");
+    document.documentElement.classList.remove("karnish-intro-revealing");
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
 
-    // Trigger smooth enter transition on route changes (only when intro is not running)
-    if (!document.documentElement.classList.contains("karnish-intro-active")) {
-      document.documentElement.classList.add("karnish-page-entering");
-      const enterTimer = setTimeout(() => {
-        document.documentElement.classList.remove("karnish-page-entering");
-      }, 350);
-    }
+    // Trigger smooth enter transition on route changes
+    document.documentElement.classList.add("karnish-page-entering");
+    const enterTimer = setTimeout(() => {
+      document.documentElement.classList.remove("karnish-page-entering");
+    }, 350);
 
     // Complete and hide progress bar
     const bar = progressBarRef.current;

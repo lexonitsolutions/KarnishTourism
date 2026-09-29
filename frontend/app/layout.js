@@ -37,24 +37,9 @@ export default function RootLayout({ children }) {
             __html: `
               (function() {
                 try {
-                  var pathname = window.location.pathname || '';
-                  var isHome = pathname === '/' || pathname === '';
-                  // If on any page other than home, never activate intro
-                  if (!isHome) {
-                    document.documentElement.classList.add('karnish-intro-done');
-                    document.documentElement.classList.remove('karnish-intro-active');
-                    return;
-                  }
-                  var p = new URLSearchParams(window.location.search);
-                  var force = p.get('intro') === '1' || p.get('intro') === 'true' || p.get('replay') === '1';
-                  var played = sessionStorage.getItem('karnishIntroPlayed');
-                  if (force || !played) {
-                    document.documentElement.classList.add('karnish-intro-active');
-                    document.documentElement.classList.remove('karnish-intro-done');
-                  } else {
-                    document.documentElement.classList.add('karnish-intro-done');
-                    document.documentElement.classList.remove('karnish-intro-active');
-                  }
+                  document.documentElement.classList.add('karnish-intro-done');
+                  document.documentElement.classList.remove('karnish-intro-active');
+                  document.documentElement.classList.remove('karnish-intro-revealing');
                 } catch(e) {}
               })();
             `,

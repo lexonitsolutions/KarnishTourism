@@ -176,6 +176,8 @@
            ========================================================================== */
         $('.rolling-text').each(function () {
             const $el = $(this);
+            // Skip if already initialized by Navbar's React useEffect
+            if ($el.find('.block').length) return;
             const innerText = $el.text();
             $el.empty();
             const $textContainer = $('<div>').addClass('block');

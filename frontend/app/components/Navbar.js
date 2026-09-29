@@ -5,6 +5,24 @@ import { usePathname } from "next/navigation";
 import AuthModal from "./AuthModal";
 import NavUtilityMenu from "./NavUtilityMenu";
 
+function RollingNavText({ text }) {
+  const chars = Array.from(text);
+  return (
+    <span className="rolling-text">
+      <div className="block">
+        {chars.map((letter, i) => (
+          <span key={i} className="letter">{letter === " " ? "\u00a0" : letter}</span>
+        ))}
+      </div>
+      <div className="block">
+        {chars.map((letter, i) => (
+          <span key={i} className="letter">{letter === " " ? "\u00a0" : letter}</span>
+        ))}
+      </div>
+    </span>
+  );
+}
+
 export default function Navbar() {
   const pathname = usePathname() || "";
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -13,9 +31,9 @@ export default function Navbar() {
   const isHome = pathname === "/" || pathname === "";
   const isAbout = pathname === "/about";
   const isTours = pathname === "/tours" || pathname.startsWith("/tour");
+  const isActivities = pathname === "/activities";
   const isVisas = pathname === "/visas" || pathname.startsWith("/visas");
   const isServices = pathname === "/services" || pathname.startsWith("/service");
-  const isBlog = pathname === "/blog" || pathname.startsWith("/blog") || pathname.startsWith("/post");
   const isContact = pathname === "/contact";
 
   const handleOpenAuth = (tab = "login") => {
@@ -68,37 +86,37 @@ export default function Navbar() {
             <ul className="navbar-nav ms-auto align-items-lg-center">
               <li className="nav-item">
                 <a className={`nav-link ${isHome ? "active" : ""}`} href="/">
-                  <span className="rolling-text">Home</span>
+                  <RollingNavText text="Home" />
                 </a>
               </li>
               <li className="nav-item">
                 <a className={`nav-link ${isAbout ? "active" : ""}`} href="/about">
-                  <span className="rolling-text">About</span>
+                  <RollingNavText text="About" />
                 </a>
               </li>
               <li className="nav-item">
                 <a className={`nav-link ${isTours ? "active" : ""}`} href="/tours">
-                  <span className="rolling-text">Tours</span>
+                  <RollingNavText text="Tours" />
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className={`nav-link ${isActivities ? "active" : ""}`} href="/activities">
+                  <RollingNavText text="Activities" />
                 </a>
               </li>
               <li className="nav-item">
                 <a className={`nav-link ${isVisas ? "active" : ""}`} href="/visas">
-                  <span className="rolling-text">Visas</span>
+                  <RollingNavText text="Visas" />
                 </a>
               </li>
               <li className="nav-item">
                 <a className={`nav-link ${isServices ? "active" : ""}`} href="/services">
-                  <span className="rolling-text">Services</span>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className={`nav-link ${isBlog ? "active" : ""}`} href="/blog">
-                  <span className="rolling-text">Blog</span>
+                  <RollingNavText text="Services" />
                 </a>
               </li>
               <li className="nav-item">
                 <a className={`nav-link ${isContact ? "active" : ""}`} href="/contact">
-                  <span className="rolling-text">Contact</span>
+                  <RollingNavText text="Contact" />
                 </a>
               </li>
 

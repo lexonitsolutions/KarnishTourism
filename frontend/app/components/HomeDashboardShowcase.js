@@ -14,8 +14,6 @@ export default function HomeDashboardShowcase() {
     { name: "Switzerland", image: "/images/5.jpg", price: "₹1,79,999", link: "/tours/international/switzerland" },
     { name: "Maldives", image: "/images/1.jpg", price: "₹69,999", link: "/tours/international/maldives" },
     { name: "Kerala", image: "/images/a3.jpg", price: "₹25,999", link: "/tours/domestic/kerala" },
-    { name: "Thailand", image: "/images/7.jpg", price: "₹42,999", link: "/tours/international/thailand" },
-    { name: "Vietnam", image: "/images/destination-c.jpg", price: "₹47,999", link: "/tours/international/vietnam" },
   ];
 
   const offers = [
@@ -158,14 +156,6 @@ export default function HomeDashboardShowcase() {
           <div className="kt-dash-trust-item">
             <i className="ti-headphone-alt" /> 24/7 Concierge Support
           </div>
-          <a
-            href="https://wa.me/971500000000?text=Hello%20Karnish%20Tourism!%20I%20am%20planning%20a%20trip%20and%20need%20a%20custom%20quote."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="kt-dash-trust-item wa-item"
-          >
-            <i className="fa-brands fa-whatsapp" /> Instant WhatsApp
-          </a>
         </div>
       </div>
 

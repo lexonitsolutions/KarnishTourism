@@ -36,7 +36,7 @@ export default function SiteFooter() {
         <div className="kt-footer-links">
           <div><strong>Explore</strong><Link href="/tours">Holiday Packages</Link><Link href="/destination">Destinations</Link><Link href="/activities">Activities</Link><Link href="/blog">Travel Journal</Link></div>
           <div><strong>Travel services</strong><Link href="/visas">Visa Assistance</Link><Link href="/tours/inquiry">Custom Holidays</Link><Link href="/services">Our Services</Link><Link href="/contact">Contact Support</Link></div>
-          <div><strong>Company</strong><Link href="/about">About Karnish</Link><Link href="/team">Our Team</Link><Link href="/contact">Office &amp; Contact</Link><Link href="/privacy">Privacy Policy</Link></div>
+          <div><strong>Company</strong><Link href="/about">About Karnish</Link><Link href="/business-collaboration">Business Collaboration</Link><Link href="/team">Our Team</Link><Link href="/contact">Office &amp; Contact</Link><Link href="/privacy">Privacy Policy</Link></div>
           <div className="kt-footer-contact"><strong>Need assistance?</strong><a href="tel:+971501234567">+971 50 123 4567</a><a href="mailto:support@karnishtourism.com">support@karnishtourism.com</a><span>Business Bay, Dubai, UAE</span></div>
         </div>
       </div>

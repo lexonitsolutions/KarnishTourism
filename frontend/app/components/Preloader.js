@@ -16,15 +16,12 @@ export default function Preloader() {
     const path = pathRef.current || document.getElementById("svg");
     if (!preloader || !path) return;
 
-    // If home intro is active, don't show preloader
-    if (document.documentElement.classList.contains("karnish-intro-active")) {
-      preloader.style.display = "none";
-      return;
-    }
-
     const startGsapAnimation = (gsapInstance) => {
       if (isAnimatingRef.current) return;
       isAnimatingRef.current = true;
+      if (typeof window !== "undefined") {
+        window.karnishPreloaderHandled = true;
+      }
 
       const curve = "M0 502S175 272 500 272s500 230 500 230V0H0Z";
       const flat = "M0 2S175 1 500 1s500 1 500 1V0H0Z";

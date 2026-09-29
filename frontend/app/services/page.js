@@ -1,8 +1,11 @@
 "use client";
 
 import Script from "next/script";
+import Image from "next/image";
+import Link from "next/link";
 import Navbar from "../components/Navbar";
 import SiteFooter from "../components/SiteFooter";
+import BusinessCollaborationSection from "../components/BusinessCollaborationSection";
 
 export default function Services() {
   return (
@@ -96,6 +99,9 @@ export default function Services() {
                 </div>
               </div>
             </section>
+
+            {/* Business Collaboration */}
+            <BusinessCollaborationSection />
 
             {/* Dedicated Visa Services Showcase */}
             <section className="section-padding" style={{ background: "#f8fafc", borderTop: "1px solid #e2e8f0" }}>

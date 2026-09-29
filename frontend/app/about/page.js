@@ -5,6 +5,7 @@ import Link from "next/link";
 import Script from "next/script";
 import Navbar from "../components/Navbar";
 import SiteFooter from "../components/SiteFooter";
+import BusinessCollaborationSection from "../components/BusinessCollaborationSection";
 
 export default function About() {
   const videoRef = useRef(null);
@@ -626,93 +627,18 @@ export default function About() {
 
               </div>
             </section>
+
+            {/* Business Collaboration & Industry Partnerships */}
+            <BusinessCollaborationSection
+              subtitle="Business & Industry Partnerships"
+              titlePrefix="Partner With Us & Expand Your"
+              titleItalic="Global Reach"
+              description="Whether you are a travel agency, tour operator, hotel group, fleet operator, or activity provider, collaborate with Karnish Tourism to scale world-class travel experiences."
+            />
           </main>
 
-          {/* Footer */}
+          {/* Site Footer */}
           <SiteFooter />
-          <footer className="footer">
-            <div className="container">
-              <div className="row justify-content-center">
-                <div className="col-md-7 mb-45 text-center">
-                  <div className="subscribe">
-                    <div className="section-subtitle wow fadeInRight">Subscribe to travel</div>
-                    <div className="section-title d-rotate wow mb-30"><span className="rotate-text text-white">Travel deals to your inbox<i>!</i></span></div>
-                    <div className="newsletter">
-                      <form action="#">
-                        <input type="email" placeholder="Enter your email address" required />
-                        <button type="submit"><i className="fa-light fa-arrow-right"></i></button>
-                      </form>
-                    </div>
-                    <p>We are committed to protecting your <a href="#0" className="text-decoration-line-bottom">privacy policy.</a></p>
-                  </div>
-                </div>
-              </div>
-              {/* Instagram */}
-              <div className="insta">
-                <div className="container">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="item">
-                        <div className="img">
-                          <a href="#0"> <img src="/images/03_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/01_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/02_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/04.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/05.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/06.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="follow">
-                          <a href="#0" className="text-bg"> <span><i className="fa-brands fa-instagram"></i> / Karnish Tourism</span></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Bottom */}
-            <div className="bottom">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-3 col-md-12">
-                    <p>© All Rights Reserved <a href="https://lexonit.com" target="_blank">lexonit.com</a></p>
-                  </div>
-                  <div className="col-lg-7 col-md-12 text-center">
-                    <div className="links">
-                      <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/tours">Tours</a></li>
-                        <li><a href="/destination">Destinations</a></li>
-                        <li><a href="/blog">Blog</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-12">
-                    <div className="social-icons text-end">
-                      <ul className="list-inline">
-                        <li><a href="#"><i className="fa-brands fa-instagram"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-twitter"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-dribbble"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-text-style5">Karnish Tourism</div>
-          </footer>
         </div>
       </div>
 

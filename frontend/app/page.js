@@ -1,19 +1,15 @@
 "use client";
 
-import ActivitySearchBar from "./components/ActivitySearchBar";
-import KarnishCinematicIntro from "./components/KarnishCinematicIntro";
 import Navbar from "./components/Navbar";
 import HomeDashboardShowcase from "./components/HomeDashboardShowcase";
 import HomeLegacyScripts from "./components/HomeLegacyScripts";
 import SiteFooter from "./components/SiteFooter";
+import BusinessCollaborationSection from "./components/BusinessCollaborationSection";
 import "./homeDashboard.css";
 
 export default function Home() {
   return (
     <>
-      {/* Cinematic Airplane + Cloth Reveal Intro (Plays once per browser session) */}
-      <KarnishCinematicIntro />
-
       {/* Cursor */}
       <div className="cursor"></div>
       {/* Progress scroll totop */}
@@ -102,9 +98,6 @@ export default function Home() {
               <div className="star3"><img src="/images/flight-up.png" alt="" /> </div>
               <div className="star4 duru-rotate-on-scroll"> <img src="/images/bg-compass.png" alt="" /></div>
             </header>
-
-            {/* Interactive Search Bar (Nestles cleanly on hero) */}
-            <ActivitySearchBar />
 
             {/* High-Converting Home Dashboard Showcase: Popular Destinations, Offers & Tour Packages */}
             <HomeDashboardShowcase />
@@ -443,6 +436,10 @@ export default function Home() {
               </div>
               <div className="bg-text-style4 duru-slide-right">Questions</div>
             </section>
+
+            {/* Business Collaboration Showcase */}
+            <BusinessCollaborationSection />
+
             {/* Travel Journal & Intelligence */}
             <section className="blog-home section-padding">
               <div className="container">
