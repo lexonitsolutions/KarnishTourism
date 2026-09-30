@@ -167,6 +167,18 @@ export default function Preloader() {
     window.showKarnishPreloader = showPreloader;
     window.hideKarnishPreloader = runRevealAnimation;
 
+    // On the user's first visit in this session, the cinematic flight intro
+    // is the only startup animation. All later document loads and route
+    // changes continue to use this regular page loader.
+    if (document.documentElement.classList.contains("karnish-intro-active")) {
+      const preloader = preloaderRef.current;
+      if (preloader) {
+        preloader.style.display = "none";
+        preloader.style.visibility = "hidden";
+      }
+      return;
+    }
+
     // On mount or route change, run reveal
     showPreloader();
     const timer = setTimeout(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import AuthModal from "./AuthModal";
 import NavUtilityMenu from "./NavUtilityMenu";
@@ -27,6 +27,18 @@ export default function Navbar() {
   const pathname = usePathname() || "";
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authInitialTab, setAuthInitialTab] = useState("login");
+  const [accountUser, setAccountUser] = useState(null);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      try {
+        const savedUser = sessionStorage.getItem("karnishAccountUser");
+        if (savedUser) setAccountUser(JSON.parse(savedUser));
+      } catch (_) {}
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const isHome = pathname === "/" || pathname === "";
   const isAbout = pathname === "/about";
@@ -37,8 +49,17 @@ export default function Navbar() {
   const isContact = pathname === "/contact";
 
   const handleOpenAuth = (tab = "login") => {
+    if (accountUser) {
+      window.location.assign("/account");
+      return;
+    }
     setAuthInitialTab(tab);
     setIsAuthModalOpen(true);
+  };
+
+  const handleAuthenticated = (user) => {
+    setAccountUser(user);
+    try { sessionStorage.setItem("karnishAccountUser", JSON.stringify(user)); } catch (_) {}
   };
 
   return (
@@ -62,7 +83,7 @@ export default function Navbar() {
               aria-label="Account Login or Register"
               title="My Account"
             >
-              <i className="ti-user"></i>
+              <i className={accountUser ? "ti-user kt-user-signed-in" : "ti-user"}></i>
             </button>
           </div>
 
@@ -70,19 +91,18 @@ export default function Navbar() {
           <button
             className="navbar-toggler"
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbar"
             aria-controls="navbar"
-            aria-expanded="false"
+            aria-expanded={isMobileNavOpen}
             aria-label="Toggle navigation"
+            onClick={() => setIsMobileNavOpen((isOpen) => !isOpen)}
           >
             <span className="navbar-toggler-icon">
-              <i className="ti-menu"></i>
+              <i className={isMobileNavOpen ? "ti-close" : "ti-menu"}></i>
             </span>
           </button>
 
           {/* Menu Items */}
-          <div className="collapse navbar-collapse" id="navbar">
+          <div className={`collapse navbar-collapse ${isMobileNavOpen ? "show" : ""}`} id="navbar">
             <ul className="navbar-nav ms-auto align-items-lg-center">
               <li className="nav-item">
                 <a className={`nav-link ${isHome ? "active" : ""}`} href="/">
@@ -132,10 +152,10 @@ export default function Navbar() {
                   type="button"
                   className="nav-person-btn"
                   onClick={() => handleOpenAuth("login")}
-                  aria-label="Account Login or Register"
-                  title="My Account (Login / Register)"
+                  aria-label={accountUser ? "Open My Account" : "Account Login or Register"}
+                  title={accountUser ? "My Account" : "My Account (Login / Register)"}
                 >
-                  <i className="ti-user"></i>
+                  <i className={accountUser ? "ti-user kt-user-signed-in" : "ti-user"}></i>
                 </button>
               </li>
             </ul>
@@ -148,6 +168,7 @@ export default function Navbar() {
         isOpen={isAuthModalOpen}
         initialTab={authInitialTab}
         onClose={() => setIsAuthModalOpen(false)}
+        onAuthenticated={handleAuthenticated}
       />
     </>
   );

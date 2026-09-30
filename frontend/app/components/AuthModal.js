@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import AuthCard from "./AuthCard";
 
-export default function AuthModal({ isOpen, initialTab = "signin", onClose }) {
+export default function AuthModal({ isOpen, initialTab = "signin", onClose, onAuthenticated }) {
   // Lock body scroll, hide custom site cursor, and handle Escape key
   useEffect(() => {
     if (!isOpen) return;
@@ -32,7 +32,7 @@ export default function AuthModal({ isOpen, initialTab = "signin", onClose }) {
       role="dialog"
       aria-modal="true"
     >
-      <AuthCard initialMode={initialTab} isModal={true} onClose={onClose} />
+      <AuthCard initialMode={initialTab} isModal={true} onClose={onClose} onAuthenticated={onAuthenticated} />
     </div>
   );
 }

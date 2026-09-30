@@ -22,7 +22,7 @@ const WATERMARK_LOGOS = [
   { top: "90%", left: "82%", rotate: "56deg", size: 64, opacity: 0.075 },
 ];
 
-export default function AuthCard({ initialMode = "signin", isModal = false, onClose }) {
+export default function AuthCard({ initialMode = "signin", isModal = false, onClose, onAuthenticated }) {
   const [authMode, setAuthMode] = useState(
     initialMode === "signup" || initialMode === "register" ? "signup" : "signin"
   );
@@ -58,6 +58,13 @@ export default function AuthCard({ initialMode = "signin", isModal = false, onCl
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).trim().toLowerCase());
   };
 
+  const completeAuthentication = (user) => {
+    try {
+      sessionStorage.setItem("karnishAccountUser", JSON.stringify(user));
+    } catch (_) {}
+    if (onAuthenticated) onAuthenticated(user);
+  };
+
   const handleSignInSubmit = (e) => {
     e.preventDefault();
     const errors = {};
@@ -83,6 +90,10 @@ export default function AuthCard({ initialMode = "signin", isModal = false, onCl
     setTimeout(() => {
       setIsSubmitting(false);
       setSuccessMessage("Welcome back! Successfully signed in.");
+      completeAuthentication({
+        name: signInEmail.split("@")[0].replace(/[._-]+/g, " "),
+        email: signInEmail.trim(),
+      });
       setTimeout(() => {
         if (onClose) onClose();
         else window.location.href = "/";
@@ -127,6 +138,7 @@ export default function AuthCard({ initialMode = "signin", isModal = false, onCl
     setTimeout(() => {
       setIsSubmitting(false);
       setSuccessMessage(`Account created successfully! Welcome, ${signUpName}.`);
+      completeAuthentication({ name: signUpName.trim(), email: signUpEmail.trim() });
       setTimeout(() => {
         if (onClose) onClose();
         else window.location.href = "/";

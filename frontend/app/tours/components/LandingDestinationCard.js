@@ -3,33 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { formatPrice } from "../data";
+import WishlistButton from "../../components/WishlistButton";
 
 export default function LandingDestinationCard({ destination, layout = "international", priority = false }) {
   const router = useRouter();
-  const [saved, setSaved] = useState(false);
   const tourPackage = destination.packages[0];
   const destinationUrl = `/tours/${destination.type}/${destination.slug}`;
-
-  useEffect(() => {
-    try {
-      setSaved(JSON.parse(localStorage.getItem("karnish-saved-tours") || "[]").includes(tourPackage.id));
-    } catch {}
-  }, [tourPackage.id]);
-
-  function toggleSaved(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    try {
-      const values = JSON.parse(localStorage.getItem("karnish-saved-tours") || "[]");
-      const next = values.includes(tourPackage.id)
-        ? values.filter((id) => id !== tourPackage.id)
-        : [...values, tourPackage.id];
-      localStorage.setItem("karnish-saved-tours", JSON.stringify(next));
-      setSaved(next.includes(tourPackage.id));
-    } catch {}
-  }
 
   function handleCardClick(e) {
     // If the click is inside the heart button, let toggleSaved handle it
@@ -93,15 +73,7 @@ export default function LandingDestinationCard({ destination, layout = "internat
           />
         </Link>
         <span>{destination.badge}</span>
-        <button
-          type="button"
-          className={saved ? "saved" : ""}
-          onClick={toggleSaved}
-          aria-label={saved ? `Remove ${destination.name} from saved tours` : `Save ${destination.name}`}
-          suppressHydrationWarning
-        >
-          <i className={saved ? "fa-solid fa-heart" : "ti-heart"} />
-        </button>
+        <WishlistButton compact item={{ id: `tour-${tourPackage.id}`, title: titleText, image: destination.image, price: tourPackage.salePrice, meta: `${tourPackage.days} days · ${destination.name}`, href: destinationUrl, type: "Tour" }} />
         <small>{tourPackage.days} Days / {tourPackage.nights} Nights</small>
       </div>
       <div className="ktl-card-copy">

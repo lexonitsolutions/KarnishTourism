@@ -65,6 +65,7 @@ export default function BlogHubPage() {
               <button
                 key={cat}
                 type="button"
+                suppressHydrationWarning
                 className={`kt-blog-tab ${selectedCategory === cat ? "active" : ""}`}
                 onClick={() => setSelectedCategory(cat)}
               >
@@ -176,6 +177,7 @@ export default function BlogHubPage() {
             <p style={{ color: "#64748b", fontSize: "14px" }}>Try selecting another category or clearing your search term.</p>
             <button
               type="button"
+              suppressHydrationWarning
               className="kt-blog-tab active"
               onClick={() => {
                 setSelectedCategory("All Stories");

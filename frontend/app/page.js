@@ -5,11 +5,14 @@ import HomeDashboardShowcase from "./components/HomeDashboardShowcase";
 import HomeLegacyScripts from "./components/HomeLegacyScripts";
 import SiteFooter from "./components/SiteFooter";
 import BusinessCollaborationSection from "./components/BusinessCollaborationSection";
+import KarnishCinematicIntro from "./components/KarnishCinematicIntro";
 import "./homeDashboard.css";
 
 export default function Home() {
   return (
     <>
+      <KarnishCinematicIntro />
+
       {/* Cursor */}
       <div className="cursor"></div>
       {/* Progress scroll totop */}

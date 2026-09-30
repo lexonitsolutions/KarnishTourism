@@ -15,8 +15,16 @@ export default function SiteFooter() {
               <div className="section-title mb-30"><span className="text-white">Travel deals to your inbox<i>!</i></span></div>
               <div className="newsletter">
                 <form action="#" onSubmit={(event) => event.preventDefault()}>
-                  <input type="email" aria-label="Email address" placeholder="Enter your email address" required />
-                  <button type="submit" aria-label="Subscribe"><i className="fa-light fa-arrow-right" /></button>
+                  <input
+                    type="email"
+                    aria-label="Email address"
+                    placeholder="Enter your email address"
+                    required
+                    suppressHydrationWarning
+                  />
+                  <button type="submit" aria-label="Subscribe" suppressHydrationWarning>
+                    <i className="fa-light fa-arrow-right" />
+                  </button>
                 </form>
               </div>
               <p>We are committed to protecting your <Link href="/privacy" className="text-decoration-line-bottom">privacy.</Link></p>

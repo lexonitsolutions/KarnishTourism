@@ -22,11 +22,23 @@ export default function RouteTransitionHandler() {
     // Remove any leaving state
     document.documentElement.classList.remove("karnish-page-leaving");
 
-    document.documentElement.classList.add("karnish-intro-done");
-    document.documentElement.classList.remove("karnish-intro-active");
-    document.documentElement.classList.remove("karnish-intro-revealing");
-    document.documentElement.style.overflow = "";
-    document.body.style.overflow = "";
+    const isHome = pathname === "/" || pathname === "";
+    let hasPlayed = false;
+    try {
+      hasPlayed = sessionStorage.getItem("karnishIntroPlayed") === "true";
+    } catch (_) {}
+
+    // If intro has already played, or if we are on any subpage, intro can never be active
+    if (hasPlayed || !isHome) {
+      document.documentElement.classList.add("karnish-intro-done");
+      document.documentElement.classList.remove("karnish-intro-active");
+      document.documentElement.classList.remove("karnish-intro-revealing");
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      try {
+        sessionStorage.setItem("karnishIntroPlayed", "true");
+      } catch (_) {}
+    }
 
     // Trigger smooth enter transition on route changes
     document.documentElement.classList.add("karnish-page-entering");
@@ -82,6 +94,12 @@ export default function RouteTransitionHandler() {
         // Only handle internal same-origin routes
         if (dest.origin !== window.location.origin) return;
 
+        // When navigating between pages in this session, mark intro as played
+        // so returning to home will never show the starting page intro again
+        try {
+          sessionStorage.setItem("karnishIntroPlayed", "true");
+        } catch (_) {}
+
         // If clicking link to the exact same page, let it be or smooth-scroll to top
         if (dest.pathname === window.location.pathname && dest.search === window.location.search) {
           if (!dest.hash) {
@@ -129,6 +147,12 @@ export default function RouteTransitionHandler() {
     // Clean up leaving state if user navigated via browser Back/Forward (bfcache)
     const handlePageShow = (e) => {
       document.documentElement.classList.remove("karnish-page-leaving");
+      try {
+        if (sessionStorage.getItem("karnishIntroPlayed") === "true") {
+          document.documentElement.classList.add("karnish-intro-done");
+          document.documentElement.classList.remove("karnish-intro-active");
+        }
+      } catch (_) {}
       const bar = progressBarRef.current;
       if (bar) {
         bar.classList.remove("kt-progress-active", "kt-progress-finish");

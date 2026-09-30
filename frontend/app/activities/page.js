@@ -5,6 +5,7 @@ import Script from "next/script";
 import { useSearchParams } from "next/navigation";
 import Navbar from "../components/Navbar";
 import SiteFooter from "../components/SiteFooter";
+import WishlistButton from "../components/WishlistButton";
 import {
   activities,
   destinationOptions,
@@ -59,6 +60,7 @@ function ActivityCard({ activity, viewMode }) {
     <div className="ac-card">
       <div className="ac-card-img">
         <img src={activity.image || "/images/a4.jpg"} alt={activity.title} loading="lazy" />
+        <WishlistButton compact className="ac-wishlist-btn" item={{ id: `activity-${activity.id || activity.slug}`, title: activity.title, image: activity.image, price: activity.price, meta: destinationLabel, href: activity.link, type: "Activity" }} />
         {activity.activities && activity.activities[0] ? (
           <span className="ac-card-tag">{activity.activities[0]}</span>
         ) : null}

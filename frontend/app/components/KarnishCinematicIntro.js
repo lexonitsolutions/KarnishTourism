@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 export default function KarnishCinematicIntro() {
-  const [shouldMount, setShouldMount] = useState(true);
+  const [shouldMount, setShouldMount] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   const overlayRef = useRef(null);
@@ -67,7 +67,9 @@ export default function KarnishCinematicIntro() {
         params.get("intro") === "1" ||
         params.get("intro") === "true" ||
         params.get("replay") === "1";
-      alreadyPlayed = !forceReplay && sessionStorage.getItem("karnishIntroPlayed") === "true";
+      const isDone = document.documentElement.classList.contains("karnish-intro-done");
+      const hasPlayed = sessionStorage.getItem("karnishIntroPlayed") === "true";
+      alreadyPlayed = !forceReplay && (isDone || hasPlayed);
     } catch (_) {}
 
     // Allow manual replay from browser console: window.replayKarnishIntro()
@@ -81,15 +83,23 @@ export default function KarnishCinematicIntro() {
     if (alreadyPlayed) {
       document.documentElement.classList.remove("karnish-intro-active");
       document.documentElement.classList.add("karnish-intro-done");
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
       setShouldMount(false);
       return;
     }
+
+    // Mark intro played in session immediately so any navigation away or back never replays
+    try {
+      sessionStorage.setItem("karnishIntroPlayed", "true");
+    } catch (_) {}
 
     // Lock page scrolling and mark intro as active
     document.documentElement.classList.add("karnish-intro-active");
     document.documentElement.classList.remove("karnish-intro-done");
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
+    setShouldMount(true);
   }, []);
 
   useEffect(() => {
@@ -298,6 +308,9 @@ export default function KarnishCinematicIntro() {
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
+      document.documentElement.classList.remove("karnish-intro-active");
+      document.documentElement.classList.remove("karnish-intro-revealing");
+      document.documentElement.classList.add("karnish-intro-done");
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
     };
@@ -310,6 +323,7 @@ export default function KarnishCinematicIntro() {
       ref={overlayRef}
       id="karnish-intro-overlay"
       className="karnish-intro-overlay"
+      suppressHydrationWarning
       aria-label="Karnish Tourism Introduction"
       role="dialog"
       aria-modal="true"

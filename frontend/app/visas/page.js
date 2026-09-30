@@ -82,6 +82,7 @@ export default function VisaHubPage() {
             <button
               key={region}
               type="button"
+              suppressHydrationWarning
               className={selectedRegion === region ? "active" : ""}
               onClick={() => setSelectedRegion(region)}
             >

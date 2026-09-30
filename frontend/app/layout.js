@@ -37,10 +37,35 @@ export default function RootLayout({ children }) {
             __html: `
               (function() {
                 try {
+                  var pathname = window.location.pathname || '';
+                  var isHome = pathname === '/' || pathname === '';
+                  var params = new URLSearchParams(window.location.search);
+                  var forceReplay = params.get('intro') === '1' || params.get('intro') === 'true' || params.get('replay') === '1';
+                  var hasPlayed = sessionStorage.getItem('karnishIntroPlayed') === 'true';
+
+                  if (isHome && forceReplay) {
+                    sessionStorage.setItem('karnishIntroPlayed', 'true');
+                    document.documentElement.classList.add('karnish-intro-active');
+                    document.documentElement.classList.remove('karnish-intro-done');
+                    return;
+                  }
+
+                  // If user has already seen intro, or is visiting ANY other page,
+                  // or returning to home later in the session:
+                  if (hasPlayed || !isHome) {
+                    sessionStorage.setItem('karnishIntroPlayed', 'true');
+                    document.documentElement.classList.add('karnish-intro-done');
+                    document.documentElement.classList.remove('karnish-intro-active');
+                    document.documentElement.classList.remove('karnish-intro-revealing');
+                  } else {
+                    // Only on the very first landing of the session directly on home page
+                    sessionStorage.setItem('karnishIntroPlayed', 'true');
+                    document.documentElement.classList.add('karnish-intro-active');
+                    document.documentElement.classList.remove('karnish-intro-done');
+                  }
+                } catch(e) {
                   document.documentElement.classList.add('karnish-intro-done');
-                  document.documentElement.classList.remove('karnish-intro-active');
-                  document.documentElement.classList.remove('karnish-intro-revealing');
-                } catch(e) {}
+                }
               })();
             `,
           }}
@@ -64,19 +89,35 @@ export default function RootLayout({ children }) {
                 width: 0 !important;
                 height: 0 !important;
               }
-              html.karnish-intro-done #karnish-intro-overlay {
+              #karnish-intro-overlay,
+              .karnish-intro-overlay {
                 display: none !important;
-              }
-              html.karnish-intro-revealing #karnish-intro-overlay {
-                background: transparent !important;
-              }
-              #karnish-intro-overlay {
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
                 position: fixed;
                 inset: 0;
                 width: 100vw;
                 height: 100dvh;
                 z-index: 2147483647;
                 background: transparent;
+              }
+              html.karnish-intro-active #karnish-intro-overlay,
+              html.karnish-intro-active .karnish-intro-overlay {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+              }
+              html.karnish-intro-done #karnish-intro-overlay,
+              html.karnish-intro-done .karnish-intro-overlay {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+              }
+              html.karnish-intro-revealing #karnish-intro-overlay {
+                background: transparent !important;
               }
               @keyframes ktLogoReveal {
                 0% {
