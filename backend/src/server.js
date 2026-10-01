@@ -1,40 +1,29 @@
-const http = require('http');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const { initializeDatabase } = require("./config/database");
+const { seedStarterCatalog } = require("./config/starterCatalog");
+const { authRouter, ensureAdmin } = require("./routes/auth");
+const adminRouter = require("./routes/admin");
+const publicRouter = require("./routes/public");
 
-const PORT = process.env.PORT || 5000;
+const app = express();
+const PORT = Number(process.env.PORT) || 5000;
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:3000").split(",").map((value) => value.trim());
 
-const server = http.createServer((req, res) => {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+app.disable("x-powered-by");
+app.use(cors({ origin(origin, callback) { if (!origin || allowedOrigins.includes(origin)) return callback(null, true); callback(new Error("Origin not allowed")); }, credentials: true }));
+app.use(express.json({ limit: "1mb" }));
+app.get("/", (req, res) => res.json({ status: "ok", service: "Karnish Tourism Backend API" }));
+app.get("/api/health", (req, res) => res.json({ status: "ok", service: "Karnish Tourism Backend API", timestamp: new Date().toISOString(), uptime: process.uptime() }));
+app.use("/api/auth", authRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/catalog", publicRouter);
+app.use("/api", (req, res) => res.status(404).json({ error: "Not Found", path: req.path }));
+app.use((error, req, res, next) => { console.error(error); res.status(500).json({ error: process.env.NODE_ENV === "production" ? "Internal server error" : error.message }); });
 
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204);
-    res.end();
-    return;
-  }
-
-  const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-
-  if (url.pathname === '/' || url.pathname === '/api/health') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      status: 'ok',
-      service: 'Karnish Tourism Backend API',
-      timestamp: new Date().toISOString(),
-      uptime: process.uptime()
-    }));
-    return;
-  }
-
-  // 404 fallback
-  res.writeHead(404, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({
-    error: 'Not Found',
-    path: url.pathname
-  }));
-});
-
-server.listen(PORT, () => {
-  console.log(`[Backend] Server listening on http://localhost:${PORT}`);
-});
+initializeDatabase()
+  .then(seedStarterCatalog)
+  .then(ensureAdmin)
+  .then(() => app.listen(PORT, () => console.log(`[Backend] Server listening on http://localhost:${PORT}`)))
+  .catch((error) => { console.error("[Backend] Startup failed", error); process.exitCode = 1; });
