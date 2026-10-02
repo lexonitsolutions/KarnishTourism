@@ -35,29 +35,19 @@ export default function Contact() {
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <main className="kc-page">
-            <header className="kc-hero">
-              <div className="kc-hero-overlay" />
-              <div className="kc-shell">
-                <div className="kc-hero-content">
-                  <div className="kc-eyebrow-pill">
-                    <i className="fa-solid fa-headset" />
-                    <span>24/7 Dedicated Concierge &amp; Support</span>
+            <header className="pg-hero section-padding">
+              <div className="container">
+                <div className="row mb-60 justify-content-center">
+                  <div className="col-md-6 text-center">
+                    <div className="section-subtitle">Get In Touch</div>
+                    <div className="section-title">Let's plan something <i>unforgettable</i></div>
                   </div>
-                  <h1>
-                    Let’s Plan Something <span className="kc-gradient-text">Unforgettable.</span>
-                  </h1>
-                  <p className="kc-hero-desc">
-                    Questions about a destination, visa approval, luxury hotel, or custom itinerary? Speak directly with a licensed Karnish travel specialist — no automated queues, no chatbots.
-                  </p>
-                  <div className="kc-hero-actions">
-                    <a className="kc-btn kc-btn-whatsapp" href={WHATSAPP} target="_blank" rel="noreferrer">
-                      <i className="fa-brands fa-whatsapp" />
-                      <span>Chat on WhatsApp</span>
-                    </a>
-                    <a className="kc-btn kc-btn-call" href={`tel:${PHONE_LINK}`}>
-                      <i className="fa-solid fa-phone" />
-                      <span>Call Our Team</span>
-                    </a>
+                </div>
+              </div>
+              <div className="container-fluid">
+                <div className="height1">
+                  <div className="radius-mask">
+                    <div className="bg-img height2" data-background="/images/service-details-hero.jpg" style={{ backgroundImage: "url('/images/service-details-hero.jpg')" }}></div>
                   </div>
                 </div>
               </div>

@@ -970,4 +970,5 @@
             travelHeroSlider.enable();
         }
     
+    window.karnishCustomReady = true;
 })(jQuery);

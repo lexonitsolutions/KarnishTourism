@@ -36,7 +36,7 @@ export default function Post() {
               <div className="container-fluid">
                 <div className="height1">
                   <div className="radius-mask">
-                    <div className="bg-img height2" data-background="/images/destination-03.jpg" data-speed="0.5" data-lag="0"></div>
+                    <div className="bg-img height2" data-background="/images/destination-03.jpg" style={{ backgroundImage: "url('/images/destination-03.jpg')" }}></div>
                   </div>
                 </div>
               </div>

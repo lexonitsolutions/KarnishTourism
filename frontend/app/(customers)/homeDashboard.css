@@ -656,7 +656,6 @@
 .kt-visa-card-mini:hover {
   background: rgba(255, 255, 255, 0.16);
   border-color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-2px);
   color: #ffffff;
 }
 
@@ -869,8 +868,8 @@
 .kt-visa-copy{position:relative;z-index:1}.kt-visa-dash-kicker{display:inline-flex;align-items:center;gap:8px;margin-bottom:17px;color:#e0ad62;font-size:10px;letter-spacing:.18em}.kt-visa-dash-banner h3{margin:0 0 18px;font-size:clamp(34px,3.3vw,50px);font-weight:500;line-height:.96;letter-spacing:-.025em}.kt-visa-dash-banner h3 em{color:#78d4e4;font-weight:300}.kt-visa-dash-banner p{max-width:470px;margin-bottom:24px;color:rgba(255,255,255,.68);font-size:14px;line-height:1.7}
 .kt-visa-proof-list{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin-bottom:30px;color:rgba(255,255,255,.84);font-size:11px}.kt-visa-proof-list span:last-child{grid-column:1/-1}.kt-visa-proof-list i{margin-right:7px;color:#78d4e4;font-size:9px}
 .kt-visa-main-cta{display:inline-flex;align-items:center;gap:12px;padding:13px 20px;border:1px solid rgba(255,255,255,.28);border-radius:24px;color:#fff;font-size:11px;font-weight:700;text-decoration:none;transition:background-color .3s ease,border-color .3s ease,transform .35s cubic-bezier(.16,1,.3,1)}.kt-visa-main-cta i{font-size:9px;transition:transform .35s cubic-bezier(.16,1,.3,1)}.kt-visa-main-cta:hover{transform:translateY(-2px);border-color:#78d4e4;background:rgba(32,149,174,.18);color:#fff}.kt-visa-main-cta:hover i{transform:translateX(4px)}
-.kt-visa-card-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:14px}.kt-visa-card-mini{position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;min-height:190px;padding:20px;border:1px solid rgba(255,255,255,.13);border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.055));box-shadow:inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden;transition:transform .45s cubic-bezier(.16,1,.3,1),background-color .35s ease,border-color .35s ease,box-shadow .4s ease}
-.kt-visa-card-mini:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(120,212,228,.1) 50%,transparent 70%);opacity:0;transform:translateX(-45%);transition:opacity .3s ease,transform .7s cubic-bezier(.16,1,.3,1)}.kt-visa-card-mini:hover{transform:translateY(-5px);border-color:rgba(120,212,228,.45);background:rgba(255,255,255,.12);box-shadow:0 17px 32px rgba(1,9,28,.24);color:#fff}.kt-visa-card-mini:hover:before{opacity:1;transform:translateX(45%)}
+.kt-visa-card-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:14px}.kt-visa-card-mini{position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;min-height:190px;padding:20px;border:1px solid rgba(255,255,255,.13);border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.055));box-shadow:inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden;transition:background-color .35s ease,border-color .35s ease,box-shadow .4s ease}
+.kt-visa-card-mini:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(120,212,228,.1) 50%,transparent 70%);opacity:0;transform:translateX(-45%);transition:opacity .3s ease,transform .7s cubic-bezier(.16,1,.3,1)}.kt-visa-card-mini:hover{border-color:rgba(120,212,228,.45);background:rgba(255,255,255,.12);box-shadow:0 17px 32px rgba(1,9,28,.24);color:#fff}.kt-visa-card-mini:hover:before{opacity:1;transform:translateX(45%)}
 .kt-visa-card-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;margin-bottom:21px}.kt-visa-flag{display:grid;place-items:center;width:42px;height:42px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.1);font-size:21px}.kt-visa-card-arrow{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);font-size:10px;transition:transform .35s cubic-bezier(.16,1,.3,1),background-color .3s ease}.kt-visa-card-mini:hover .kt-visa-card-arrow{transform:translate(2px,-2px);background:#2095ae;color:#fff}
 .kt-visa-card-mini>small{position:relative;z-index:1;margin-bottom:4px;color:#78d4e4;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}.kt-visa-card-mini>strong{position:relative;z-index:1;color:#fff;font-size:19px;font-weight:600}.kt-visa-card-meta{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:auto;padding-top:18px;border-top:1px solid rgba(255,255,255,.1)}.kt-visa-card-meta>span{color:rgba(255,255,255,.58);font-size:9px}.kt-visa-card-meta>span i{margin-right:4px}.kt-visa-card-meta p{margin:0;color:rgba(255,255,255,.58);font-size:9px;line-height:1}.kt-visa-card-meta b{display:block;margin-top:5px;color:#fff;font-size:15px}
 @media(max-width:991px){.kt-visa-dash-banner{grid-template-columns:1fr;gap:38px;padding:42px}.kt-visa-copy{max-width:680px}.kt-visa-card-mini{min-height:180px}}
@@ -969,3 +968,376 @@
   .kt-dest-chips-row:has(.kt-dest-pill-card:hover) .kt-dest-pill-card:not(:hover){flex-grow:.84;opacity:.88}
   .kt-dest-chips-row .kt-dest-pill-card:hover{flex-grow:1.75;transform:translateY(-8px);border-color:rgba(32,149,174,.4);box-shadow:0 22px 42px rgba(15,36,84,.14);opacity:1;z-index:2}
 }
+
+/* ==========================================================================
+   Home Page Isolated Animation Enhancements
+   (Hardware-accelerated, stutter-free, zero impact on other pages)
+   ========================================================================== */
+
+/* 1. HERO VERTICAL MARQUEE (Seamless infinite loop & multi-directional flow) */
+header .main-marq {
+  position: relative;
+  overflow: hidden;
+}
+
+header .main-marq:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    #0f2454 0%,
+    rgba(15, 36, 84, 0.4) 60px,
+    rgba(15, 36, 84, 0) 140px,
+    rgba(15, 36, 84, 0) calc(100% - 140px),
+    rgba(15, 36, 84, 0.4) calc(100% - 60px),
+    #0f2454 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.slide-vertical {
+  overflow: hidden;
+  height: calc(100vh - 110px);
+  max-height: 820px;
+  position: relative;
+  transform: translateZ(0);
+}
+
+.slide-vertical .box {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 20px;
+  position: relative;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Column 1: Smooth Upward Glide */
+.slide-vertical.st1 .box {
+  animation: ktMarqSlideUp 28s linear infinite !important;
+}
+
+/* Column 2 (Center Featured): Elegant Downward Glide */
+.slide-vertical.st2 .box {
+  animation: ktMarqSlideDown 34s linear infinite !important;
+}
+
+/* Column 3: Smooth Upward Glide at slightly staggered pace */
+.slide-vertical.st3 .box {
+  animation: ktMarqSlideUp 24s linear infinite !important;
+}
+
+/* Pause smoothly on hover */
+.slide-vertical:hover .box {
+  animation-play-state: paused !important;
+}
+
+.slide-vertical .img {
+  display: block;
+  width: 100%;
+  height: 300px;
+  margin: 0 !important;
+  border-radius: 40px;
+  overflow: hidden;
+  position: relative;
+  transform: translateZ(0);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+}
+
+.slide-vertical.st2 .img {
+  height: 390px;
+  border-radius: 50px;
+}
+
+.slide-vertical .img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.slide-vertical .img:hover img {
+  transform: scale(1.08);
+}
+
+@keyframes ktMarqSlideUp {
+  0% {
+    transform: translate3d(0, 0%, 0);
+  }
+  100% {
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+@keyframes ktMarqSlideDown {
+  0% {
+    transform: translate3d(0, -100%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0%, 0);
+  }
+}
+
+
+/* 2. FLOATING HERO ELEMENTS (Compass, Aircrafts, Sparkle) */
+
+/* Slow hypnotic 360-degree compass rotation with organic levitation */
+header .star4,
+header .kt-compass-element {
+  position: absolute;
+  top: 34%;
+  left: 45%;
+  width: 78px;
+  height: 78px;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+  animation: ktCompassLevitate 6s ease-in-out infinite alternate !important;
+}
+
+header .star4 img,
+header .kt-compass-element img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  will-change: transform;
+  animation: ktCompassSpin 32s linear infinite !important;
+  filter: drop-shadow(0 8px 18px rgba(15, 36, 84, 0.4));
+}
+
+@keyframes ktCompassSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ktCompassLevitate {
+  0% {
+    transform: translate3d(0, -10px, 0);
+  }
+  100% {
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+/* Aerodynamic descending flight drift */
+header .star2 {
+  position: absolute;
+  top: 38%;
+  right: 1%;
+  width: 230px;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+  animation: ktPlaneGlideDown 12s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate !important;
+}
+
+header .star2 img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 28px rgba(15, 36, 84, 0.35));
+}
+
+@keyframes ktPlaneGlideDown {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate3d(-32px, 16px, 0) rotate(-1deg);
+  }
+  100% {
+    transform: translate3d(-60px, 34px, 0) rotate(-5deg);
+  }
+}
+
+/* Aerodynamic ascending flight climb */
+header .star3 {
+  position: absolute;
+  bottom: 0%;
+  left: 36%;
+  width: 175px;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+  animation: ktPlaneGlideUp 11s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate !important;
+}
+
+header .star3 img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 28px rgba(15, 36, 84, 0.35));
+}
+
+@keyframes ktPlaneGlideUp {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(2deg);
+  }
+  50% {
+    transform: translate3d(24px, -18px, 0) rotate(5deg);
+  }
+  100% {
+    transform: translate3d(48px, -36px, 0) rotate(1deg);
+  }
+}
+
+/* Sparkle twinkle */
+header .star1 {
+  position: absolute;
+  top: 14%;
+  left: 9%;
+  width: 36px;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: ktSparklePulse 4s ease-in-out infinite !important;
+}
+
+@keyframes ktSparklePulse {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.7) rotate(0deg);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(3px, -8px, 0) scale(1.1) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.7) rotate(360deg);
+    opacity: 0.35;
+  }
+}
+
+
+/* 3. SECTION SCROLL ANIMATIONS (Fade-ins, 3D text rotation, reveals)
+   Strictly scoped to .kt-home-page-root so they never affect other pages */
+
+.kt-home-page-root .d-rotate,
+.kt-home-page-root .d-rotate .rotate-text,
+.kt-home-page-root .wow,
+.kt-home-page-root .duru-slide-up,
+.kt-home-page-root .duru-slide-down,
+.kt-home-page-root .duru-slide-left,
+.kt-home-page-root .duru-slide-right {
+  visibility: visible !important;
+}
+
+/* 3D Title Rotation Reveal */
+.kt-home-page-root .d-rotate {
+  perspective: 1200px;
+  overflow: visible;
+}
+
+.kt-home-page-root .d-rotate .rotate-text {
+  display: block;
+  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
+  transform: translate3d(0, 28px, 0) rotateX(-18deg);
+  opacity: 0;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.kt-home-page-root .d-rotate.kt-in-view .rotate-text,
+.kt-home-page-root .d-rotate.animated .rotate-text,
+.kt-home-page-root .d-rotate .rotate-text.kt-in-view {
+  transform: translate3d(0, 0, 0) rotateX(0deg) !important;
+  opacity: 1 !important;
+}
+
+/* Subtitle & Fade Animations */
+.kt-home-page-root .section-subtitle.wow {
+  opacity: 0;
+  transform: translate3d(24px, 0, 0);
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s ease !important;
+  will-change: transform, opacity;
+}
+
+.kt-home-page-root .section-subtitle.wow.kt-in-view,
+.kt-home-page-root .section-subtitle.wow.animated {
+  opacity: 1 !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+.kt-home-page-root .wow.fadeInUp {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease !important;
+  will-change: transform, opacity;
+}
+
+.kt-home-page-root .wow.fadeInUp.kt-in-view,
+.kt-home-page-root .wow.fadeInUp.animated {
+  opacity: 1 !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+.kt-home-page-root .wow.fadeInRight {
+  opacity: 0;
+  transform: translate3d(26px, 0, 0);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease !important;
+  will-change: transform, opacity;
+}
+
+.kt-home-page-root .wow.fadeInRight.kt-in-view,
+.kt-home-page-root .wow.fadeInRight.animated {
+  opacity: 1 !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+/* About 2 Section Images */
+.kt-home-page-root .about2-img .duru-slide-down,
+.kt-home-page-root .about2-img .duru-slide-up {
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease !important;
+  will-change: transform;
+}
+
+.kt-home-page-root .about2-img .duru-slide-down {
+  transform: translate3d(0, -25px, 0);
+  opacity: 0.85;
+}
+
+.kt-home-page-root .about2-img .duru-slide-down.kt-in-view,
+.kt-home-page-root .about2-img .duru-slide-down.animated {
+  transform: translate3d(0, 0, 0) !important;
+  opacity: 1 !important;
+}
+
+.kt-home-page-root .about2-img .duru-slide-up {
+  transform: translate3d(0, 25px, 0);
+  opacity: 0.85;
+}
+
+.kt-home-page-root .about2-img .duru-slide-up.kt-in-view,
+.kt-home-page-root .about2-img .duru-slide-up.animated {
+  transform: translate3d(0, 0, 0) !important;
+  opacity: 1 !important;
+}
+
+/* Watermark Text */
+.kt-home-page-root .bg-text-style.duru-slide-right,
+.kt-home-page-root .bg-text-style4.duru-slide-right {
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease !important;
+  transform: translate3d(35px, 0, 0);
+  opacity: 0.4;
+  will-change: transform;
+}
+
+.kt-home-page-root .bg-text-style.duru-slide-right.kt-in-view,
+.kt-home-page-root .bg-text-style4.duru-slide-right.kt-in-view {
+  transform: translate3d(0, 0, 0) !important;
+  opacity: 1 !important;
+}
+
+

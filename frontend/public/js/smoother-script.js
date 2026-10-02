@@ -1,52 +1,72 @@
-$(function () {
-  if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined" || typeof ScrollSmoother === "undefined") {
-    return;
+(function () {
+  "use strict";
+
+  var activeSmoother = null;
+  var refreshFrame = null;
+
+  function librariesReady() {
+    return (
+      typeof window.gsap !== "undefined" &&
+      typeof window.ScrollTrigger !== "undefined" &&
+      typeof window.ScrollSmoother !== "undefined"
+    );
   }
-
-  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
-  ScrollTrigger.normalizeScroll(false);
-
-  // Check if smooth wrapper exists on page
-  var wrapper = document.getElementById("smooth-wrapper");
-  var content = document.getElementById("smooth-content");
-  if (!wrapper || !content) {
-    return;
-  }
-
-  // Create the smooth scroller
-  var smoother = ScrollSmoother.create({
-    wrapper: "#smooth-wrapper",
-    content: "#smooth-content",
-    smooth: 1.5,
-    effects: true,
-  });
 
   function refreshScroller() {
-    try {
-      ScrollTrigger.refresh();
-      if (smoother && typeof smoother.refresh === "function") {
-        smoother.refresh();
-      }
-      // Keep WOW elements visible
-      if (typeof $ !== "undefined") {
-        $(".wow").css("visibility", "visible");
-      }
-    } catch (_) {}
-  }
-
-  // Refresh when images finish loading
-  if (typeof imagesLoaded !== "undefined") {
-    imagesLoaded("#smooth-content", function () {
-      refreshScroller();
+    window.cancelAnimationFrame(refreshFrame);
+    refreshFrame = window.requestAnimationFrame(function () {
+      try {
+        window.ScrollTrigger && window.ScrollTrigger.refresh();
+        activeSmoother && activeSmoother.refresh && activeSmoother.refresh();
+        document.querySelectorAll(".wow").forEach(function (element) {
+          element.style.visibility = "visible";
+        });
+      } catch (_) {}
     });
   }
 
-  window.addEventListener("load", refreshScroller);
-  setTimeout(refreshScroller, 300);
-  setTimeout(refreshScroller, 800);
-  setTimeout(refreshScroller, 1800);
-  setTimeout(refreshScroller, 3000);
+  function initializeScroller() {
+    if (!librariesReady()) return;
 
-  // Expose globally for preloader and route transitions
+    var wrapper = document.getElementById("smooth-wrapper");
+    var content = document.getElementById("smooth-content");
+
+    try {
+      var previous = window.ScrollSmoother.get && window.ScrollSmoother.get();
+      if (previous) previous.kill();
+    } catch (_) {}
+    activeSmoother = null;
+
+    if (!wrapper || !content) {
+      refreshScroller();
+      return;
+    }
+
+    window.gsap.registerPlugin(window.ScrollTrigger, window.ScrollSmoother);
+    window.ScrollTrigger.normalizeScroll(false);
+
+    activeSmoother = window.ScrollSmoother.create({
+      wrapper: wrapper,
+      content: content,
+      smooth: 1.5,
+      effects: true,
+    });
+
+    if (typeof window.imagesLoaded !== "undefined") {
+      window.imagesLoaded(content, refreshScroller);
+    }
+
+    refreshScroller();
+  }
+
   window.refreshKarnishScroller = refreshScroller;
-});
+  window.reinitializeKarnishScroller = initializeScroller;
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeScroller, { once: true });
+  } else {
+    initializeScroller();
+  }
+
+  window.addEventListener("load", refreshScroller, { once: true });
+})();

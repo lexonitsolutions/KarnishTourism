@@ -86,21 +86,7 @@ export default function Preloader() {
         duration: 0.01,
       });
 
-      // Smooth entrance of header and content without sudden display
-      const headerEl = document.querySelector("header");
-      if (headerEl) {
-        tl.from(
-          headerEl,
-          {
-            y: 40,
-            opacity: 0,
-            duration: 0.6,
-            ease: "power2.out",
-            clearProps: "all",
-          },
-          "-=0.5"
-        );
-      }
+      // Page banners animate after the overlay clears via PageBannerAnimator.
     };
 
     // Check if gsap is available or poll for it

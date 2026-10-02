@@ -1,12 +1,83 @@
 "use client";
 
-import Script from "next/script";
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import SiteFooter from "../components/SiteFooter";
 import BusinessCollaborationSection from "../components/BusinessCollaborationSection";
 
 export default function Services() {
+  useEffect(() => {
+    // Kill any lingering ScrollSmoother instance from other pages
+    if (typeof window !== "undefined" && window.ScrollSmoother?.get?.()) {
+      try {
+        window.ScrollSmoother.get().kill();
+      } catch (_) {}
+    }
+
+    // Force window and body to be naturally scrollable
+    document.documentElement.style.overflowY = "auto";
+    document.body.style.overflowY = "auto";
+
+    const row1 = document.querySelector(".kt-services-row-1");
+    const row2 = document.querySelector(".kt-services-row-2");
+
+    if (!row1 || !row2) return;
+
+    let ticking = false;
+
+    const updateScrollAnimation = () => {
+      const vh = window.innerHeight || 800;
+      const isMobile = window.innerWidth < 768;
+      const maxOffset = isMobile ? 70 : 180;
+
+      // Row 1 calculation (slides from left)
+      const rect1 = row1.getBoundingClientRect();
+      const start1 = vh * 0.95;
+      const end1 = vh * 0.35;
+      const rawProgress1 = (start1 - rect1.top) / (start1 - end1);
+      const progress1 = Math.max(0, Math.min(1, rawProgress1));
+      const eased1 = Math.pow(progress1, 1.25);
+      const offset1 = -maxOffset * (1 - eased1);
+      const opacity1 = Math.max(0.08, Math.min(1, progress1 * 1.4));
+
+      row1.style.transform = `translate3d(${offset1.toFixed(1)}px, 0, 0)`;
+      row1.style.opacity = opacity1.toFixed(3);
+
+      // Row 2 calculation (slides from right)
+      const rect2 = row2.getBoundingClientRect();
+      const start2 = vh * 0.95;
+      const end2 = vh * 0.35;
+      const rawProgress2 = (start2 - rect2.top) / (start2 - end2);
+      const progress2 = Math.max(0, Math.min(1, rawProgress2));
+      const eased2 = Math.pow(progress2, 1.25);
+      const offset2 = maxOffset * (1 - eased2);
+      const opacity2 = Math.max(0.08, Math.min(1, progress2 * 1.4));
+
+      row2.style.transform = `translate3d(${offset2.toFixed(1)}px, 0, 0)`;
+      row2.style.opacity = opacity2.toFixed(3);
+
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScrollAnimation);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+
+    // Initial positioning
+    updateScrollAnimation();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
   return (
     <>
       {/* Cursor */}
@@ -17,11 +88,7 @@ export default function Services() {
           <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
         </svg>
       </div>
-      {/* Smooth-wrapper */}
-      <div id="smooth-wrapper" suppressHydrationWarning>
-        {/* Navbar */}
-        <div id="smooth-content" suppressHydrationWarning>
-          <main className="o-hidden" suppressHydrationWarning data-protonpass-ignore="true">
+      <main className="kt-services-page" data-protonpass-ignore="true">
             {/* Header Banner */}
             <header className="pg-hero section-padding">
               <div className="container">
@@ -35,76 +102,226 @@ export default function Services() {
               <div className="container-fluid">
                 <div className="height1">
                   <div className="radius-mask">
-                    <div className="bg-img height2" data-background="/images/services-hero.jpg" data-speed="0.5" data-lag="0"></div>
+                    <div className="bg-img height2" data-background="/images/services-hero.jpg" style={{ backgroundImage: "url('/images/services-hero.jpg')" }}></div>
                   </div>
                 </div>
               </div>
             </header>
             {/* Services */}
-            <section className="services section-padding">
+            <section className="services section-padding kt-services-wrapper">
               <div className="container">
-                <div className="row justify-content-center">
-                  <div className="col-md-4">
-                    <div className="item mb-25 duru-slide-right">
-                      <a href="/services/custom-tour-packages" aria-label="Explore Custom Tour Packages">
-                        <span className="arrow fa-thin fa-arrow-up-right"></span>
-                      </a>
-                      <div className="icon"><i className="fa-thin fa-route"></i></div>
-                      <h5><a href="/services/custom-tour-packages">Custom Tour Packages</a></h5>
-                      <p>Personalized travel plans tailored to your interests and budget.</p>
-                    </div>
+                {/* Row 1 - Slides in from LEFT when user is scrolling */}
+                <div className="row justify-content-center g-4 mb-4 kt-services-row kt-services-row-1">
+                  {/* Service 1: Custom Tour Packages */}
+                  <div className="col-lg-4 col-md-6">
+                    <a href="/services/custom-tour-packages" className="kt-service-clean-link" aria-label="Explore Custom Tour Packages">
+                      <div className="kt-service-clean-card">
+                        <span className="arrow"><i className="ti-arrow-top-right"></i></span>
+                        <div className="icon"><i className="fa-thin fa-route"></i></div>
+                        <h5>Custom Tour Packages</h5>
+                        <p>Personalized travel plans tailored to your interests and budget.</p>
+                      </div>
+                    </a>
                   </div>
-                  <div className="col-md-4">
-                    <div className="item mb-25 duru-slide-right">
-                      <a href="/services/flight-booking" aria-label="Explore Flight Booking">
-                        <span className="arrow fa-thin fa-arrow-up-right"></span>
-                      </a>
-                      <div className="icon"><i className="fa-thin fa-plane-departure"></i></div>
-                      <h5><a href="/services/flight-booking">Flight Booking</a></h5>
-                      <p>Fast and secure flight reservations at the best available prices.</p>
-                    </div>
+
+                  {/* Service 2: Flight Booking */}
+                  <div className="col-lg-4 col-md-6">
+                    <a href="/services/flight-booking" className="kt-service-clean-link" aria-label="Explore Flight Booking">
+                      <div className="kt-service-clean-card">
+                        <span className="arrow"><i className="ti-arrow-top-right"></i></span>
+                        <div className="icon"><i className="fa-thin fa-plane-departure"></i></div>
+                        <h5>Flight Booking</h5>
+                        <p>Fast and secure flight reservations at the best available prices.</p>
+                      </div>
+                    </a>
                   </div>
-                  <div className="col-md-4">
-                    <div className="item mb-25 duru-slide-right">
-                      <a href="/services/hotel-accommodation" aria-label="Explore Hotel & Accommodation">
-                        <span className="arrow fa-thin fa-arrow-up-right"></span>
-                      </a>
-                      <div className="icon"><i className="fa-thin fa-hotel"></i></div>
-                      <h5><a href="/services/hotel-accommodation">Hotel &amp; Accommodation</a></h5>
-                      <p>Comfortable and premium accommodation options worldwide.</p>
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="item mb-25 duru-slide-left">
-                      <a href="/services/visa-assistance" aria-label="Explore Visa Assistance">
-                        <span className="arrow fa-thin fa-arrow-up-right"></span>
-                      </a>
-                      <div className="icon"><i className="fa-thin fa-passport"></i></div>
-                      <h5><a href="/services/visa-assistance">Visa Assistance</a></h5>
-                      <p>Professional support for all your travel visa procedures.</p>
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="item mb-25 duru-slide-left">
-                      <a href="/services/transfer-services" aria-label="Explore Transfer Services">
-                        <span className="arrow fa-thin fa-arrow-up-right"></span>
-                      </a>
-                      <div className="icon"><i className="fa-thin fa-van-shuttle"></i></div>
-                      <h5><a href="/services/transfer-services">Transfer Services</a></h5>
-                      <p>Reliable airport and city transfer solutions for stress-free travel.</p>
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="item mb-25 duru-slide-left">
-                      <a href="/services/customer-support" aria-label="Explore 24/7 Customer Support">
-                        <span className="arrow fa-thin fa-arrow-up-right"></span>
-                      </a>
-                      <div className="icon"><i className="fa-thin fa-headset"></i></div>
-                      <h5><a href="/services/customer-support">24/7 Customer Support</a></h5>
-                      <p>Dedicated support available anytime during your journey.</p>
-                    </div>
+
+                  {/* Service 3: Hotel & Accommodation */}
+                  <div className="col-lg-4 col-md-6">
+                    <a href="/services/hotel-accommodation" className="kt-service-clean-link" aria-label="Explore Hotel & Accommodation">
+                      <div className="kt-service-clean-card">
+                        <span className="arrow"><i className="ti-arrow-top-right"></i></span>
+                        <div className="icon"><i className="fa-thin fa-hotel"></i></div>
+                        <h5>Hotel &amp; Accommodation</h5>
+                        <p>Comfortable and premium accommodation options worldwide.</p>
+                      </div>
+                    </a>
                   </div>
                 </div>
+
+                {/* Row 2 - Slides in from RIGHT when user is scrolling */}
+                <div className="row justify-content-center g-4 kt-services-row kt-services-row-2">
+                  {/* Service 4: Visa Assistance */}
+                  <div className="col-lg-4 col-md-6">
+                    <a href="/services/visa-assistance" className="kt-service-clean-link" aria-label="Explore Visa Assistance">
+                      <div className="kt-service-clean-card">
+                        <span className="arrow"><i className="ti-arrow-top-right"></i></span>
+                        <div className="icon"><i className="fa-thin fa-passport"></i></div>
+                        <h5>Visa Assistance</h5>
+                        <p>Professional support for all your travel visa procedures.</p>
+                      </div>
+                    </a>
+                  </div>
+
+                  {/* Service 5: Transfer Services */}
+                  <div className="col-lg-4 col-md-6">
+                    <a href="/services/transfer-services" className="kt-service-clean-link" aria-label="Explore Transfer Services">
+                      <div className="kt-service-clean-card">
+                        <span className="arrow"><i className="ti-arrow-top-right"></i></span>
+                        <div className="icon"><i className="fa-thin fa-van-shuttle"></i></div>
+                        <h5>Transfer Services</h5>
+                        <p>Reliable airport and city transfer solutions for stress-free travel.</p>
+                      </div>
+                    </a>
+                  </div>
+
+                  {/* Service 6: 24/7 Customer Support */}
+                  <div className="col-lg-4 col-md-6">
+                    <a href="/services/customer-support" className="kt-service-clean-link" aria-label="Explore 24/7 Customer Support">
+                      <div className="kt-service-clean-card">
+                        <span className="arrow"><i className="ti-arrow-top-right"></i></span>
+                        <div className="icon"><i className="fa-thin fa-headset"></i></div>
+                        <h5>24/7 Customer Support</h5>
+                        <p>Dedicated support available anytime during your journey.</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                <style>{`
+                  html, body {
+                    overflow-y: auto !important;
+                    height: auto !important;
+                  }
+
+                  .kt-services-page {
+                    width: 100%;
+                    min-height: 100vh;
+                    overflow-x: clip !important;
+                    overflow-y: visible !important;
+                    position: relative;
+                  }
+
+                  .kt-services-wrapper {
+                    overflow-x: clip !important;
+                    overflow-y: visible !important;
+                    position: relative;
+                  }
+
+                  .kt-services-row {
+                    will-change: transform, opacity;
+                    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+                  }
+
+                  .kt-service-clean-link {
+                    text-decoration: none !important;
+                    color: inherit !important;
+                    display: block;
+                    height: 100%;
+                  }
+
+                  .kt-service-clean-card {
+                    position: relative;
+                    padding: 44px 32px;
+                    background: #ffffff;
+                    border-radius: 24px;
+                    text-align: center;
+                    border: 1px solid rgba(15, 36, 84, 0.08);
+                    box-shadow: 0 10px 30px rgba(15, 36, 84, 0.04), 0 20px 50px rgba(15, 36, 84, 0.04);
+                    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+                    overflow: hidden;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    cursor: pointer;
+                  }
+
+                  .kt-service-clean-card:hover {
+                    transform: translateY(-8px);
+                    border-color: rgba(32, 149, 174, 0.35);
+                    box-shadow: 0 22px 48px rgba(15, 36, 84, 0.12);
+                  }
+
+                  /* Arrow in top-right corner on hover in slow motion */
+                  .kt-service-clean-card .arrow {
+                    position: absolute;
+                    top: 25px;
+                    right: 25px;
+                    width: 48px;
+                    height: 48px;
+                    line-height: 48px;
+                    border-radius: 50%;
+                    background-color: #2095ae;
+                    color: #ffffff;
+                    display: grid;
+                    place-items: center;
+                    font-size: 16px;
+                    opacity: 0;
+                    transform: scale(0.65);
+                    transition: all 0.65s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                    pointer-events: none;
+                    z-index: 5;
+                  }
+
+                  .kt-service-clean-card:hover .arrow {
+                    top: 0 !important;
+                    right: 0 !important;
+                    width: 62px !important;
+                    height: 62px !important;
+                    line-height: 62px !important;
+                    border-radius: 0 24px 0 46px !important;
+                    background-color: #2095ae !important;
+                    color: #ffffff !important;
+                    opacity: 1 !important;
+                    transform: scale(1) !important;
+                    box-shadow: 0 10px 24px rgba(32, 149, 174, 0.38) !important;
+                    transition: all 0.65s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                  }
+
+                  .kt-service-clean-card .arrow i {
+                    font-size: 15px;
+                    color: #ffffff;
+                    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+                  }
+
+                  .kt-service-clean-card:hover .arrow i {
+                    transform: translate(2px, -2px);
+                  }
+
+                  .kt-service-clean-card .icon {
+                    font-size: 52px;
+                    color: #2095ae;
+                    line-height: 1;
+                    margin-bottom: 20px;
+                    display: inline-block;
+                    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+                  }
+
+                  .kt-service-clean-card:hover .icon {
+                    transform: translateY(-4px) scale(1.08);
+                    color: #167a8f;
+                  }
+
+                  .kt-service-clean-card h5 {
+                    font-size: 22px;
+                    font-weight: 700;
+                    color: #0f2454;
+                    margin-bottom: 12px;
+                    transition: color 0.35s ease;
+                  }
+
+                  .kt-service-clean-card:hover h5 {
+                    color: #2095ae;
+                  }
+
+                  .kt-service-clean-card p {
+                    font-size: 14.5px;
+                    line-height: 1.65;
+                    color: #5e6282;
+                    margin-bottom: 0;
+                  }
+                `}</style>
                 <div className="row">
                   <div className="col-md-12 text-center mt-30 duru-slide-right">
                     <div className="section-info">
@@ -269,106 +486,9 @@ export default function Services() {
                 </div>
               </div>
             </section>
-          </main>
           {/* Footer */}
           <SiteFooter />
-          <footer className="footer">
-            <div className="container">
-              <div className="row justify-content-center">
-                <div className="col-md-7 mb-45 text-center">
-                  <div className="subscribe">
-                    <div className="section-subtitle wow fadeInRight">Subscribe to travel</div>
-                    <div className="section-title d-rotate wow mb-30"><span className="rotate-text text-white">Travel deals to your inbox<i>!</i></span></div>
-                    <div className="newsletter">
-                      <form action="#">
-                        <input type="email" placeholder="Enter your email address" required />
-                        <button type="submit"><i className="fa-light fa-arrow-right"></i></button>
-                      </form>
-                    </div>
-                    <p>We are committed to protecting your <a href="#0" className="text-decoration-line-bottom">privacy policy.</a></p>
-                  </div>
-                </div>
-              </div>
-              {/* Instagram */}
-              <div className="insta">
-                <div className="container">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="item">
-                        <div className="img">
-                          <a href="#0"> <img src="/images/03_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/01_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/02_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/04.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/05.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/06.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="follow">
-                          <a href="#0" className="text-bg"> <span><i className="fa-brands fa-instagram"></i> / Karnish Tourism</span></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Bottom */}
-            <div className="bottom">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-3 col-md-12">
-                    <p>© All Rights Reserved <a href="https://lexonit.com" target="_blank">lexonit.com</a></p>
-                  </div>
-                  <div className="col-lg-7 col-md-12 text-center">
-                    <div className="links">
-                      <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/tours">Tours</a></li>
-                        <li><a href="/destination">Destinations</a></li>
-                        <li><a href="/blog">Blog</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-12">
-                    <div className="social-icons text-end">
-                      <ul className="list-inline">
-                        <li><a href="#"><i className="fa-brands fa-instagram"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-twitter"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-dribbble"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-text-style5">Karnish Tourism</div>
-          </footer>
-        </div>
-      </div>
-
-      <Script id="script-jquery" src="/js/jquery-3.6.0.min.js" strategy="afterInteractive" />
-      <Script id="script-jquery-migrate" src="/js/jquery-migrate-3.4.0.min.js" strategy="afterInteractive" />
-      <Script id="script-plugins" src="/js/plugins.js" strategy="afterInteractive" />
-      <Script id="script-imagesloaded" src="/js/imagesloaded.pkgd.min.js" strategy="afterInteractive" />
-      <Script id="script-gsap" src="/js/gsap.min.js" strategy="afterInteractive" />
-      <Script id="script-scrollsmoother" src="/js/ScrollSmoother.min.js" strategy="afterInteractive" />
-      <Script id="script-scrolltrigger" src="/js/ScrollTrigger.min.js" strategy="afterInteractive" />
-      <Script id="script-smoother-script" src="/js/smoother-script.js" strategy="afterInteractive" />
-      <Script id="script-springer" src="/js/springer.min.js" strategy="afterInteractive" />
-      <Script id="script-lenis" src="/js/lenis.min.js" strategy="afterInteractive" />
-      <Script id="script-custom" src="/js/custom.js" strategy="afterInteractive" />
+        </main>
     </>
   );
 }

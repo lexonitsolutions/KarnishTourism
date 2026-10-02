@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import HomeDashboardShowcase from "./components/HomeDashboardShowcase";
 import HomeLegacyScripts from "./components/HomeLegacyScripts";
 import SiteFooter from "./components/SiteFooter";
@@ -7,6 +8,53 @@ import BusinessCollaborationSection from "./components/BusinessCollaborationSect
 import "./homeDashboard.css";
 
 export default function Home() {
+  useEffect(() => {
+    // High-performance intersection observer for home page section animations
+    const animatedElements = document.querySelectorAll(
+      ".wow, .d-rotate, .duru-slide-up, .duru-slide-down, .duru-slide-left, .duru-slide-right, .duru-mask-reveal-horizontal"
+    );
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("kt-in-view", "animated");
+            const rotateChild = entry.target.querySelector(".rotate-text");
+            if (rotateChild) {
+              rotateChild.classList.add("kt-in-view");
+            }
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "0px 0px -40px 0px",
+        threshold: 0.1,
+      }
+    );
+
+    animatedElements.forEach((el) => observer.observe(el));
+
+    // Fallback timer to ensure elements in view on initial load are animated
+    const timer = setTimeout(() => {
+      animatedElements.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add("kt-in-view", "animated");
+          const rotateChild = el.querySelector(".rotate-text");
+          if (rotateChild) {
+            rotateChild.classList.add("kt-in-view");
+          }
+        }
+      });
+    }, 350);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <>
 
@@ -22,7 +70,7 @@ export default function Home() {
       <div id="smooth-wrapper">
         {/* Navbar */}
         <div id="smooth-content">
-          <main className="o-hidden">
+          <main className="o-hidden kt-home-page-root">
             {/* Parallax Image */}
             <header className="full-height valign">
               <div className="background bg-img"></div>
@@ -93,9 +141,9 @@ export default function Home() {
                 </div>
               </div>
               <div className="star1"> <img src="/images/star2.png" alt="" /> </div>
-              <div className="star2 duru-slide-right"><img src="/images/flight-down.png" alt="" /></div>
+              <div className="star2"><img src="/images/flight-down.png" alt="" /></div>
               <div className="star3"><img src="/images/flight-up.png" alt="" /> </div>
-              <div className="star4 duru-rotate-on-scroll"> <img src="/images/bg-compass.png" alt="" /></div>
+              <div className="star4 kt-compass-element"> <img src="/images/bg-compass.png" alt="" /></div>
             </header>
 
             {/* High-Converting Home Dashboard Showcase: Popular Destinations, Offers & Tour Packages */}

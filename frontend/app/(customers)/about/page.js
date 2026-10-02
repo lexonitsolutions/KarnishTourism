@@ -83,8 +83,6 @@ export default function About() {
                     <div
                       className="bg-img height2"
                       data-background="/images/about/hero_skyline.jpg"
-                      data-speed="0.5"
-                      data-lag="0"
                       style={{ backgroundImage: "url('/images/about/hero_skyline.jpg')" }}
                     ></div>
                   </div>

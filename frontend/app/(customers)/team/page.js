@@ -32,7 +32,7 @@ export default function Team() {
               <div className="container-fluid">
                 <div className="height1">
                   <div className="radius-mask">
-                    <div className="bg-img height2" data-background="/images/team-hero.jpg" data-speed="0.5" data-lag="0"></div>
+                    <div className="bg-img height2" data-background="/images/team-hero.jpg" style={{ backgroundImage: "url('/images/team-hero.jpg')" }}></div>
                   </div>
                 </div>
               </div>

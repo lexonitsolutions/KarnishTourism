@@ -1,5 +1,4 @@
 import Image from "next/image";
-import LandingTourSearch from "./components/LandingTourSearch";
 import LandingSmartFinder from "./components/LandingSmartFinder";
 import LandingDestinationCard from "./components/LandingDestinationCard";
 import SignatureShowcase from "./components/SignatureShowcase";
@@ -21,19 +20,23 @@ export default function ToursPage() {
   const signature = signatureSlugs.map(([type,slug]) => { const destination = getDestination(type,slug); return { destination, package: destination.packages[0] }; });
   return <main className="ktl-page">
     <RevealOnScroll />
-    <section className="ktl-video-hero ktl-image-hero">
-      <Image
-        src="/images/destination-01.jpg"
-        alt="Karnish Tourism luxury destinations"
-        fill
-        priority
-        sizes="100vw"
-        className="ktl-hero-bg-img"
-      />
-      <div className="ktl-video-overlay" />
-      <div className="ktl-hero-content"><span>Curated journeys · Unforgettable memories</span><h1>Explore the World with<br /><em>Karnish Tourism</em></h1><p>Thoughtfully curated journeys, exceptional stays and unforgettable experiences — designed around the way you love to travel.</p><div>{[["ti-map-alt","Curated Experiences"],["ti-home","Verified Stays"],["ti-direction-alt","Seamless Travel"]].map(([icon,text]) => <span key={text}><i className={icon} /> {text}</span>)}</div></div>
-      <div className="ktl-search-float"><LandingTourSearch /></div>
-    </section>
+    <header className="pg-hero section-padding">
+      <div className="container">
+        <div className="row mb-60 justify-content-center">
+          <div className="col-md-6 text-center">
+            <div className="section-subtitle">Curated Tour Packages</div>
+            <div className="section-title">Explore the world with <i>Karnish Tourism</i></div>
+          </div>
+        </div>
+      </div>
+      <div className="container-fluid">
+        <div className="height1">
+          <div className="radius-mask">
+            <div className="bg-img height2" data-background="/images/destination-01.jpg" style={{ backgroundImage: "url('/images/destination-01.jpg')" }}></div>
+          </div>
+        </div>
+      </div>
+    </header>
     <div className="ktl-after-hero"><div className="ktl-content"><LandingSmartFinder /></div></div>
     <section className="ktl-content ktl-section ktl-reveal"><div className="ktl-section-head"><div><span>Global escapes</span><h2>Curated International Holidays</h2></div><a href="/tours/international">View All International Destinations <i className="ti-arrow-right" /></a></div><div className="ktl-international-grid">{international.map((item,index) => <LandingDestinationCard destination={item} key={item.id} priority={index < 2} />)}</div><div className="ktl-mini-strip">{mini.map(item => <a className="ktl-mini-card" href={`/tours/international/${item.slug}`} key={item.id}><div className="ktl-mini-image"><Image src={item.image} alt={item.name} fill sizes="90px" /></div><div className="ktl-mini-copy"><strong className="ktl-mini-title">{item.name} Escape</strong><small className="ktl-mini-meta">{item.duration} · From ₹{item.startingPrice.toLocaleString("en-IN")}</small></div><i className="ti-arrow-right ktl-mini-arrow" /></a>)}</div></section>
 

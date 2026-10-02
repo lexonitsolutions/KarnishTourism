@@ -31,13 +31,20 @@ html.karnish-intro-completed #karnish-intro-overlay {
 
 /* The cinematic flight reveal exclusively owns the first session visit. */
 html.karnish-intro-active .loader-wrap,
-html.karnish-intro-active #karnish-preloader,
-html.karnish-intro-completed .loader-wrap,
-html.karnish-intro-completed #karnish-preloader {
+html.karnish-intro-active #karnish-preloader {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
+}
+
+html.karnish-route-transitioning .loader-wrap,
+.loader-wrap.kt-loader-active {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 99999999999999 !important;
 }
 .loader-wrap svg {
   position: absolute;
@@ -128,24 +135,244 @@ html.karnish-intro-active .karnish-intro-overlay {
   visibility: visible !important;
 }
 
-/* Page Enter Animation (smooth fade-in only on route navigation) */
-html.karnish-page-entering:not(.karnish-intro-active) #smooth-wrapper {
-  animation: ktPageEnter 0.3s ease both;
+/* One compositor-only route stage prevents old/new page overlap and blank frames. */
+.kt-route-stage {
+  min-height: 100vh;
+  opacity: 1;
+  /* `backwards` applies the entry frame only while the animation runs.
+     Keeping the final opacity animation with `both`/`forwards` creates a
+     permanent stacking context and hides Home's negative-z hero layers. */
+  animation: ktRouteEnter 0.28s ease-out backwards;
 }
 
-@keyframes ktPageEnter {
-  0% {
-    opacity: 0;
+.kt-route-stage.is-leaving {
+  opacity: 0.92;
+  transition: opacity 0.12s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ktRouteEnter {
+  from {
+    opacity: 0.94;
   }
-  100% {
+  to {
     opacity: 1;
   }
 }
 
-/* Page Exit Animation (smooth fade-out when navigating) */
-html.karnish-page-leaving #smooth-wrapper {
-  opacity: 0 !important;
-  transition: opacity 0.2s ease !important;
+/* Consistent first-banner entrance after the intro/preloader has cleared. */
+.kt-page-banner-enter {
+  animation: ktPageBannerEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
+}
+
+.kt-page-banner-media-enter {
+  animation: ktPageBannerImageEnter 1.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
+}
+
+@keyframes ktPageBannerEnter {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ktPageBannerImageEnter {
+  from {
+    opacity: 0.72;
+    transform: scale(1.045);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kt-page-banner-enter,
+  .kt-page-banner-media-enter {
+    animation: none;
+  }
+}
+
+/* Premium split banner shared by About, Services and legacy content pages. */
+.pg-hero.section-padding {
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  width: min(1500px, calc(100% - 48px));
+  min-height: clamp(540px, 68vh, 660px);
+  margin: 28px auto 78px;
+  padding: 64px 0 !important;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(32, 149, 174, 0.2), transparent 34%),
+    linear-gradient(145deg, #071733 0%, #102a5d 100%);
+  box-shadow: 0 28px 75px rgba(9, 26, 61, 0.2);
+}
+
+.pg-hero.section-padding::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 40%;
+  z-index: 1;
+  background: linear-gradient(90deg, #0d2756 0%, rgba(13, 39, 86, 0.82) 12%, rgba(7, 23, 51, 0.08) 48%, transparent 100%);
+  pointer-events: none;
+}
+
+.pg-hero.section-padding::after {
+  content: "";
+  position: absolute;
+  left: clamp(34px, 5vw, 76px);
+  bottom: 42px;
+  z-index: 2;
+  width: clamp(72px, 8vw, 120px);
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2095ae, #e0ad62);
+}
+
+.pg-hero.section-padding > .container {
+  position: relative;
+  z-index: 3;
+  order: 2;
+  width: min(1360px, calc(100% - 96px));
+}
+
+.pg-hero.section-padding > .container .row {
+  justify-content: flex-start !important;
+  margin-bottom: 0 !important;
+}
+
+.pg-hero.section-padding > .container .row > [class*="col-"] {
+  width: min(540px, 42%);
+  max-width: 540px;
+  text-align: left !important;
+}
+
+.pg-hero.section-padding .section-subtitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 8px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #8edbea;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  backdrop-filter: blur(10px);
+}
+
+.pg-hero.section-padding .section-subtitle::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e0ad62;
+  box-shadow: 0 0 0 4px rgba(224, 173, 98, 0.16);
+}
+
+.pg-hero.section-padding .section-title,
+.pg-hero.section-padding h1 {
+  max-width: 570px;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(46px, 4.5vw, 68px);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  text-shadow: 0 5px 28px rgba(0, 0, 0, 0.2);
+}
+
+.pg-hero.section-padding .section-title i,
+.pg-hero.section-padding h1 i,
+.pg-hero.section-padding h1 span {
+  color: #78d4e4;
+  font-weight: 300;
+}
+
+.pg-hero.section-padding > .container p,
+.pg-hero.section-padding > .container a,
+.pg-hero.section-padding > .container span {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.pg-hero.section-padding > .container-fluid {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 43%;
+  z-index: 0;
+  width: 57%;
+  max-width: none;
+  padding: 0;
+}
+
+.pg-hero.section-padding .height1,
+.pg-hero.section-padding .radius-mask,
+.pg-hero.section-padding .height2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.pg-hero.section-padding .height2 {
+  background-position: center;
+  background-size: cover;
+}
+
+@media (max-width: 767px) {
+  .pg-hero.section-padding {
+    align-items: flex-end;
+    width: calc(100% - 24px);
+    min-height: 620px;
+    margin: 14px auto 54px;
+    padding: 0 0 54px !important;
+    border-radius: 24px;
+    background: #091a3d;
+  }
+
+  .pg-hero.section-padding::before {
+    left: 0;
+    background: linear-gradient(0deg, rgba(4, 15, 39, 0.96) 0%, rgba(4, 15, 39, 0.62) 58%, rgba(4, 15, 39, 0.16) 100%);
+  }
+
+  .pg-hero.section-padding::after {
+    left: 20px;
+    bottom: 24px;
+  }
+
+  .pg-hero.section-padding > .container {
+    width: calc(100% - 38px);
+  }
+
+  .pg-hero.section-padding > .container .row > [class*="col-"] {
+    width: 100%;
+  }
+
+  .pg-hero.section-padding > .container-fluid {
+    left: 0;
+    width: 100%;
+  }
+
+  .pg-hero.section-padding .section-title,
+  .pg-hero.section-padding h1 {
+    font-size: clamp(42px, 13vw, 58px);
+  }
 }
 
 /* Fullscreen Overlay Container */
@@ -893,6 +1120,15 @@ body.kt-auth-open .cursor {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .kt-route-stage {
+    animation: none;
+  }
+
+  .kt-route-stage.is-leaving {
+    opacity: 1;
+    transition: none;
+  }
+
   .kt-header-auth-backdrop,
   .kt-header-auth-box,
   .kt-header-auth-view,

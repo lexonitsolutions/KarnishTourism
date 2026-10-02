@@ -132,8 +132,6 @@ export default function ServiceInterfaceClient({ slug }) {
                         backgroundSize: "cover"
                       }}
                       data-background={service.heroImage}
-                      data-speed="0.5"
-                      data-lag="0"
                     ></div>
                   </div>
                 </div>

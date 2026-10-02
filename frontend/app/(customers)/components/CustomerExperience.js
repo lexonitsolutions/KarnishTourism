@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import RouteTransitionHandler from "./RouteTransitionHandler";
-import Preloader from "./Preloader";
 import KarnishCinematicIntro from "./KarnishCinematicIntro";
 
 export default function CustomerExperience() {
@@ -23,5 +22,5 @@ export default function CustomerExperience() {
   }, [isAuthPage]);
 
   if (isAuthPage) return null;
-  return <><KarnishCinematicIntro /><Preloader /><RouteTransitionHandler /></>;
+  return <><KarnishCinematicIntro /><RouteTransitionHandler /></>;
 }

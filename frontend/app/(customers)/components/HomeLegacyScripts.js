@@ -3,33 +3,38 @@
 import { useEffect } from "react";
 
 const scripts = [
-  ["home-jquery", "/js/jquery-3.6.0.min.js"],
-  ["home-jquery-migrate", "/js/jquery-migrate-3.4.0.min.js"],
-  ["home-plugins", "/js/plugins.js"],
-  ["home-imagesloaded", "/js/imagesloaded.pkgd.min.js"],
-  ["home-gsap", "/js/gsap.min.js"],
-  ["home-scrollsmoother", "/js/ScrollSmoother.min.js"],
-  ["home-scrolltrigger", "/js/ScrollTrigger.min.js"],
-  ["home-smoother-script", "/js/smoother-script.js"],
-  ["home-springer", "/js/springer.min.js"],
-  ["home-lenis", "/js/lenis.min.js"],
-  ["home-custom", "/js/custom.js"],
+  ["home-jquery", "/js/jquery-3.6.0.min.js", () => Boolean(window.jQuery)],
+  ["home-jquery-migrate", "/js/jquery-migrate-3.4.0.min.js", () => Boolean(window.jQuery?.migrateVersion)],
+  ["home-plugins", "/js/plugins.js", () => Boolean(window.WOW && window.Swiper)],
+  ["home-imagesloaded", "/js/imagesloaded.pkgd.min.js", () => Boolean(window.imagesLoaded)],
+  ["home-gsap", "/js/gsap.min.js", () => Boolean(window.gsap)],
+  ["home-scrollsmoother", "/js/ScrollSmoother.min.js", () => Boolean(window.ScrollSmoother)],
+  ["home-scrolltrigger", "/js/ScrollTrigger.min.js", () => Boolean(window.ScrollTrigger)],
+  ["home-smoother-script", "/js/smoother-script.js", () => Boolean(window.reinitializeKarnishScroller)],
+  ["home-springer", "/js/springer.min.js", () => Boolean(window.Springer)],
+  ["home-lenis", "/js/lenis.min.js", () => Boolean(window.Lenis)],
+  ["home-custom", "/js/custom.js", () => window.karnishCustomReady === true],
 ];
+
+function findScriptBySource(src) {
+  const absoluteSource = new URL(src, window.location.origin).href;
+  return Array.from(document.scripts).find((script) => script.src === absoluteSource);
+}
 
 export default function HomeLegacyScripts() {
   useEffect(() => {
     let cancelled = false;
 
-    const loadScript = ([id, src]) =>
+    const loadScript = ([id, src, isReady]) =>
       new Promise((resolve, reject) => {
-        const existing = document.getElementById(id);
-
-        if (existing?.dataset.loaded === "true") {
+        if (isReady()) {
           resolve();
           return;
         }
 
+        const existing = findScriptBySource(src);
         const script = existing || document.createElement("script");
+
         const handleLoad = () => {
           script.dataset.loaded = "true";
           resolve();
@@ -43,6 +48,8 @@ export default function HomeLegacyScripts() {
           script.src = src;
           script.async = false;
           document.body.appendChild(script);
+        } else if (script.dataset.loaded === "true" || isReady()) {
+          resolve();
         }
       });
 
@@ -52,10 +59,12 @@ export default function HomeLegacyScripts() {
         await loadScript(script);
       }
 
-      if (!cancelled) {
-        window.dispatchEvent(new Event("load"));
-        window.refreshKarnishScroller?.();
-      }
+      if (cancelled) return;
+
+      window.requestAnimationFrame(() => {
+        window.reinitializeKarnishScroller?.();
+        window.ScrollTrigger?.refresh?.();
+      });
     };
 
     initialiseHome().catch((error) => {

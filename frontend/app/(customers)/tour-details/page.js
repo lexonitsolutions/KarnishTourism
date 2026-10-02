@@ -31,7 +31,7 @@ export default function TourDetails() {
               <div className="container-fluid">
                 <div className="height1">
                   <div className="radius-mask">
-                    <div className="bg-img height2" data-background="/images/destination-01.jpg" data-speed="0.5" data-lag="0"></div>
+                    <div className="bg-img height2" data-background="/images/destination-01.jpg" style={{ backgroundImage: "url('/images/destination-01.jpg')" }}></div>
                   </div>
                 </div>
               </div>

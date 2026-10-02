@@ -1,169 +1,248 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-/**
- * RouteTransitionHandler manages silky smooth transitions between all pages:
- * 1. Instantly resets any intro locks on subpages.
- * 2. Provides a top glowing progress bar on route transitions.
- * 3. Gracefully cross-fades the leaving page out (220ms) and enters the new page with a smooth lift & fade.
- * 4. Intercepts internal link clicks seamlessly while preserving browser behavior and back/forward cache.
- */
+function isModifiedClick(event) {
+  return event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey;
+}
+
+function canTransition(anchor, event) {
+  if (!anchor || event.defaultPrevented || isModifiedClick(event)) return false;
+  if (anchor.target && anchor.target !== "_self") return false;
+  if (anchor.hasAttribute("download") || anchor.dataset.noTransition === "true") return false;
+
+  const href = anchor.getAttribute("href");
+  return Boolean(
+    href &&
+    !href.startsWith("#") &&
+    !href.startsWith("javascript:") &&
+    !href.startsWith("mailto:") &&
+    !href.startsWith("tel:")
+  );
+}
+
+// SVG path definitions for the signature curved sweep
+const FLAT_CLOSED = "M0,1005S175,995,500,995s500,5,500,5V0H0Z";
+const CURVED_SWEEP = "M0 502S175 272 500 272s500 230 500 230V0H0Z";
+const FLAT_TOP = "M0 2S175 1 500 1s500 1 500 1V0H0Z";
+
 export default function RouteTransitionHandler() {
-  const pathname = usePathname();
-  const router = useRouter();
   const progressBarRef = useRef(null);
-  const isNavigatingRef = useRef(false);
+  const preloaderRef = useRef(null);
+  const pathRef = useRef(null);
+  const headingRef = useRef(null);
+  const navigatingRef = useRef(false);
 
-  // 1. Enter transition & route stabilization when pathname changes
-  useEffect(() => {
-    isNavigatingRef.current = false;
+  // Execute the smooth curved SVG reveal sweep when the new page is ready
+  const revealNewPage = () => {
+    const preloader = preloaderRef.current;
+    const path = pathRef.current;
+    const heading = headingRef.current;
 
-    // Remove any leaving state
-    document.documentElement.classList.remove("karnish-page-leaving");
-
-    let hasPlayed = false;
     try {
-      hasPlayed = sessionStorage.getItem("karnishIntroPlayed") === "true";
+      sessionStorage.removeItem("karnishPageTransition");
+      document.documentElement.classList.remove("karnish-route-transitioning");
     } catch (_) {}
 
-    // If intro has already played in this session, ensure intro locks are cleared
-    if (hasPlayed) {
-      document.documentElement.classList.add("karnish-intro-done");
-      document.documentElement.classList.remove("karnish-intro-active");
-      document.documentElement.classList.remove("karnish-intro-revealing");
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-    }
+    if (!preloader || !path) return;
 
-    // Trigger smooth enter transition on route changes
-    document.documentElement.classList.add("karnish-page-entering");
-    const enterTimer = setTimeout(() => {
-      document.documentElement.classList.remove("karnish-page-entering");
-    }, 350);
-
-    // Complete and hide progress bar
+    // Reset progress bar to finish
     const bar = progressBarRef.current;
     if (bar) {
       bar.classList.remove("kt-progress-active");
       bar.classList.add("kt-progress-finish");
-      const finishTimer = setTimeout(() => {
+      window.setTimeout(() => {
         bar.classList.remove("kt-progress-finish");
         bar.style.width = "0%";
-      }, 350);
-      return () => clearTimeout(finishTimer);
+      }, 400);
     }
-  }, [pathname]);
 
-  // 2. Intercept internal links for smooth exit transitions
-  useEffect(() => {
-    const handleLinkClick = (e) => {
-      // Find closest anchor tag
-      const anchor = e.target.closest("a");
-      if (!anchor) return;
+    const gsap = typeof window !== "undefined" ? window.gsap : null;
 
-      // Ignore if user opened with modifier keys (new tab, new window)
-      if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+    if (gsap) {
+      try {
+        const tl = gsap.timeline({
+          onComplete: () => {
+            if (preloader) {
+              preloader.classList.remove("kt-loader-active");
+              preloader.style.display = "none";
+              preloader.style.visibility = "hidden";
+            }
+            navigatingRef.current = false;
+          },
+        });
 
-      // Ignore explicit target windows
-      if (anchor.target && anchor.target !== "_self") return;
+        if (heading) {
+          tl.to(heading, {
+            y: -35,
+            opacity: 0,
+            duration: 0.2,
+            ease: "power2.in",
+          });
+        }
 
-      // Ignore download links
-      if (anchor.hasAttribute("download")) return;
+        tl.to(path, {
+          duration: 0.38,
+          attr: { d: CURVED_SWEEP },
+          ease: "power2.easeIn",
+        }).to(path, {
+          duration: 0.38,
+          attr: { d: FLAT_TOP },
+          ease: "power2.easeOut",
+        });
 
-      const rawHref = anchor.getAttribute("href");
-      if (!rawHref) return;
-
-      // Ignore hashes, JS void, mailto, tel
-      if (
-        rawHref.startsWith("#") ||
-        rawHref.startsWith("javascript:") ||
-        rawHref.startsWith("mailto:") ||
-        rawHref.startsWith("tel:")
-      ) {
-        return;
+        tl.to(
+          preloader,
+          {
+            y: -1200,
+            duration: 0.42,
+            ease: "power2.inOut",
+          },
+          "-=0.22"
+        );
+      } catch (_) {
+        fallbackCssReveal(preloader);
       }
+    } else {
+      fallbackCssReveal(preloader);
+    }
+  };
+
+  const fallbackCssReveal = (preloader) => {
+    if (!preloader) return;
+    preloader.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease";
+    preloader.style.transform = "translateY(-100%)";
+    preloader.style.opacity = "0";
+    window.setTimeout(() => {
+      preloader.classList.remove("kt-loader-active");
+      preloader.style.display = "none";
+      preloader.style.visibility = "hidden";
+      navigatingRef.current = false;
+    }, 450);
+  };
+
+  // On page mount / reload: check if this was an automatic route change transition
+  useEffect(() => {
+    const isIntroActive = typeof document !== "undefined" && document.documentElement.classList.contains("karnish-intro-active");
+    if (isIntroActive) {
+      return;
+    }
+
+    let isTransition = false;
+    try {
+      isTransition = sessionStorage.getItem("karnishPageTransition") === "true";
+    } catch (_) {}
+
+    if (isTransition) {
+      // Run the smooth curved reveal animation on the freshly reloaded destination page
+      revealNewPage();
+    } else {
+      // Ensure preloader is hidden on direct initial entrance once intro is done
+      const preloader = preloaderRef.current;
+      if (preloader) {
+        preloader.style.display = "none";
+        preloader.classList.remove("kt-loader-active");
+      }
+    }
+  }, []);
+
+  // Intercept internal link clicks to automatically reload the page on navigation
+  useEffect(() => {
+    const handleClick = (event) => {
+      const anchor = event.target.closest("a");
+      if (!canTransition(anchor, event)) return;
 
       try {
-        const dest = new URL(anchor.href, window.location.origin);
+        const destination = new URL(anchor.href, window.location.origin);
+        if (destination.origin !== window.location.origin) return;
 
-        // Only handle internal same-origin routes
-        if (dest.origin !== window.location.origin) return;
+        const current = `${window.location.pathname}${window.location.search}`;
+        const target = `${destination.pathname}${destination.search}`;
 
-        // When navigating between pages in this session, mark intro as played
-        // so returning to home will never show the starting page intro again
-        try {
-          sessionStorage.setItem("karnishIntroPlayed", "true");
-        } catch (_) {}
-
-        // If clicking link to the exact same page, let it be or smooth-scroll to top
-        if (dest.pathname === window.location.pathname && dest.search === window.location.search) {
-          if (!dest.hash) {
-            e.preventDefault();
+        if (target === current) {
+          if (!destination.hash) {
+            event.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
           }
           return;
         }
 
-        // Prevent instant hard browser snap
-        e.preventDefault();
+        event.preventDefault();
+        if (navigatingRef.current) return;
+        navigatingRef.current = true;
 
-        if (isNavigatingRef.current) return;
-        isNavigatingRef.current = true;
+        try {
+          sessionStorage.setItem("karnishIntroPlayed", "true");
+          sessionStorage.setItem("karnishPageTransition", "true");
+        } catch (_) {}
 
-        // Activate glowing top progress bar
+        document.documentElement.classList.add("karnish-route-transitioning");
+
+        // Activate glowing progress bar
         const bar = progressBarRef.current;
-        if (bar) {
-          bar.classList.remove("kt-progress-finish");
-          bar.classList.add("kt-progress-active");
+        bar?.classList.remove("kt-progress-finish");
+        bar?.classList.add("kt-progress-active");
+
+        // Activate curved loader curtain
+        const preloader = preloaderRef.current;
+        const path = pathRef.current;
+        const heading = headingRef.current;
+
+        if (preloader && path) {
+          path.setAttribute("d", FLAT_CLOSED);
+          preloader.style.transition = "none";
+          preloader.style.transform = "none";
+          preloader.style.opacity = "1";
+          preloader.style.display = "flex";
+          preloader.style.visibility = "visible";
+          preloader.classList.add("kt-loader-active");
+
+          if (heading) {
+            heading.style.transition = "none";
+            heading.style.transform = "none";
+            heading.style.opacity = "1";
+          }
         }
 
-        // Trigger smooth page exit fade
-        document.documentElement.classList.add("karnish-page-leaving");
-
-        // Let the content settle, then use Next.js client navigation so the
-        // shared header and shell stay mounted without a loading-screen flash.
-        setTimeout(() => {
-          router.push(`${dest.pathname}${dest.search}${dest.hash}`);
-        }, 160);
-
-        // Safety fallback: if navigation stalls or is cancelled, restore page
-        setTimeout(() => {
-          document.documentElement.classList.remove("karnish-page-leaving");
-          if (bar) bar.classList.remove("kt-progress-active");
-          isNavigatingRef.current = false;
-        }, 3000);
-      } catch (_) {}
-    };
-
-    // Clean up leaving state if user navigated via browser Back/Forward (bfcache)
-    const handlePageShow = (e) => {
-      document.documentElement.classList.remove("karnish-page-leaving");
-      try {
-        if (sessionStorage.getItem("karnishIntroPlayed") === "true") {
-          document.documentElement.classList.add("karnish-intro-done");
-          document.documentElement.classList.remove("karnish-intro-active");
-        }
-      } catch (_) {}
-      const bar = progressBarRef.current;
-      if (bar) {
-        bar.classList.remove("kt-progress-active", "kt-progress-finish");
-        bar.style.width = "0%";
+        const fullDestination = `${target}${destination.hash}`;
+        // Automatically reload and navigate to the destination page cleanly
+        window.setTimeout(() => {
+          window.location.assign(fullDestination);
+        }, 80);
+      } catch (_) {
+        navigatingRef.current = false;
+        try {
+          sessionStorage.removeItem("karnishPageTransition");
+          document.documentElement.classList.remove("karnish-route-transitioning");
+        } catch (_) {}
       }
-      isNavigatingRef.current = false;
     };
 
-    document.addEventListener("click", handleLinkClick, { capture: true });
-    window.addEventListener("pageshow", handlePageShow);
-    window.addEventListener("popstate", handlePageShow);
-
+    document.addEventListener("click", handleClick, { capture: true });
     return () => {
-      document.removeEventListener("click", handleLinkClick, { capture: true });
-      window.removeEventListener("pageshow", handlePageShow);
-      window.removeEventListener("popstate", handlePageShow);
+      document.removeEventListener("click", handleClick, { capture: true });
     };
-  }, [router]);
+  }, []);
 
-  return <div id="kt-page-progress-bar" ref={progressBarRef} aria-hidden="true" />;
+  return (
+    <>
+      <div id="kt-page-progress-bar" ref={progressBarRef} aria-hidden="true" />
+      <div
+        className="loader-wrap kt-internal-loader"
+        id="karnish-preloader"
+        ref={preloaderRef}
+        aria-hidden="true"
+        style={{ display: "none" }}
+      >
+        <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+          <path id="svg" ref={pathRef} d={FLAT_CLOSED} />
+        </svg>
+        <div className="loader-wrap-heading" ref={headingRef}>
+          <div className="load-text">
+            <span>L</span> <span>o</span> <span>a</span> <span>d</span> <span>i</span> <span>n</span> <span>g</span>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }

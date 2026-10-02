@@ -18,47 +18,19 @@ export default function VisaHubPage() {
     <div className="kt-visa-page">
 
       {/* 1. Hero */}
-      <header className="kt-visa-hero">
-        <Image
-          src="/images/destination-01.jpg"
-          alt="World travel and visa services"
-          fill
-          priority
-          sizes="100vw"
-          className="kt-visa-hero-bg"
-        />
-        <div className="kt-visa-hero-overlay" />
-        <div className="kt-visa-container">
-          <div className="kt-visa-breadcrumb">
-            <a href="/">Home</a>
-            <i className="ti-angle-right" />
-            <span>Visa Services</span>
+      <header className="pg-hero section-padding">
+        <div className="container">
+          <div className="row mb-60 justify-content-center">
+            <div className="col-md-6 text-center">
+              <div className="section-subtitle">Visa Services</div>
+              <div className="section-title">Global visa services &amp; <i>hassle-free eVisas</i></div>
+            </div>
           </div>
-
-          <span className="kt-visa-hero-kicker">
-            <i className="ti-shield" /> Accredited Consular Desk
-          </span>
-
-          <h1>
-            Global Visa Services &amp; <em>Hassle-Free eVisas</em>
-          </h1>
-          <p>
-            Experience swift, error-free visa processing for UAE, Schengen, USA, UK, Canada, Australia, and Singapore.
-            Pre-audited documentation, direct consular lodgement, and a 99.4% approval rate.
-          </p>
-
-          <div className="kt-visa-hero-badges">
-            <div className="kt-visa-badge-item">
-              <i className="ti-time" />
-              <span>Express e-Visas in 24–48 Hours</span>
-            </div>
-            <div className="kt-visa-badge-item">
-              <i className="ti-thumb-up" />
-              <span>99.4% Verified Approval Track Record</span>
-            </div>
-            <div className="kt-visa-badge-item">
-              <i className="ti-headphone-alt" />
-              <span>Dedicated 1-on-1 Visa Counselor</span>
+        </div>
+        <div className="container-fluid">
+          <div className="height1">
+            <div className="radius-mask">
+              <div className="bg-img height2" data-background="/images/destination-05.jpg" style={{ backgroundImage: "url('/images/destination-05.jpg')" }}></div>
             </div>
           </div>
         </div>
