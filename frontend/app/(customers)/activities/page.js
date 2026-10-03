@@ -5,13 +5,15 @@ import Script from "next/script";
 import { useSearchParams } from "next/navigation";
 import SiteFooter from "../components/SiteFooter";
 import WishlistButton from "../components/WishlistButton";
-import {
-  activities,
-  destinationOptions,
-  activityOptions,
-  tripTypeOptions,
-  difficultyOptions,
-} from "../data/activities";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+// Derive unique string values from the activities list for a given field (array fields)
+function uniqueOptions(items, field) {
+  const set = new Set();
+  items.forEach((a) => { if (Array.isArray(a[field])) a[field].forEach((v) => set.add(v)); else if (a[field]) set.add(a[field]); });
+  return Array.from(set).sort().map((name) => ({ name }));
+}
 
 function matchesGroup(activity, field, selectedSet) {
   if (selectedSet.size === 0) return true;
@@ -126,6 +128,24 @@ function ActivityCard({ activity, viewMode }) {
 function ActivitiesResults() {
   const searchParams = useSearchParams();
 
+  // API state
+  const [allActivities, setAllActivities] = useState([]);
+  const [apiLoading, setApiLoading] = useState(true);
+
+  useEffect(() => {
+    setApiLoading(true);
+    fetch(`${API_BASE}/api/activities?limit=500`, { cache: "no-store" })
+      .then((r) => r.ok ? r.json() : { items: [] })
+      .then((data) => { setAllActivities(data.items || []); setApiLoading(false); })
+      .catch(() => { setAllActivities([]); setApiLoading(false); });
+  }, []);
+
+  // Derive filter options dynamically from DB data
+  const destinationOptions = useMemo(() => uniqueOptions(allActivities, "destinations"), [allActivities]);
+  const activityOptions    = useMemo(() => uniqueOptions(allActivities, "activities"), [allActivities]);
+  const tripTypeOptions    = useMemo(() => uniqueOptions(allActivities, "tripTypes"), [allActivities]);
+  const difficultyOptions  = useMemo(() => uniqueOptions(allActivities, "difficulty"), [allActivities]);
+
   const [selectedDestinations, setSelectedDestinations] = useState(() => {
     const v = searchParams.get("destination");
     return v ? new Set([v]) : new Set();
@@ -152,39 +172,13 @@ function ActivitiesResults() {
   const PAGE_SIZE = 12;
 
   const groupsMeta = [
-    {
-      key: "destinations",
-      label: "Destination",
-      field: "destinations",
-      options: destinationOptions,
-      selected: selectedDestinations,
-      toggle: (name) => toggleInSet(setSelectedDestinations, name),
-    },
-    {
-      key: "activities",
-      label: "Activity",
-      field: "activities",
-      options: activityOptions,
-      selected: selectedActivities,
-      toggle: (name) => toggleInSet(setSelectedActivities, name),
-    },
-    {
-      key: "tripTypes",
-      label: "Trip Type",
-      field: "tripTypes",
-      options: tripTypeOptions,
-      selected: selectedTypes,
-      toggle: (name) => toggleInSet(setSelectedTypes, name),
-    },
-    {
-      key: "difficulty",
-      label: "Difficulty",
-      field: "difficulty",
-      options: difficultyOptions,
-      selected: selectedDifficulties,
-      toggle: (name) => toggleInSet(setSelectedDifficulties, name),
-    },
+    { key: "destinations", label: "Destination", field: "destinations", options: destinationOptions, selected: selectedDestinations, toggle: (name) => toggleInSet(setSelectedDestinations, name) },
+    { key: "activities", label: "Activity", field: "activities", options: activityOptions, selected: selectedActivities, toggle: (name) => toggleInSet(setSelectedActivities, name) },
+    { key: "tripTypes", label: "Trip Type", field: "tripTypes", options: tripTypeOptions, selected: selectedTypes, toggle: (name) => toggleInSet(setSelectedTypes, name) },
+    { key: "difficulty", label: "Difficulty", field: "difficulty", options: difficultyOptions, selected: selectedDifficulties, toggle: (name) => toggleInSet(setSelectedDifficulties, name) },
   ];
+
+  const activities = allActivities;
 
   const filtered = useMemo(() => {
     return activities.filter(
@@ -259,6 +253,17 @@ function ActivitiesResults() {
     selectedTypes.size > 0 ||
     selectedDifficulties.size > 0 ||
     searchText.trim().length > 0;
+
+  if (apiLoading) {
+    return (
+      <section className="activity-results-section section-padding pt-0">
+        <div className="container" style={{ textAlign: "center", padding: "80px 20px", color: "#888" }}>
+          <i className="fa-light fa-compass" style={{ fontSize: "48px", display: "block", marginBottom: "16px", opacity: 0.3, animation: "spin 2s linear infinite" }} />
+          <p>Loading activities from database...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="activity-results-section section-padding pt-0">

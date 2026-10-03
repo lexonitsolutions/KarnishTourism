@@ -1,3 +1,6 @@
+import { ClerkProvider } from "@clerk/nextjs";
+import Script from "next/script";
+
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: "Karnish Tourism — Travel Agency",
@@ -16,8 +19,29 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <link rel="stylesheet" href="/css/plugins.css" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/activities.css" />
+        <Script
+          id="karnish-intro-guard"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var p=new URLSearchParams(window.location.search);if(p.get('auth')==='signin'||p.get('auth')==='signup'||window.location.pathname==='/signin'||window.location.pathname==='/signup'){document.documentElement.classList.add('karnish-intro-done');document.documentElement.classList.remove('karnish-intro-active','karnish-intro-revealing');return}var force=p.get('intro')==='1'||p.get('intro')==='true'||p.get('replay')==='1';var played=sessionStorage.getItem('karnishIntroPlayed')==='true';if(!played||force){if(force){try{sessionStorage.removeItem('karnishIntroPlayed')}catch(_){}}document.documentElement.classList.add('karnish-intro-active');document.documentElement.classList.remove('karnish-intro-done','karnish-intro-completed')}else{document.documentElement.classList.add('karnish-intro-done');document.documentElement.classList.remove('karnish-intro-active','karnish-intro-revealing')}if(sessionStorage.getItem('karnishPageTransition')==='true'){document.documentElement.classList.add('karnish-route-transitioning');}}catch(e){document.documentElement.classList.add('karnish-intro-done')}})();`,
+          }}
+        />
+        <Script src="/js/gsap.min.js" strategy="afterInteractive" />
+      </head>
       <body suppressHydrationWarning>
-        {children}
+        <ClerkProvider>
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );

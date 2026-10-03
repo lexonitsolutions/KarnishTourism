@@ -33,6 +33,7 @@ yarn-error.log*
 .env
 .env.*
 .env*.local
+atlas-credentials.env
 !.env.example
 !backend/.env.example
 !frontend/.env.example

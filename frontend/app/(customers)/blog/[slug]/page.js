@@ -3,15 +3,37 @@ import Image from "next/image";
 import { INITIAL_POSTS, getAllPosts, getPostBySlug } from "../blogData";
 import "../blog.css";
 
-export async function generateStaticParams() {
-  return INITIAL_POSTS.map((post) => ({
-    slug: post.slug,
-  }));
+export const dynamic = "force-dynamic";
+
+async function getPost(slug) {
+  try {
+    const rawBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const apiBase = rawBase.endsWith("/api") ? rawBase : `${rawBase}/api`;
+    const res = await fetch(`${apiBase}/posts/${slug}`, {
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.item) {
+        const item = data.item;
+        return {
+          ...item,
+          image: item.imageUrl || item.image || "/images/destination-01.jpg",
+          excerpt: item.summary || item.excerpt || "",
+          date: item.date || (item.publishedAt ? new Date(item.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent"),
+          author: item.author || "Karnish Editorial",
+          readTime: item.readTime || "5 min read",
+          content: item.content || item.summary || "",
+        };
+      }
+    }
+  } catch {}
+  return getPostBySlug(slug) || null;
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug) || INITIAL_POSTS.find((p) => p.slug === slug);
+  const post = await getPost(slug);
   if (!post) {
     return { title: "Blog Article | Karnish Tourism" };
   }
@@ -24,7 +46,7 @@ export async function generateMetadata({ params }) {
 
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug) || INITIAL_POSTS.find((p) => p.slug === slug);
+  const post = await getPost(slug);
 
   if (!post) {
     notFound();
@@ -117,9 +139,9 @@ export default async function BlogPostPage({ params }) {
             {post.tags && post.tags.length > 0 && (
               <div className="d-flex gap-2 flex-wrap my-4">
                 <strong style={{ color: "#0f2454", fontSize: "13px", alignSelf: "center" }}>Tags:</strong>
-                {post.tags.map((tag) => (
+                {post.tags.map((tag, idx) => (
                   <span
-                    key={tag}
+                    key={`tag-${tag || idx}`}
                     style={{
                       background: "#f1f5f9",
                       padding: "4px 10px",
@@ -238,8 +260,8 @@ export default async function BlogPostPage({ params }) {
           <section style={{ borderTop: "1px solid #e2e8f0", paddingTop: "50px", marginBottom: "80px" }}>
             <h3 style={{ color: "#0f2454", fontSize: "24px", marginBottom: "25px" }}>Related Intelligence &amp; Stories</h3>
             <div className="kt-blog-grid" style={{ marginBottom: 0 }}>
-              {relatedPosts.map((rel) => (
-                <article key={rel.slug} className="kt-blog-card">
+              {relatedPosts.map((rel, idx) => (
+                <article key={rel.slug || rel.id || `rel-${idx}`} className="kt-blog-card">
                   <div className="kt-blog-card-img" style={{ height: "180px" }}>
                     <Image src={rel.image} alt={rel.title} fill sizes="350px" />
                     <div className="kt-blog-card-badge">

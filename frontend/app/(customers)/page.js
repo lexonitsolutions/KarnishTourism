@@ -1,13 +1,39 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import HomeDashboardShowcase from "./components/HomeDashboardShowcase";
 import HomeLegacyScripts from "./components/HomeLegacyScripts";
 import SiteFooter from "./components/SiteFooter";
 import BusinessCollaborationSection from "./components/BusinessCollaborationSection";
 import "./homeDashboard.css";
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+async function apiFetch(resource, params = {}) {
+  const qs = new URLSearchParams();
+  Object.entries(params).forEach(([k, v]) => { if (v !== undefined) qs.set(k, String(v)); });
+  try {
+    const res = await fetch(`${API_BASE}/api/${resource}?${qs}`, { cache: "no-store" });
+    if (!res.ok) return [];
+    return (await res.json()).items || [];
+  } catch { return []; }
+}
+
 export default function Home() {
+  useEffect(() => {
+    // Strictly reload page internally when navigating to home page from any other page
+    // so all GSAP, WOW, ScrollSmoother, and ticker animations initialize fresh
+    try {
+      const prev = sessionStorage.getItem("karnishLastActivePath");
+      sessionStorage.setItem("karnishLastActivePath", "/");
+      if (prev && prev !== "/" && prev !== "") {
+        sessionStorage.setItem("karnishPageTransition", "true");
+        window.location.replace("/");
+        return;
+      }
+    } catch (_) {}
+  }, []);
+
   useEffect(() => {
     // High-performance intersection observer for home page section animations
     const animatedElements = document.querySelectorAll(
@@ -54,6 +80,28 @@ export default function Home() {
       observer.disconnect();
     };
   }, []);
+
+  // ── DB-driven sections ────────────────────────────────────────────────────
+  const [homeTours, setHomeTours] = useState([]);
+  const [homeTestimonials, setHomeTestimonials] = useState([]);
+  const [homePosts, setHomePosts] = useState([]);
+
+  useEffect(() => {
+    Promise.all([
+      apiFetch("tours", { featured: "true", limit: 3 }),
+      apiFetch("reviews", { limit: 3 }),
+      apiFetch("posts", { featured: "true", limit: 3 }),
+    ]).then(([tours, reviews, posts]) => {
+      setHomeTours(tours);
+      setHomeTestimonials(reviews);
+      setHomePosts(posts);
+    });
+  }, []);
+
+  const fmtPrice = (val, cur = "INR") => {
+    if (!val && val !== 0) return null;
+    return cur === "INR" ? `₹${Number(val).toLocaleString("en-IN")}` : `${cur} ${Number(val).toLocaleString()}`;
+  };
 
   return (
     <>
@@ -191,7 +239,8 @@ export default function Home() {
               </div>
               <div className="bg-text-style duru-slide-right">Karnish Tourism</div>
             </div>
-            {/* Tours */}
+            {/* Tours — DB-driven */}
+            {homeTours.length > 0 && (
             <section className="tours stsec section-padding">
               <div className="container">
                 <div className="row justify-content-between">
@@ -200,82 +249,41 @@ export default function Home() {
                       <div className="section-subtitle wow fadeInRight">Choose your place</div>
                       <div className="section-title d-rotate wow"><span className="rotate-text">Discover dream <i>destinations</i></span></div>
                       <p className="wow fadeInRight" data-wow-delay=".3s">Turn your dream destinations into unforgettable experiences with guidance. From hidden gems to iconic landmarks, we craft personalized journeys for you.</p>
-                      <a href="#" className="butn-arrow wow fadeInUp" data-wow-delay=".8s"> <span className="btn-text">Read more</span> <span className="arrow-wrap">
-                          <span className="arrow-inner">
-                            <i className="ti-arrow-right"></i>
-                            <i className="ti-arrow-right"></i>
-                          </span> </span>
-                      </a>
+                      <a href="/tours" className="butn-arrow wow fadeInUp" data-wow-delay=".8s"> <span className="btn-text">See all tours</span> <span className="arrow-wrap"><span className="arrow-inner"><i className="ti-arrow-right"></i><i className="ti-arrow-right"></i></span></span></a>
                     </div>
                   </div>
                   <div className="col-lg-7 offset-lg-1 items">
-                    <div className="item">
-                      <div className="tour-media"> <img src="/images/01.jpg" alt="" className="height2" data-speed="0.8" data-lag="0" />
-                        <div className="clicko"><a href="/tour-details"><span className="icon-wrap"><span className="icon"><i className="ti-arrow-top-right"></i></span></span></a></div>
+                    {homeTours.map((tour, idx) => (
+                    <div className="item" key={tour.id || tour._id || `${tour.slug}-${idx}` || `tour-${idx}`}>
+                      <div className="tour-media">
+                        <img src={tour.imageUrl || "/images/01.jpg"} alt={tour.title} className="height2" data-speed="0.8" data-lag="0" />
+                        <div className="clicko"><a href={`/tour-details/${tour.slug}`}><span className="icon-wrap"><span className="icon"><i className="ti-arrow-top-right"></i></span></span></a></div>
                       </div>
                       <div className="tour-content">
                         <div className="tour-header">
-                          <div className="tour-location"> <i className="ti-location-pin"></i> <span>Maldives, Asia</span> </div>
-                          <h4 className="tour-title">Maldives Signature Journey</h4>
+                          <div className="tour-location"> <i className="ti-location-pin"></i> <span>{tour.destination?.title || tour.type}</span> </div>
+                          <h4 className="tour-title">{tour.title}</h4>
                         </div>
                         <div className="tour-info">
                           <div className="tour-duration">
                             <div className="tour-icon"> <i className="fa-light fa-calendar"></i> </div>
-                            <div className="tour-meta"> <small>Duration</small> <span>6 Days - 5 Nights</span> </div>
+                            <div className="tour-meta"> <small>Duration</small> <span>{tour.durationDays ? `${tour.durationDays} Days - ${tour.durationDays - 1} Nights` : "–"}</span> </div>
                           </div>
                         </div>
                         <div className="tour-price-wrap">
                           <div className="tour-rating"> <i className="fa-solid fa-star"></i> 4.9 </div>
-                          <div className="tour-price"> ₹87,999 <span>/ Traveler</span> </div>
+                          {fmtPrice(tour.price, tour.currency) && (
+                            <div className="tour-price"> {fmtPrice(tour.price, tour.currency)} <span>/ Traveler</span> </div>
+                          )}
                         </div>
                       </div>
                     </div>
-                    <div className="item">
-                      <div className="tour-media"> <img src="/images/03.jpg" alt="" className="height2" data-speed="0.8" data-lag="0" />
-                        <div className="clicko"><a href="/tour-details"><span className="icon-wrap"><span className="icon"><i className="ti-arrow-top-right"></i></span></span></a></div>
-                      </div>
-                      <div className="tour-content">
-                        <div className="tour-header">
-                          <div className="tour-location"> <i className="ti-location-pin"></i> <span>Dubai, UAE</span> </div>
-                          <h4 className="tour-title">Dubai Signature Journey</h4>
-                        </div>
-                        <div className="tour-info">
-                          <div className="tour-duration">
-                            <div className="tour-icon"> <i className="fa-light fa-calendar"></i> </div>
-                            <div className="tour-meta"> <small>Duration</small> <span>5 Days - 4 Nights</span> </div>
-                          </div>
-                        </div>
-                        <div className="tour-price-wrap">
-                          <div className="tour-rating"> <i className="fa-solid fa-star"></i> 4.8 </div>
-                          <div className="tour-price"> ₹67,999 <span>/ Traveler</span> </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="item">
-                      <div className="tour-media"> <img src="/images/02.jpg" alt="" className="height2" data-speed="0.8" data-lag="0" />
-                        <div className="clicko"><a href="/tour-details"><span className="icon-wrap"><span className="icon"><i className="ti-arrow-top-right"></i></span></span></a></div>
-                      </div>
-                      <div className="tour-content">
-                        <div className="tour-header">
-                          <div className="tour-location"> <i className="ti-location-pin"></i> <span>Bali, Indonesia</span> </div>
-                          <h4 className="tour-title">Bali Signature Journey</h4>
-                        </div>
-                        <div className="tour-info">
-                          <div className="tour-duration">
-                            <div className="tour-icon"> <i className="fa-light fa-calendar"></i> </div>
-                            <div className="tour-meta"> <small>Duration</small> <span>7 Days - 6 Nights</span> </div>
-                          </div>
-                        </div>
-                        <div className="tour-price-wrap">
-                          <div className="tour-rating"> <i className="fa-solid fa-star"></i> 4.9 </div>
-                          <div className="tour-price"> ₹63,999 <span>/ Traveler</span> </div>
-                        </div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
             </section>
+            )}
             {/* Services */}
             <section className="services pt-120">
               <div className="container">
@@ -373,7 +381,8 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            {/* Testimonials */}
+            {/* Testimonials — DB-driven (approved reviews) */}
+            {homeTestimonials.length > 0 && (
             <div className="position-relative section-padding pt-0">
               <div className="container">
                 <div className="row">
@@ -384,61 +393,27 @@ export default function Home() {
                 </div>
                 <div className="row justify-content-center g-0">
                   <div className="col-12 testimonials2">
-                    <div className="item box-shadow-extra-large active">
-                      <div className="img duru-image-parallax"> <img src="/images/01_1.jpg" className="img-fluid" alt="" /> </div>
+                    {homeTestimonials.map((review, idx) => (
+                    <div key={review.id || review._id || `rev-${idx}`} className={`item box-shadow-extra-large${idx > 0 ? " duru-slide-right" : " active"}`}>
+                      <div className="img duru-image-parallax">
+                        <img src={review.imageUrl || `/images/0${idx + 1}_1.jpg`} className="img-fluid" alt="" />
+                      </div>
                       <div className="flex-column cont">
                         <div className="cont-hover">
-                          <h6>Africa Tour</h6>
-                          <div className="rating"> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> </div>
-                          <p>This tour was a truly memorable experience. Africa’s nature and shared memories were amazing.</p>
-                          <div className="traveller">
-                            <ul>
-                              <li><img src="/images/tst1.jpg" alt="" /></li>
-                              <li><img src="/images/tst2.jpg" alt="" /></li>
-                              <li><img src="/images/tst3.jpg" alt="" /><span>3+</span></li>
-                            </ul>
+                          <h6>{review.title || "Traveller Review"}</h6>
+                          <div className="rating">
+                            {Array.from({ length: review.rating || 5 }).map((_, i) => <i key={`star-${review.id || review._id || idx}-${i}`} className="fa-solid fa-star"></i>)}
                           </div>
+                          <p>{review.comment}</p>
                         </div>
                       </div>
                     </div>
-                    <div className="item box-shadow-extra-large duru-slide-right">
-                      <div className="img duru-image-parallax"> <img src="/images/02_1.jpg" className="img-fluid" alt="" /> </div>
-                      <div className="flex-column cont">
-                        <div className="cont-hover">
-                          <h6>Canada Tour</h6>
-                          <div className="rating"> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> </div>
-                          <p>This tour was a memorable experience. Canada’s landscapes and shared moments were incredible.</p>
-                          <div className="traveller">
-                            <ul>
-                              <li><img src="/images/tst1.jpg" alt="" /></li>
-                              <li><img src="/images/tst2.jpg" alt="" /></li>
-                              <li><img src="/images/tst3.jpg" alt="" /><span>3+</span></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="item box-shadow-extra-large duru-slide-right">
-                      <div className="img duru-image-parallax"> <img src="/images/03_1.jpg" className="img-fluid" alt="" /> </div>
-                      <div className="flex-column cont">
-                        <div className="cont-hover">
-                          <h6>Cappadocia Tour</h6>
-                          <div className="rating"> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> <i className="fa-solid fa-star"></i> </div>
-                          <p>This tour was a memorable experience. Cappadocia’s scenery and shared moments were magical.</p>
-                          <div className="traveller">
-                            <ul>
-                              <li><img src="/images/tst1.jpg" alt="" /></li>
-                              <li><img src="/images/tst2.jpg" alt="" /></li>
-                              <li><img src="/images/tst3.jpg" alt="" /><span>3+</span></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
+            )}
             {/* FAQS */}
             <section className="faqs section-padding bg-white">
               <div className="container">
@@ -487,14 +462,13 @@ export default function Home() {
             {/* Business Collaboration Showcase */}
             <BusinessCollaborationSection />
 
-            {/* Travel Journal & Intelligence */}
+            {/* Travel Journal — DB-driven (published posts) */}
+            {homePosts.length > 0 && (
             <section className="blog-home section-padding">
               <div className="container">
                 <div className="row justify-content-center">
                   <div className="col-md-12 text-center mb-40">
-                    <div className="section-subtitle wow fadeInRight" style={{ color: "#2095ae" }}>
-                      Travel Journal &amp; Intelligence
-                    </div>
+                    <div className="section-subtitle wow fadeInRight" style={{ color: "#2095ae" }}>Travel Journal &amp; Intelligence</div>
                     <div className="section-title mb-15 d-rotate wow">
                       <span className="rotate-text">Destination Guides &amp; <i>Visa Updates</i></span>
                     </div>
@@ -504,94 +478,41 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-4 duru-slide-left">
-                    <div className="item bg-img" data-background="/images/blog-1.jpg">
-                      <div className="content">
-                        <div className="info d-flex justify-content-between align-items-center">
-                          <span style={{ background: "#2095ae", color: "#ffffff", padding: "3px 10px", borderRadius: "10px", fontSize: "10px", fontWeight: "700", textTransform: "uppercase" }}>
-                            Visa Updates
-                          </span>
-                          <a href="/blog/uae-schengen-visa-updates-2026">
-                            <span><i className="ti-time"></i>28 Mar 2026</span>
-                          </a>
-                        </div>
-                        <a href="/blog/uae-schengen-visa-updates-2026">
-                          <h5>UAE &amp; Schengen Visa Updates 2026: Fast-Track Rules</h5>
-                        </a>
-                        <p>Essential consular updates on 24-hr Dubai e-visas and European VFS slot booking protocols.</p>
-                        <div className="arrow">
-                          <a href="/blog/uae-schengen-visa-updates-2026"><i className="ti-arrow-top-right"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-4 duru-slide-up">
-                    <div className="item bg-img active" data-background="/images/blog-2.jpg">
-                      <div className="content">
-                        <div className="info d-flex justify-content-between align-items-center">
-                          <span style={{ background: "#d39948", color: "#ffffff", padding: "3px 10px", borderRadius: "10px", fontSize: "10px", fontWeight: "700", textTransform: "uppercase" }}>
-                            Destination Guide
-                          </span>
-                          <a href="/blog/connoisseurs-guide-to-switzerland">
-                            <span><i className="ti-time"></i>22 Mar 2026</span>
-                          </a>
-                        </div>
-                        <a href="/blog/connoisseurs-guide-to-switzerland">
-                          <h5>The Connoisseur’s Guide to Switzerland</h5>
-                        </a>
-                        <p>Glacier Express Excellence Class, boutique alpine chalets, and uncrowded valleys.</p>
-                        <div className="arrow">
-                          <a href="/blog/connoisseurs-guide-to-switzerland"><i className="ti-arrow-top-right"></i></a>
+                  {homePosts.map((post, idx) => {
+                    const catColor = idx === 0 ? "#2095ae" : idx === 1 ? "#d39948" : "#0f2454";
+                    const animCls = idx === 0 ? "duru-slide-left" : idx === 1 ? "duru-slide-up" : "duru-slide-right";
+                    const activeCls = idx === 1 ? " active" : "";
+                    const href = `/blog/${post.slug}`;
+                    const dateStr = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "";
+                    return (
+                    <div key={post.id || post._id || `${post.slug}-${idx}` || `post-${idx}`} className={`col-md-4 ${animCls}`}>
+                      <div className={`item bg-img${activeCls}`} data-background={post.imageUrl || `/images/blog-${idx + 1}.jpg`}>
+                        <div className="content">
+                          <div className="info d-flex justify-content-between align-items-center">
+                            <span style={{ background: catColor, color: "#ffffff", padding: "3px 10px", borderRadius: "10px", fontSize: "10px", fontWeight: "700", textTransform: "uppercase" }}>
+                              {post.category || "Travel"}
+                            </span>
+                            {dateStr && <a href={href}><span><i className="ti-time"></i>{dateStr}</span></a>}
+                          </div>
+                          <a href={href}><h5>{post.title}</h5></a>
+                          {post.summary && <p>{post.summary}</p>}
+                          <div className="arrow"><a href={href}><i className="ti-arrow-top-right"></i></a></div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col-md-4 duru-slide-right">
-                    <div className="item bg-img" data-background="/images/blog-3.jpg">
-                      <div className="content">
-                        <div className="info d-flex justify-content-between align-items-center">
-                          <span style={{ background: "#0f2454", color: "#ffffff", padding: "3px 10px", borderRadius: "10px", fontSize: "10px", fontWeight: "700", textTransform: "uppercase" }}>
-                            Travel Tips
-                          </span>
-                          <a href="/blog/forex-currency-travel-tips">
-                            <span><i className="ti-time"></i>18 Mar 2026</span>
-                          </a>
-                        </div>
-                        <a href="/blog/forex-currency-travel-tips">
-                          <h5>Smart Currency &amp; Forex: Avoid Costly Traps Abroad</h5>
-                        </a>
-                        <p>Beat the Dynamic Currency Conversion (DCC) trick and avoid airport counter markups.</p>
-                        <div className="arrow">
-                          <a href="/blog/forex-currency-travel-tips"><i className="ti-arrow-top-right"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    );
+                  })}
                 </div>
                 <div className="row mt-40">
                   <div className="col-12 text-center">
-                    <a
-                      href="/blog"
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        background: "#0f2454",
-                        color: "#ffffff",
-                        padding: "12px 28px",
-                        borderRadius: "25px",
-                        fontSize: "13px",
-                        fontWeight: "600",
-                        textDecoration: "none",
-                        transition: "all 0.25s ease",
-                      }}
-                    >
-                      Explore All 5 Categories in Journal <i className="ti-arrow-right" />
+                    <a href="/blog" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#0f2454", color: "#ffffff", padding: "12px 28px", borderRadius: "25px", fontSize: "13px", fontWeight: "600", textDecoration: "none", transition: "all 0.25s ease" }}>
+                      Explore All Categories in Journal <i className="ti-arrow-right" />
                     </a>
                   </div>
                 </div>
               </div>
             </section>
+            )}
           </main>
           {/* Footer */}
           <SiteFooter />

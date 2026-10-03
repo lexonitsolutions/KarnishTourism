@@ -1,5 +1,5 @@
 const ALL = ["view", "create", "edit", "delete", "approve", "publish", "export"];
-const RESOURCE_TYPES = ["packages","destinations","itineraries","activities","visas","hotels","offers","gallery","blogs","testimonials","bookings","inquiries","customers","b2b-requests","payments","seo","users","settings"];
+const RESOURCE_TYPES = ["packages","tours","destinations","itineraries","activities","visas","hotels","offers","coupons","gallery","blogs","testimonials","reviews","bookings","inquiries","customers","collaborators","b2b-requests","payments","seo","users","settings"];
 const full = Object.fromEntries(RESOURCE_TYPES.map((key) => [key, ALL]));
 const roles = {
   super_admin: full,

@@ -8,8 +8,8 @@ import WishlistButton from "../../components/WishlistButton";
 
 export default function LandingDestinationCard({ destination, layout = "international", priority = false }) {
   const router = useRouter();
-  const tourPackage = destination.packages[0];
-  const destinationUrl = `/tours/${destination.type}/${destination.slug}`;
+  const tourPackage = destination.packages?.[0] || null;
+  const destinationUrl = `/tours/${destination.type || "international"}/${destination.slug}`;
 
   function handleCardClick(e) {
     // If the click is inside the heart button, let toggleSaved handle it
@@ -29,20 +29,12 @@ export default function LandingDestinationCard({ destination, layout = "internat
     }
   }
 
-  const titles = {
-    dubai: "Dubai & Desert Dunes",
-    bali: "Bali Tropical Bliss",
-    maldives: "Maldives Overwater Haven",
-    switzerland: "Swiss Alpine Panorama",
-    kashmir: "Kashmir: Srinagar, Gulmarg & Pahalgam",
-    kerala: "Kerala: Munnar Tea Hills & Alleppey",
-    rajasthan: "Royal Rajasthan: Jaipur, Udaipur & Jodhpur",
-    goa: "Goa Coastal & Luxury Getaway",
-    "himachal-pradesh": "Himachal: Shimla & Manali",
-    andaman: "Andaman: Havelock & Neil Island",
-  };
-
-  const titleText = titles[destination.slug] || tourPackage.name;
+  const titleText = tourPackage?.name || destination.name;
+  const activitiesText = Array.isArray(tourPackage?.activities) && tourPackage.activities.length > 0
+    ? tourPackage.activities.slice(0, 3).join(" · ")
+    : Array.isArray(tourPackage?.inclusions) && tourPackage.inclusions.length > 0
+    ? tourPackage.inclusions.slice(0, 3).join(" · ")
+    : tourPackage?.summary || destination.tagline;
 
   return (
     <article
@@ -61,7 +53,7 @@ export default function LandingDestinationCard({ destination, layout = "internat
           tabIndex={-1}
         >
           <Image
-            src={destination.image}
+            src={destination.image || "/images/destination-01.jpg"}
             alt={`${destination.name} holiday`}
             fill
             sizes={
@@ -72,20 +64,20 @@ export default function LandingDestinationCard({ destination, layout = "internat
             preload={priority}
           />
         </Link>
-        <span>{destination.badge}</span>
-        <WishlistButton compact item={{ id: `tour-${tourPackage.id}`, title: titleText, image: destination.image, price: tourPackage.salePrice, meta: `${tourPackage.days} days · ${destination.name}`, href: destinationUrl, type: "Tour" }} />
-        <small>{tourPackage.days} Days / {tourPackage.nights} Nights</small>
+        {destination.badge && <span>{destination.badge}</span>}
+        <WishlistButton compact item={{ id: `tour-${tourPackage?.id || destination.id}`, title: titleText, image: destination.image || "/images/destination-01.jpg", price: tourPackage?.salePrice ?? destination.startingPrice, meta: [tourPackage?.days ? `${tourPackage.days} days` : "", destination.name].filter(Boolean).join(" · "), href: destinationUrl, type: "Tour" }} />
+        {tourPackage?.days && <small>{tourPackage.days} Days{tourPackage.nights != null ? ` / ${tourPackage.nights} Nights` : ""}</small>}
       </div>
       <div className="ktl-card-copy">
         <span>{destination.name} · {destination.country}</span>
         <h3>
           <Link href={destinationUrl}>{titleText}</Link>
         </h3>
-        <p>{tourPackage.activities.slice(0, 3).join(" · ")}</p>
+        <p>{activitiesText}</p>
         <div>
           <small>Starting from</small>
           <strong>
-            {formatPrice(tourPackage.salePrice)} <em>/ person</em>
+            {formatPrice(tourPackage?.salePrice ?? destination.startingPrice)} {tourPackage?.salePrice != null && <em>/ person</em>}
           </strong>
           <Link href={destinationUrl} className="ktl-card-explore-btn">
             Explore <i className="ti-arrow-right" />

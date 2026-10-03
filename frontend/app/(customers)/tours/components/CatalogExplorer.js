@@ -25,7 +25,29 @@ export default function CatalogExplorer({ items, type }) {
         <label><span>Sort by</span><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="recommended">Recommended</option><option value="price-low">Price: low to high</option><option value="duration">Shortest first</option></select></label>
       </div>
       <div className="ktours-results-head"><p><strong>{filtered.length}</strong> {type} destinations</p>{(query || region !== "All regions" || budget !== "all") && <button onClick={() => { setQuery(""); setRegion("All regions"); setBudget("all"); }}>Clear all filters</button>}</div>
-      {filtered.length ? <div className="ktours-destination-grid">{filtered.map((destination, index) => <DestinationCard destination={destination} key={destination.id} priority={index < 2} />)}</div> : <div className="ktours-empty"><i className="ti-map-alt" /><h3>No destinations found</h3><p>Try changing your region or budget filters.</p><button className="ktours-button" onClick={() => { setQuery(""); setRegion("All regions"); setBudget("all"); }}>Reset filters</button></div>}
+      {items.length === 0 ? (
+        <div className="ktours-empty" style={{ padding: "60px 20px" }}>
+          <i className="ti-map-alt" />
+          <h3>No {type} destinations published yet</h3>
+          <p>Upload new destinations anytime through the Admin Dashboard to have them appear here immediately.</p>
+          <a href="/admin/destinations" className="ktours-button" style={{ display: "inline-block", marginTop: "15px" }}>
+            Go to Admin Dashboard
+          </a>
+        </div>
+      ) : filtered.length ? (
+        <div className="ktours-destination-grid">
+          {filtered.map((destination, index) => (
+            <DestinationCard destination={destination} key={destination.id || destination._id || index} priority={index < 2} />
+          ))}
+        </div>
+      ) : (
+        <div className="ktours-empty">
+          <i className="ti-map-alt" />
+          <h3>No destinations found</h3>
+          <p>Try changing your region or budget filters.</p>
+          <button className="ktours-button" onClick={() => { setQuery(""); setRegion("All regions"); setBudget("all"); }}>Reset filters</button>
+        </div>
+      )}
     </>
   );
 }

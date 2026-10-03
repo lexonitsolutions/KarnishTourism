@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { Show } from "@clerk/nextjs";
 import NavUtilityMenu from "./NavUtilityMenu";
 import HeaderAuthBox from "@shared/components/HeaderAuthBox";
 
@@ -27,6 +28,7 @@ function RollingNavText({ text }) {
 
 export default function Navbar() {
   const pathname = usePathname() || "";
+  const router = useRouter();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [authBox, setAuthBox] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -62,6 +64,25 @@ export default function Navbar() {
     }
   };
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && pathname) {
+      try {
+        sessionStorage.setItem("karnishLastActivePath", pathname);
+      } catch (_) {}
+    }
+  }, [pathname]);
+
+  const handleHomeClick = (e) => {
+    if (pathname && pathname !== "/" && pathname !== "") {
+      e.preventDefault();
+      try {
+        sessionStorage.setItem("karnishPageTransition", "true");
+        sessionStorage.setItem("karnishLastActivePath", "/");
+      } catch (_) {}
+      window.location.href = "/";
+    }
+  };
+
   const isHome = pathname === "/" || pathname === "";
   const isAbout = pathname === "/about";
   const isTours = pathname === "/tours" || pathname.startsWith("/tour");
@@ -70,15 +91,13 @@ export default function Navbar() {
   const isServices = pathname === "/services" || pathname.startsWith("/service");
   const isContact = pathname === "/contact";
 
-  const handleOpenAuth = () => authBox ? closeAuthBox() : setAuthBox("signin");
-
   return (
     <>
       <nav className={`navbar navbar-expand-lg ${isScrolled ? "nav-scroll" : ""}`}>
         <div className="container">
           {/* Logo */}
           <div className="logo-wrapper">
-            <Link className="logo" href="/">
+            <Link className="logo" href="/" onClick={handleHomeClick}>
               <Image src="/images/karnish-logo.png" width={96} height={96} className="logo-img karnish-logo" alt="Karnish Tourism LLC" priority />
             </Link>
           </div>
@@ -86,16 +105,16 @@ export default function Navbar() {
           {/* Mobile Actions: Utility Menu + Person Icon + Toggle Button */}
           <div className="d-flex align-items-center d-lg-none ms-auto me-2 gap-2">
             <NavUtilityMenu isMobile={true} />
-            <button
-              suppressHydrationWarning
-              type="button"
-              className="nav-person-btn nav-person-btn-mobile"
-              onClick={() => handleOpenAuth("login")}
-              aria-label="Open account"
-              title="Sign in or open account"
-            >
-              <i className="ti-user"></i>
-            </button>
+            <Show when="signed-out">
+              <button suppressHydrationWarning type="button" className="nav-person-btn nav-person-btn-mobile" onClick={() => setAuthBox("signin")} aria-label="Open account" title="Sign in or open account">
+                <i className="ti-user"></i>
+              </button>
+            </Show>
+            <Show when="signed-in">
+              <button suppressHydrationWarning type="button" className="nav-person-btn nav-person-btn-mobile" onClick={() => router.push("/account")} aria-label="Open account" title="Open my account">
+                <i className="ti-user"></i>
+              </button>
+            </Show>
           </div>
 
           {/* Mobile Toggle Button */}
@@ -117,7 +136,7 @@ export default function Navbar() {
           <div className={`collapse navbar-collapse ${isMobileNavOpen ? "show" : ""}`} id="navbar">
             <ul className="navbar-nav ms-auto align-items-lg-center">
               <li className="nav-item">
-                <Link className={`nav-link ${isHome ? "active" : ""}`} href="/">
+                <Link className={`nav-link ${isHome ? "active" : ""}`} href="/" onClick={handleHomeClick}>
                   <RollingNavText text="Home" />
                 </Link>
               </li>
@@ -159,16 +178,16 @@ export default function Navbar() {
 
               {/* Person Icon in Desktop Navbar */}
               <li className="nav-item nav-auth-item ms-lg-2 d-none d-lg-flex">
-                <button
-                  suppressHydrationWarning
-                  type="button"
-                  className="nav-person-btn"
-                  onClick={() => handleOpenAuth("login")}
-                  aria-label="Open account"
-                  title="Sign in or open account"
-                >
-                  <i className="ti-user"></i>
-                </button>
+                <Show when="signed-out">
+                  <button suppressHydrationWarning type="button" className="nav-person-btn" onClick={() => setAuthBox("signin")} aria-label="Open account" title="Sign in or open account">
+                    <i className="ti-user"></i>
+                  </button>
+                </Show>
+                <Show when="signed-in">
+                  <button suppressHydrationWarning type="button" className="nav-person-btn" onClick={() => router.push("/account")} aria-label="Open account" title="Open my account">
+                    <i className="ti-user"></i>
+                  </button>
+                </Show>
               </li>
             </ul>
           </div>
@@ -176,11 +195,7 @@ export default function Navbar() {
       </nav>
       {authBox && (
         <>
-          <button
-            className="kt-header-auth-backdrop"
-            onClick={closeAuthBox}
-            aria-label="Close authentication"
-          />
+          <button className="kt-header-auth-backdrop" onClick={closeAuthBox} aria-label="Close authentication" />
           <HeaderAuthBox initialMode={authBox} onClose={closeAuthBox} />
         </>
       )}

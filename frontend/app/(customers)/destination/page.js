@@ -1,9 +1,29 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Script from "next/script";
 import SiteFooter from "../components/SiteFooter";
+import { fetchPublic } from "@/lib/api";
 
 export default function Destination() {
+  const [destinations, setDestinations] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    fetchPublic("destinations", { limit: 100 })
+      .then((data) => {
+        if (active && Array.isArray(data?.items)) {
+          setDestinations(data.items);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => { active = false; };
+  }, []);
+
   return (
     <>
       {/* Cursor */}
@@ -77,92 +97,45 @@ export default function Destination() {
             {/* Destinations */}
             <div className="destination section-padding pt-0">
               <div className="container">
-                <div className="row">
-                  <div className="col-lg-4 col-md-12 mb-60">
-                    <div className="item transition-inner-all"> <img src="/images/destination-a.jpg" className="img-fluid" alt="" />
-                      <div className="cont hover">
-                        <div className="wrap"> <span className="title">Greece</span>
-                          <div className="link">
-                            <a href="/tour-details">
-                              <div className="category">4+ Tour Packages</div><i className="fa-light fa-arrow-right-long"></i>
-                            </a>
-                          </div>
-                          <div className="overlay"></div>
-                        </div>
+                {loading ? (
+                  <div className="row">
+                    {[1, 2, 3].map((n) => (
+                      <div className="col-lg-4 col-md-12 mb-60" key={`dest-skel-${n}`}>
+                        <div style={{ height: "380px", borderRadius: "14px", background: "#f2f4f7" }} />
                       </div>
-                    </div>
+                    ))}
                   </div>
-                  <div className="col-lg-4 col-md-12 mb-60">
-                    <div className="item transition-inner-all"> <img src="/images/destination-d.jpg" className="img-fluid" alt="" />
-                      <div className="cont hover">
-                        <div className="wrap"> <span className="title">Egypt</span>
-                          <div className="link">
-                            <a href="/tour-details">
-                              <div className="category">3+ Tour Packages</div><i className="fa-light fa-arrow-right-long"></i>
-                            </a>
+                ) : destinations.length > 0 ? (
+                  <div className="row">
+                    {destinations.map((item, idx) => {
+                      const image = item.imageUrl || item.image || `/images/destination-${["a","b","c","d","e","f"][idx % 6]}.jpg`;
+                      const linkHref = `/tours/${item.type || "international"}/${item.slug}`;
+                      return (
+                        <div className="col-lg-4 col-md-12 mb-60" key={item.id || item._id || `${item.slug}-${idx}` || `dest-${idx}`}>
+                          <div className="item transition-inner-all">
+                            <img src={image} className="img-fluid" alt={item.title} style={{ height: "380px", width: "100%", objectFit: "cover" }} />
+                            <div className="cont hover">
+                              <div className="wrap">
+                                <span className="title">{item.title}</span>
+                                <div className="link">
+                                  <a href={linkHref}>
+                                    <div className="category">{item.country || (item.type === "domestic" ? "India" : "International")}</div>
+                                    <i className="fa-light fa-arrow-right-long"></i>
+                                  </a>
+                                </div>
+                                <div className="overlay"></div>
+                              </div>
+                            </div>
                           </div>
-                          <div className="overlay"></div>
                         </div>
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
-                  <div className="col-lg-4 col-md-12 mb-60">
-                    <div className="item transition-inner-all"> <img src="/images/destination-c.jpg" className="img-fluid" alt="" />
-                      <div className="cont hover">
-                        <div className="wrap"> <span className="title">Thailand</span>
-                          <div className="link">
-                            <a href="/tour-details">
-                              <div className="category">7+ Tour Packages</div><i className="fa-light fa-arrow-right-long"></i>
-                            </a>
-                          </div>
-                          <div className="overlay"></div>
-                        </div>
-                      </div>
-                    </div>
+                ) : (
+                  <div className="text-center py-5" style={{ color: "#667085" }}>
+                    <p style={{ fontSize: "16px" }}>No destinations published yet. Add destinations from the Admin Portal.</p>
                   </div>
-                  <div className="col-lg-4 col-md-12 mb-60">
-                    <div className="item transition-inner-all"> <img src="/images/destination-e.jpg" className="img-fluid" alt="" />
-                      <div className="cont hover">
-                        <div className="wrap"> <span className="title">Iceland</span>
-                          <div className="link">
-                            <a href="/tour-details">
-                              <div className="category">4+ Tour Packages</div><i className="fa-light fa-arrow-right-long"></i>
-                            </a>
-                          </div>
-                          <div className="overlay"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4 col-md-12 mb-60">
-                    <div className="item transition-inner-all"> <img src="/images/destination-b.jpg" className="img-fluid" alt="" />
-                      <div className="cont hover">
-                        <div className="wrap"> <span className="title">South Africa</span>
-                          <div className="link">
-                            <a href="/tour-details">
-                              <div className="category">6+ Tour Packages</div><i className="fa-light fa-arrow-right-long"></i>
-                            </a>
-                          </div>
-                          <div className="overlay"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-4 col-md-12 mb-60">
-                    <div className="item transition-inner-all"> <img src="/images/destination-f.jpg" className="img-fluid" alt="" />
-                      <div className="cont hover">
-                        <div className="wrap"> <span className="title">Maldives</span>
-                          <div className="link">
-                            <a href="/tour-details">
-                              <div className="category">6+ Tour Packages</div><i className="fa-light fa-arrow-right-long"></i>
-                            </a>
-                          </div>
-                          <div className="overlay"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </main>

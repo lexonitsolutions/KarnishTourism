@@ -1,20 +1,47 @@
 const express = require("express");
-const { randomUUID } = require("crypto");
-const { all, get, run } = require("../config/database");
-const { authenticate, authorize } = require("../middleware/auth");
-const { RESOURCE_TYPES } = require("../permissions/roles");
-const router = express.Router();
-router.use(authenticate);
-router.use((req, res, next) => ["admin", "super_admin"].includes(req.user.role) ? next() : res.status(403).json({ error: "Administrator access required" }));
-const parse = (row) => ({ ...JSON.parse(row.data || "{}"), id: row.id, title: row.title, status: row.status, createdAt: row.created_at, updatedAt: row.updated_at });
-const valid = (req, res, next) => RESOURCE_TYPES.includes(req.params.resource) ? next() : res.status(404).json({ error: "Unknown resource" });
-async function audit(req, action, id) { await run("INSERT INTO audit_log(id,user_id,action,resource_type,resource_id,details,created_at) VALUES(?,?,?,?,?,?,?)", [randomUUID(), req.user.id, action, req.params.resource, id, JSON.stringify({ ip: req.ip }), new Date().toISOString()]); }
-
-router.get("/dashboard", (req, res) => res.json({ stats: { totalBookings:1284,todayBookings:18,pendingBookings:42,confirmedBookings:1167,totalRevenue:24850000,monthlyRevenue:2840000,totalCustomers:9840,newCustomers:286,activePackages:74,pendingInquiries:31,internationalBookings:786,domesticBookings:498 }, revenue:[12,18,15,24,23,31,36,34,42,48,52,61], bookings:[{id:"KT-24018",customer:"Aarav Sharma",item:"Dubai Signature",amount:124000,status:"Confirmed"},{id:"KT-24017",customer:"Meera Patel",item:"Bali Escape",amount:86000,status:"Pending"},{id:"KT-24016",customer:"Kabir Khan",item:"Kashmir Retreat",amount:68000,status:"Confirmed"}], inquiries:[{customer:"Riya Mehta",destination:"Maldives",source:"Package page",status:"New"},{customer:"Dev Arora",destination:"Switzerland",source:"Custom tour",status:"Follow-up"}] }));
-router.get("/profiles", authorize("users", "view"), async (req, res, next) => { try { const users = await all("SELECT id,full_name,email,phone,role,status,last_login,created_at,updated_at FROM profiles ORDER BY created_at DESC"); res.json({ users }); } catch (error) { next(error); } });
-router.patch("/profiles/:id/role", authorize("users", "edit"), async (req, res, next) => { try { if (req.user.role !== "super_admin") return res.status(403).json({ error: "Only a Super Admin can assign privileged roles" }); const allowed = ["customer","admin","b2b","collaborator"]; const role = String(req.body.role || ""); if (!allowed.includes(role)) return res.status(400).json({ error: "Invalid assignable role" }); const result = await run("UPDATE profiles SET role=?,updated_at=? WHERE id=?", [role,new Date().toISOString(),req.params.id]); if (!result.changes) return res.status(404).json({ error: "Profile not found" }); await audit(req,"assign-role",req.params.id); res.json({ ok:true,role }); } catch (error) { next(error); } });
-router.get("/resources/:resource", valid, authorize(null, "view"), async (req, res, next) => { try { const rows = await all("SELECT * FROM resources WHERE resource_type = ? ORDER BY updated_at DESC", [req.params.resource]); res.json({ items: rows.map(parse) }); } catch (error) { next(error); } });
-router.post("/resources/:resource", valid, authorize(null, "create"), async (req, res, next) => { try { const now = new Date().toISOString(), id = randomUUID(), title = String(req.body.title || "").trim(); if (!title) return res.status(400).json({ error: "Title is required" }); const status = String(req.body.status || "Draft"), data = { ...req.body }; delete data.title; delete data.status; await run("INSERT INTO resources(id,resource_type,title,status,data,created_by,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)", [id,req.params.resource,title,status,JSON.stringify(data),req.user.id,now,now]); await audit(req,"create",id); res.status(201).json({ item:{ id,title,status,...data } }); } catch (error) { next(error); } });
-router.put("/resources/:resource/:id", valid, authorize(null, "edit"), async (req,res,next) => { try { const row=await get("SELECT * FROM resources WHERE id=? AND resource_type=?",[req.params.id,req.params.resource]); if(!row)return res.status(404).json({error:"Record not found"}); const current=parse(row),title=String(req.body.title||current.title).trim(),status=String(req.body.status||current.status),data={...current,...req.body}; ["id","title","status","createdAt","updatedAt"].forEach(key=>delete data[key]); await run("UPDATE resources SET title=?,status=?,data=?,updated_at=? WHERE id=?",[title,status,JSON.stringify(data),new Date().toISOString(),req.params.id]); await audit(req,"edit",req.params.id); res.json({item:{id:req.params.id,title,status,...data}}); } catch(error){next(error);} });
-router.delete("/resources/:resource/:id", valid, authorize(null, "delete"), async(req,res,next)=>{try{const result=await run("DELETE FROM resources WHERE id=? AND resource_type=?",[req.params.id,req.params.resource]);if(!result.changes)return res.status(404).json({error:"Record not found"});await audit(req,"delete",req.params.id);res.json({ok:true});}catch(error){next(error);}});
+const { authenticate, allowRoles } = require("../middleware/auth");
+const { validateObjectId } = require("../middleware/validate");
+const { models } = require("../services/modelRegistry");
+const controller = require("../controllers/resourceController");
+const Booking = require("../models/Booking"), Inquiry = require("../models/Inquiry"), User = require("../models/User"), TourPackage = require("../models/TourPackage");
+const router = express.Router(); router.use(authenticate, allowRoles("admin", "super_admin"));
+router.get("/dashboard", async (_req, res, next) => {
+  try {
+    const [totalBookings, pendingBookings, totalCustomers, activePackages, pendingInquiries, revenue, recentBookings] = await Promise.all([
+      Booking.countDocuments(),
+      Booking.countDocuments({ bookingStatus: "pending" }),
+      User.countDocuments({ role: "customer" }),
+      TourPackage.countDocuments({ status: "active" }),
+      Inquiry.countDocuments({ status: { $in: ["new", "contacted", "in_progress"] } }),
+      Booking.aggregate([{ $match: { paymentStatus: "paid" } }, { $group: { _id: null, total: { $sum: "$totalAmount" } } }]),
+      Booking.find().sort({ createdAt: -1 }).limit(10).populate("package", "title destination").populate("user", "name email").lean()
+    ]);
+    res.json({
+      success: true,
+      stats: {
+        totalBookings,
+        pendingBookings,
+        totalCustomers,
+        activePackages,
+        pendingInquiries,
+        totalRevenue: revenue[0]?.total || 0
+      },
+      bookings: (recentBookings || []).map(b => ({
+        id: b.bookingId || String(b._id).slice(-6).toUpperCase(),
+        customer: b.contactInformation?.name || b.user?.name || "Guest",
+        customerEmail: b.contactInformation?.email || b.user?.email || "",
+        item: b.package?.title || "Tour Package",
+        destination: b.package?.destination || "Oman",
+        amount: b.totalAmount || 0,
+        status: b.bookingStatus || "pending",
+        paymentStatus: b.paymentStatus || "pending",
+        createdAt: b.createdAt
+      }))
+    });
+  } catch (error) { next(error); }
+});
+router.get("/profiles", (req, res, next) => controller.list(User)(req, res, next));
+router.patch("/profiles/:id/role", validateObjectId(), async (req, res, next) => { try { if (req.user.role !== "super_admin") return res.status(403).json({ success: false, error: "Only a Super Admin can assign privileged roles" }); const allowed = ["customer", "admin", "collaborator"]; if (!allowed.includes(req.body.role)) return res.status(400).json({ success: false, error: "Invalid assignable role" }); const item = await User.findByIdAndUpdate(req.params.id, { role: req.body.role }, { new: true, runValidators: true }); if (!item) return res.status(404).json({ success: false, error: "Profile not found" }); res.json({ success: true, user: item }); } catch (error) { next(error); } });
+const withModel = (handler) => (req, res, next) => { const Model = models[req.params.resource]; if (!Model) return res.status(404).json({ success: false, error: "Unknown resource" }); return handler(Model)(req, res, next); };
+router.get("/resources/:resource", withModel(controller.list)); router.post("/resources/:resource", withModel(controller.create)); router.put("/resources/:resource/:id", validateObjectId(), withModel(controller.update)); router.delete("/resources/:resource/:id", validateObjectId(), withModel(controller.remove));
 module.exports = router;

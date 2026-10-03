@@ -1,4 +1,5 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const rawApi = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = rawApi.endsWith("/api") ? rawApi : `${rawApi}/api`;
 const DEMO_AUTH_ENABLED = process.env.NEXT_PUBLIC_DEMO_AUTH === "true";
 const DEMO_STORAGE_KEY = "karnish_demo_user";
 
@@ -43,11 +44,14 @@ export async function authRequest(path, options = {}) {
     const response = await fetch(`${API_URL}/auth${path}`, { credentials: "include", ...options, headers: { "Content-Type": "application/json", ...options.headers } });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok && response.status >= 500 && DEMO_AUTH_ENABLED) return demoResponse(path, options);
-    if (!response.ok) throw new Error(payload.error || "Authentication request failed");
+    if (!response.ok) {
+      if (DEMO_AUTH_ENABLED && response.status === 404) return demoResponse(path, options);
+      throw new Error(payload.error || "Authentication request failed");
+    }
     return payload;
   } catch (error) {
-    if (!DEMO_AUTH_ENABLED || !(error instanceof TypeError)) throw error;
-    return demoResponse(path, options);
+    if (DEMO_AUTH_ENABLED) return demoResponse(path, options);
+    throw error;
   }
 }
 

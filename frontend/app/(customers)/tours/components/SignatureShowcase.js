@@ -4,12 +4,12 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { formatPrice } from "../data";
 
-const chips = ["All Trips","Dubai","Bali","Kashmir","Maldives","Honeymoon","Family","Luxury"];
 export default function SignatureShowcase({ packages }) {
   const [chip,setChip] = useState("All Trips");
   const [sort,setSort] = useState("Recommended");
   const [selected,setSelected] = useState([]);
   const [comparing,setComparing] = useState(false);
+  const chips = useMemo(() => ["All Trips", ...new Set(packages.map(row => row.destination.name).filter(Boolean))], [packages]);
   const visible = useMemo(() => {
     let rows = chip === "All Trips" ? packages : packages.filter(row => row.destination.name === chip || row.package.category === chip || row.destination.idealFor.includes(chip));
     if (sort === "Price: Low to High") rows = [...rows].sort((a,b) => a.package.salePrice-b.package.salePrice);
@@ -18,5 +18,131 @@ export default function SignatureShowcase({ packages }) {
   },[chip,sort,packages]);
   const compared = packages.filter(row => selected.includes(row.package.id));
   function toggle(id){setSelected(current => current.includes(id) ? current.filter(item => item !== id) : current.length < 3 ? [...current,id] : current)}
-  return <section className="ktl-signature-wrap"><div className="ktl-content"><div className="ktl-section-head"><div><span>Handcrafted itineraries</span><h2>Signature Packages</h2><p>Our most thoughtfully crafted journeys, combining exceptional stays, memorable experiences and seamless travel.</p></div><label>Sort by: <select value={sort} onChange={e => setSort(e.target.value)} suppressHydrationWarning><option>Recommended</option><option>Price: Low to High</option><option>Duration</option></select></label></div><div className="ktl-chip-row">{chips.map(item => <button className={chip === item ? "active" : ""} onClick={() => setChip(item)} key={item} suppressHydrationWarning>{item}</button>)}</div><div className="ktl-package-rows">{visible.map(({destination,package:tourPackage}) => <article key={tourPackage.id}><div className="ktl-package-photo"><a href={`/tours/${destination.type}/${destination.slug}/${tourPackage.slug}`} className="ktl-card-photo-link" aria-label={`View ${tourPackage.name} itinerary`}><Image src={tourPackage.image} alt={tourPackage.name} fill sizes="(max-width: 760px) 100vw, 300px" /></a><span>{tourPackage.category}</span></div><div className="ktl-package-info"><div><span>{destination.name} · {destination.country}</span><h3><a href={`/tours/${destination.type}/${destination.slug}/${tourPackage.slug}`}>{tourPackage.name}</a></h3><b><i className="fa-solid fa-star" /> {tourPackage.rating} <small>({tourPackage.reviews} reviews)</small></b></div><p>{destination.tagline}</p><div className="ktl-package-facts"><span><i className="ti-calendar" /> {tourPackage.days}D / {tourPackage.nights}N</span><span><i className="ti-home" /> {tourPackage.hotelRating} Star Hotel</span><span><i className="ti-cup" /> Meals</span><span><i className="ti-car" /> Transfers</span><span><i className="ti-camera" /> Sightseeing</span></div><ul>{tourPackage.inclusions.slice(0,3).map(item => <li key={item}><i className="ti-check" /> {item}</li>)}</ul></div><div className="ktl-package-price"><label><input type="checkbox" checked={selected.includes(tourPackage.id)} disabled={!selected.includes(tourPackage.id) && selected.length >= 3} onChange={() => toggle(tourPackage.id)} suppressHydrationWarning /> Compare</label><small>Starting from</small><strong>{formatPrice(tourPackage.salePrice)}</strong><em>/ person</em><a className="outline" href={`/tours/${destination.type}/${destination.slug}/${tourPackage.slug}`}>View Itinerary</a><a href={`/tours/inquiry?destination=${destination.slug}&package=${encodeURIComponent(tourPackage.name)}`}>Get Quote</a></div></article>)}</div>{selected.length > 0 && <div className="ktl-compare-note"><span>{selected.length} of 3 packages selected</span><button disabled={selected.length < 2} onClick={() => setComparing(true)} suppressHydrationWarning>Compare Packages</button></div>}</div>{comparing && <div className="ktours-dialog-backdrop" onMouseDown={() => setComparing(false)}><div className="ktours-compare-dialog" role="dialog" aria-modal="true" onMouseDown={event => event.stopPropagation()}><button className="ktours-dialog-close" onClick={() => setComparing(false)} suppressHydrationWarning><i className="ti-close" /></button><h2>Compare Packages</h2><div className="ktours-compare-scroll"><table><thead><tr><th>Package</th>{compared.map(row => <th key={row.package.id}>{row.package.name}<strong>{formatPrice(row.package.salePrice)}</strong></th>)}</tr></thead><tbody>{[["Duration",row=>`${row.package.days} days`],["Hotel",row=>row.package.hotel],["Meals",row=>row.package.meals],["Transfers",row=>row.package.transfers],["Cancellation",row=>row.package.cancellation]].map(([label,value]) => <tr key={label}><th>{label}</th>{compared.map(row => <td key={row.package.id}>{value(row)}</td>)}</tr>)}</tbody></table></div></div></div>}</section>;
+  return (
+    <section className="ktl-signature-wrap">
+      <div className="ktl-content">
+        <div className="ktl-section-head">
+          <div>
+            <span>Handcrafted itineraries</span>
+            <h2>Signature Packages</h2>
+            <p>Our most thoughtfully crafted journeys, combining exceptional stays, memorable experiences and seamless travel.</p>
+          </div>
+          <label>
+            Sort by:{" "}
+            <select value={sort} onChange={e => setSort(e.target.value)} suppressHydrationWarning>
+              <option>Recommended</option>
+              <option>Price: Low to High</option>
+              <option>Duration</option>
+            </select>
+          </label>
+        </div>
+        <div className="ktl-chip-row">
+          {chips.map((item, idx) => (
+            <button
+              className={chip === item ? "active" : ""}
+              onClick={() => setChip(item)}
+              key={`chip-${item || idx}`}
+              suppressHydrationWarning
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+        <div className="ktl-package-rows">
+          {visible.map(({ destination, package: tourPackage }, idx) => (
+            <article key={tourPackage.id || tourPackage.slug || `sig-pkg-${idx}`}>
+              <div className="ktl-package-photo">
+                <a href={`/tours/${destination.type}/${destination.slug}/${tourPackage.slug}`} className="ktl-card-photo-link" aria-label={`View ${tourPackage.name} itinerary`}>
+                  <Image src={tourPackage.image} alt={tourPackage.name} fill sizes="(max-width: 760px) 100vw, 300px" />
+                </a>
+                <span>{tourPackage.category}</span>
+              </div>
+              <div className="ktl-package-info">
+                <div>
+                  <span>{destination.name} · {destination.country}</span>
+                  <h3>
+                    <a href={`/tours/${destination.type}/${destination.slug}/${tourPackage.slug}`}>{tourPackage.name}</a>
+                  </h3>
+                  <b><i className="fa-solid fa-star" /> {tourPackage.rating} <small>({tourPackage.reviews} reviews)</small></b>
+                </div>
+                <p>{destination.tagline}</p>
+                <div className="ktl-package-facts">
+                  <span><i className="ti-calendar" /> {tourPackage.days}D / {tourPackage.nights}N</span>
+                  <span><i className="ti-home" /> {tourPackage.hotelRating} Star Hotel</span>
+                  <span><i className="ti-cup" /> Meals</span>
+                  <span><i className="ti-car" /> Transfers</span>
+                  <span><i className="ti-camera" /> Sightseeing</span>
+                </div>
+                <ul>
+                  {tourPackage.inclusions.slice(0, 3).map((item, incIdx) => (
+                    <li key={`inc-${tourPackage.id || idx}-${incIdx}`}><i className="ti-check" /> {item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="ktl-package-price">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selected.includes(tourPackage.id)}
+                    disabled={!selected.includes(tourPackage.id) && selected.length >= 3}
+                    onChange={() => toggle(tourPackage.id)}
+                    suppressHydrationWarning
+                  /> Compare
+                </label>
+                <small>Starting from</small>
+                <strong>{formatPrice(tourPackage.salePrice)}</strong>
+                <em>/ person</em>
+                <a className="outline" href={`/tours/${destination.type}/${destination.slug}/${tourPackage.slug}`}>View Itinerary</a>
+                <a href={`/tours/inquiry?destination=${destination.slug}&package=${encodeURIComponent(tourPackage.name)}`}>Get Quote</a>
+              </div>
+            </article>
+          ))}
+        </div>
+        {selected.length > 0 && (
+          <div className="ktl-compare-note">
+            <span>{selected.length} of 3 packages selected</span>
+            <button disabled={selected.length < 2} onClick={() => setComparing(true)} suppressHydrationWarning>Compare Packages</button>
+          </div>
+        )}
+      </div>
+      {comparing && (
+        <div className="ktours-dialog-backdrop" onMouseDown={() => setComparing(false)}>
+          <div className="ktours-compare-dialog" role="dialog" aria-modal="true" onMouseDown={event => event.stopPropagation()}>
+            <button className="ktours-dialog-close" onClick={() => setComparing(false)} suppressHydrationWarning><i className="ti-close" /></button>
+            <h2>Compare Packages</h2>
+            <div className="ktours-compare-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Package</th>
+                    {compared.map((row, idx) => (
+                      <th key={row.package.id || `comp-th-${idx}`}>
+                        {row.package.name}<strong>{formatPrice(row.package.salePrice)}</strong>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ["Duration", row => `${row.package.days} days`],
+                    ["Hotel", row => row.package.hotel],
+                    ["Meals", row => row.package.meals],
+                    ["Transfers", row => row.package.transfers],
+                    ["Cancellation", row => row.package.cancellation]
+                  ].map(([label, value]) => (
+                    <tr key={label}>
+                      <th>{label}</th>
+                      {compared.map((row, idx) => (
+                        <td key={row.package.id || `comp-td-${idx}`}>{value(row)}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
 }

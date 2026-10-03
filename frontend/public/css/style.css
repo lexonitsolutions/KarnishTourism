@@ -149,9 +149,12 @@ img {
     transition: all 0.5s;
 }
 span,
-a,
-a:hover {
+a {
     display: inline-block;
+    text-decoration: none;
+    color: inherit;
+}
+a:hover {
     text-decoration: none;
     color: inherit;
 }

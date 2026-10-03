@@ -1,0 +1,3 @@
+const mongoose = require("mongoose");
+const schema = new mongoose.Schema({ user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true }, package: { type: mongoose.Schema.Types.ObjectId, ref: "TourPackage", required: true, index: true }, booking: { type: mongoose.Schema.Types.ObjectId, ref: "Booking" }, rating: { type: Number, required: true, min: 1, max: 5 }, title: { type: String, maxlength: 160 }, comment: { type: String, required: true, maxlength: 5000 }, status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending", index: true } }, { timestamps: true });
+schema.index({ package: 1, status: 1, createdAt: -1 }); module.exports = mongoose.model("Review", schema);

@@ -1,4 +1,5 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const envBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = envBase.endsWith("/api") ? envBase : `${envBase}/api`;
 import { authRequest } from "../../shared/services/auth";
 
 export async function adminApi(path, options = {}) {
