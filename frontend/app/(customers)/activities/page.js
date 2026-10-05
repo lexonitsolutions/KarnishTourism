@@ -7,6 +7,29 @@ import SiteFooter from "../components/SiteFooter";
 import WishlistButton from "../components/WishlistButton";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const ACTIVITIES_API = `${API_BASE.replace(/\/$/, "").replace(/\/api$/, "")}/api/activities?limit=500`;
+
+function asArray(value) {
+  if (Array.isArray(value)) return value.filter(Boolean);
+  return value ? [value] : [];
+}
+
+function normalizeActivity(item) {
+  const destination = item.destination;
+  const destinationName = typeof destination === "object" && destination !== null
+    ? destination.title || destination.name
+    : destination;
+
+  return {
+    ...item,
+    destinations: asArray(item.destinations).length ? asArray(item.destinations) : asArray(destinationName),
+    activities: asArray(item.activities).length ? asArray(item.activities) : asArray(item.category),
+    tripTypes: asArray(item.tripTypes),
+    difficulty: asArray(item.difficulty),
+    image: item.image || item.imageUrl || "/images/a4.jpg",
+    link: item.link || `/contact?activity=${encodeURIComponent(item.slug || item.title || "")}`,
+  };
+}
 
 // Derive unique string values from the activities list for a given field (array fields)
 function uniqueOptions(items, field) {
@@ -17,7 +40,7 @@ function uniqueOptions(items, field) {
 
 function matchesGroup(activity, field, selectedSet) {
   if (selectedSet.size === 0) return true;
-  return activity[field].some((v) => selectedSet.has(v));
+  return asArray(activity[field]).some((v) => selectedSet.has(v));
 }
 
 function matchesSearchText(activity, text) {
@@ -134,9 +157,12 @@ function ActivitiesResults() {
 
   useEffect(() => {
     setApiLoading(true);
-    fetch(`${API_BASE}/api/activities?limit=500`, { cache: "no-store" })
+    fetch(ACTIVITIES_API, { cache: "no-store" })
       .then((r) => r.ok ? r.json() : { items: [] })
-      .then((data) => { setAllActivities(data.items || []); setApiLoading(false); })
+      .then((data) => {
+        setAllActivities(Array.isArray(data.items) ? data.items.map(normalizeActivity) : []);
+        setApiLoading(false);
+      })
       .catch(() => { setAllActivities([]); setApiLoading(false); });
   }, []);
 

@@ -710,17 +710,17 @@ function ResourcePageContent({ resource }) {
       {/* Modern Modal Dialog */}
       {modal && (
         <div className="ops-modal-backdrop" onMouseDown={() => setModal(null)}>
-          <div className="ops-modal-dialog" onMouseDown={e => e.stopPropagation()} style={{ maxWidth: "780px" }}>
+          <div className="ops-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="resource-modal-title" onMouseDown={e => e.stopPropagation()}>
             <div className="ops-modal-head">
               <div>
-                <h2>{modal.id || modal._id ? "Edit" : "Create"} {config.singular}</h2>
+                <h2 id="resource-modal-title">{modal.id || modal._id ? "Edit" : "Create"} {config.singular}</h2>
                 <p>Fill out the details below to sync directly with MongoDB Atlas.</p>
               </div>
               <button suppressHydrationWarning onClick={() => setModal(null)} title="Close">✕</button>
             </div>
 
             <form onSubmit={save}>
-              <div className="ops-modal-body" style={{ maxHeight: "72vh", overflowY: "auto" }}>
+              <div className="ops-modal-body">
                 <div className="ops-modal-form">
                   {isBookings ? (
                     <>
@@ -1314,7 +1314,7 @@ function ResourcePageContent({ resource }) {
               </div>
 
               {saveError && (
-                <div role="alert" style={{ margin: "0 24px 14px", padding: "11px 14px", border: "1px solid #f3b8b8", borderRadius: "8px", background: "#fff1f1", color: "#a12626", fontSize: "12px", fontWeight: 600 }}>
+                <div className="ops-modal-error" role="alert">
                   {saveError}
                 </div>
               )}

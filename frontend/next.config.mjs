@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Keep Next.js' development status badge from covering the admin UI while
+  // client-side route transitions are being rendered. Compile/runtime errors
+  // still appear normally in the development overlay.
+  devIndicators: false,
   async redirects() {
     return [
       { source: "/signin", destination: "/?auth=signin", permanent: false },

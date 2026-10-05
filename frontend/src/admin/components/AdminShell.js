@@ -63,14 +63,21 @@ export default function AdminShell({ children }) {
             <button className="admin-date-control" suppressHydrationWarning><i>□</i><span>Today</span><b>USD $</b></button>
           </div>
           <div className="admin-header-actions" suppressHydrationWarning>
-            <button className="admin-notification" aria-label="Notifications" suppressHydrationWarning>♢</button>
-            <Link className="admin-new-booking" href="/admin/bookings?create=1">＋ New Booking</Link>
-            <button className="admin-profile" onClick={logout} title="Sign out" suppressHydrationWarning>
+            <Link className="admin-preview-site" href="/" target="_blank" rel="noopener noreferrer">
+              <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M10 4.5c4.4 0 7 5.5 7 5.5s-2.6 5.5-7 5.5S3 10 3 10s2.6-5.5 7-5.5Z" /><circle cx="10" cy="10" r="2.25" /></svg>
+              <span>Preview Website</span>
+            </Link>
+            <button className="admin-notification" aria-label="Notifications" title="Notifications" suppressHydrationWarning>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg>
+            </button>
+            <Link className="admin-new-booking" href="/admin/bookings?create=1"><span aria-hidden="true">+</span>New Booking</Link>
+            <button className="admin-profile" onClick={logout} aria-label="Sign out of the admin portal" title="Sign out" suppressHydrationWarning>
               <span>{user?.name?.slice(0, 2).toUpperCase() || "KT"}</span>
               <div>
                 <b>{user?.name || "Karnish Admin"}</b>
                 <small>{user?.role ? user.role.replace(/_/g, " ") : "Operations Lead"}</small>
               </div>
+              <svg className="admin-profile-action" aria-hidden="true" viewBox="0 0 20 20"><path d="M8 4H5.5A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8m4-3 3-3-3-3m3 3H8" /></svg>
             </button>
           </div>
         </header>
