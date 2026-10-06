@@ -20,12 +20,20 @@ export default function LandingDestinationCard({ destination, layout = "internat
     if (e.target.closest("a")) {
       return;
     }
-    router.push(destinationUrl);
+    if (typeof window !== "undefined" && window.karnishNavigate) {
+      window.karnishNavigate(destinationUrl);
+    } else {
+      router.push(destinationUrl);
+    }
   }
 
   function handleKeyDown(e) {
     if (e.key === "Enter" && !e.target.closest("button") && !e.target.closest("a")) {
-      router.push(destinationUrl);
+      if (typeof window !== "undefined" && window.karnishNavigate) {
+        window.karnishNavigate(destinationUrl);
+      } else {
+        router.push(destinationUrl);
+      }
     }
   }
 

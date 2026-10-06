@@ -157,14 +157,9 @@ export default function Preloader() {
     window.showKarnishPreloader = showPreloader;
     window.hideKarnishPreloader = runRevealAnimation;
 
-    let hasPlayed = false;
-    try {
-      hasPlayed = sessionStorage.getItem("karnishIntroPlayed") === "true";
-    } catch (_) {}
-
-    // On the user's first visit in this session, the cinematic flight intro
-    // is the only startup animation. Never run standard preloader on first session visit.
-    if (!hasPlayed || document.documentElement.classList.contains("karnish-intro-active")) {
+    // The cinematic intro and normal page loading are separate. Suppress this
+    // loader only while the intro is actively running on the current document.
+    if (document.documentElement.classList.contains("karnish-intro-active")) {
       const preloader = preloaderRef.current;
       if (preloader) {
         preloader.style.display = "none";

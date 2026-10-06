@@ -17,9 +17,8 @@ export default function KarnishCinematicIntro() {
 
   const rafRef = useRef(null);
   const isCompletedRef = useRef(false);
-  const hasSetSessionFlagRef = useRef(false);
 
-  // Complete and cleanup helper with smooth transition to home page
+  // Complete and cleanup helper
   const completeIntro = useCallback((reason) => {
     if (isCompletedRef.current) return;
     isCompletedRef.current = true;
@@ -58,13 +57,36 @@ export default function KarnishCinematicIntro() {
     document.body.style.overflow = "";
 
     try {
-      sessionStorage.setItem("karnishIntroPlayed", "true");
+      sessionStorage.setItem("karnish_intro_seen", "true");
     } catch (_) {}
 
-    // 6. Smoothly transition to Home page if the user started on a different route in a new session
-    if (typeof window !== "undefined" && window.location.pathname !== "/" && window.location.pathname !== "") {
-      window.location.href = "/";
-      return;
+    // 6. Comprehensive engine refresh so smooth-scroll, parallax, WOW & ScrollTrigger recover instantly
+    if (typeof window !== "undefined") {
+      const triggerEngineRefresh = () => {
+        try {
+          document.querySelectorAll(".wow").forEach((el) => {
+            el.style.visibility = "visible";
+          });
+          if (window.ScrollTrigger) {
+            window.ScrollTrigger.refresh(true);
+          }
+          if (window.ScrollSmoother && window.ScrollSmoother.get()) {
+            window.ScrollSmoother.get().refresh();
+          }
+          if (window.reinitializeKarnishScroller) {
+            window.reinitializeKarnishScroller();
+          } else if (window.refreshKarnishScroller) {
+            window.refreshKarnishScroller();
+          }
+          window.dispatchEvent(new Event("resize"));
+          window.dispatchEvent(new Event("scroll"));
+        } catch (_) {}
+      };
+
+      triggerEngineRefresh();
+      window.requestAnimationFrame(triggerEngineRefresh);
+      setTimeout(triggerEngineRefresh, 80);
+      setTimeout(triggerEngineRefresh, 250);
     }
 
     // 7. Unmount overlay immediately (no delay, no flash)
@@ -72,29 +94,13 @@ export default function KarnishCinematicIntro() {
   }, []);
 
   useEffect(() => {
-    let forceReplay = false;
-    let hasPlayed = false;
+    const isIntroActive =
+      window.__karnishIntroShouldRun === true ||
+      document.documentElement.classList.contains("karnish-intro-active");
 
-    try {
-      const params = new URLSearchParams(window.location.search);
-      forceReplay =
-        params.get("intro") === "1" ||
-        params.get("intro") === "true" ||
-        params.get("replay") === "1";
-      hasPlayed = sessionStorage.getItem("karnishIntroPlayed") === "true";
-    } catch (_) {}
-
-    // Allow manual replay from browser console: window.replayKarnishIntro()
-    window.replayKarnishIntro = () => {
-      try {
-        sessionStorage.removeItem("karnishIntroPlayed");
-      } catch (_) {}
-      window.location.href = window.location.pathname + "?intro=1";
-    };
-
-    if (hasPlayed && !forceReplay) {
-      document.documentElement.classList.remove("karnish-intro-active");
-      document.documentElement.classList.add("karnish-intro-done");
+    if (!isIntroActive) {
+      document.documentElement.classList.remove("karnish-intro-active", "karnish-intro-revealing");
+      document.documentElement.classList.add("karnish-intro-done", "karnish-intro-completed");
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
       setShouldMount(false);
@@ -103,8 +109,7 @@ export default function KarnishCinematicIntro() {
 
     // Lock page scrolling and mark intro as active
     document.documentElement.classList.add("karnish-intro-active");
-    document.documentElement.classList.remove("karnish-intro-done");
-    document.documentElement.classList.remove("karnish-intro-completed");
+    document.documentElement.classList.remove("karnish-intro-done", "karnish-intro-completed");
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
     setShouldMount(true);
@@ -190,14 +195,6 @@ export default function KarnishCinematicIntro() {
       const py = H * 0.40; // Perfectly horizontal straight level flight path
 
       if (elapsed >= FLIGHT_START) {
-        // Requirement 3: Set session flag after intro animation has triggered/started successfully
-        if (!hasSetSessionFlagRef.current) {
-          hasSetSessionFlagRef.current = true;
-          try {
-            sessionStorage.setItem("karnishIntroPlayed", "true");
-          } catch (_) {}
-        }
-
         const flightDuration = TOTAL_DURATION - FLIGHT_START - 200;
         const progress = Math.min(1, (elapsed - FLIGHT_START) / flightDuration);
         const eased = easeInOutCubic(progress);
@@ -337,11 +334,15 @@ export default function KarnishCinematicIntro() {
         rafRef.current = null;
       }
       if (isCompletedRef.current) {
-        document.documentElement.classList.remove("karnish-intro-active");
-        document.documentElement.classList.remove("karnish-intro-revealing");
-        document.documentElement.classList.add("karnish-intro-done");
+        document.documentElement.classList.remove("karnish-intro-active", "karnish-intro-revealing");
+        document.documentElement.classList.add("karnish-intro-done", "karnish-intro-completed");
         document.documentElement.style.overflow = "";
         document.body.style.overflow = "";
+        try {
+          if (window.ScrollTrigger) window.ScrollTrigger.refresh(true);
+          if (window.reinitializeKarnishScroller) window.reinitializeKarnishScroller();
+          window.dispatchEvent(new Event("resize"));
+        } catch (_) {}
       }
     };
   }, [shouldMount, isFadingOut, completeIntro]);

@@ -21,16 +21,8 @@ async function apiFetch(resource, params = {}) {
 
 export default function Home() {
   useEffect(() => {
-    // Strictly reload page internally when navigating to home page from any other page
-    // so all GSAP, WOW, ScrollSmoother, and ticker animations initialize fresh
     try {
-      const prev = sessionStorage.getItem("karnishLastActivePath");
       sessionStorage.setItem("karnishLastActivePath", "/");
-      if (prev && prev !== "/" && prev !== "") {
-        sessionStorage.setItem("karnishPageTransition", "true");
-        window.location.replace("/");
-        return;
-      }
     } catch (_) {}
   }, []);
 
@@ -61,8 +53,7 @@ export default function Home() {
 
     animatedElements.forEach((el) => observer.observe(el));
 
-    // Fallback timer to ensure elements in view on initial load are animated
-    const timer = setTimeout(() => {
+    const checkInView = () => {
       animatedElements.forEach((el) => {
         const rect = el.getBoundingClientRect();
         if (rect.top < window.innerHeight && rect.bottom > 0) {
@@ -73,10 +64,16 @@ export default function Home() {
           }
         }
       });
-    }, 350);
+    };
+
+    window.addEventListener("resize", checkInView, { passive: true });
+
+    // Fallback timer to ensure elements in view on initial load are animated
+    const timer = setTimeout(checkInView, 350);
 
     return () => {
       clearTimeout(timer);
+      window.removeEventListener("resize", checkInView);
       observer.disconnect();
     };
   }, []);

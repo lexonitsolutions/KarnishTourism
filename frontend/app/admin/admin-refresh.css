@@ -1048,3 +1048,59 @@
     gap: 8px !important;
   }
 }
+
+/* Responsive safety net for dense operational views. */
+.admin-content,
+.ops-dashboard,
+.ops-panel,
+.ops-card,
+.resource-toolbar,
+.ops-toolbar {
+  min-width: 0;
+}
+
+.table-scroll,
+.ops-table-responsive {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 900px) {
+  .admin-content { width: 100%; }
+  .admin-sidebar { max-width: min(82vw, 300px); }
+  .admin-collapse { display: none; }
+  .ops-toolbar,
+  .resource-toolbar { flex-wrap: wrap; }
+  .ops-toolbar > *,
+  .resource-toolbar > * { min-width: 0; }
+}
+
+@media (max-width: 600px) {
+  .admin-content { padding: 18px 12px 40px; }
+  .admin-header { padding-inline: 12px !important; }
+  .admin-global-search { min-width: 0; }
+  .admin-global-search input::placeholder { color: transparent; }
+  .admin-notification,
+  .admin-preview-site,
+  .admin-profile { flex: 0 0 40px !important; }
+  .page-heading,
+  .ops-page-heading { gap: 14px; }
+  .page-heading > div:last-child,
+  .ops-heading-actions,
+  .ops-toolbar-actions { width: 100%; }
+  .page-heading .primary-button,
+  .page-heading .secondary-button,
+  .ops-heading-actions > *,
+  .ops-toolbar-actions > * { flex: 1 1 auto; }
+  .pagination,
+  .ops-pagination-bar { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .admin-modal,
+  .ops-modal-dialog { width: calc(100vw - 20px); max-height: calc(100dvh - 20px); }
+  .admin-modal footer,
+  .ops-modal-footer { flex-wrap: wrap; }
+  .admin-modal footer > *,
+  .ops-modal-footer > * { flex: 1 1 120px; }
+}

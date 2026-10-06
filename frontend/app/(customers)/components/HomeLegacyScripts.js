@@ -62,8 +62,10 @@ export default function HomeLegacyScripts() {
       if (cancelled) return;
 
       window.requestAnimationFrame(() => {
-        window.reinitializeKarnishScroller?.();
-        window.ScrollTrigger?.refresh?.();
+        if (!document.documentElement.classList.contains("karnish-intro-active")) {
+          window.reinitializeKarnishScroller?.();
+          window.ScrollTrigger?.refresh?.();
+        }
       });
     };
 

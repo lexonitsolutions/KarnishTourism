@@ -172,8 +172,8 @@ export default function RouteTransitionHandler() {
         navigatingRef.current = true;
 
         try {
-          sessionStorage.setItem("karnishIntroPlayed", "true");
           sessionStorage.setItem("karnishPageTransition", "true");
+          sessionStorage.setItem("karnish_intro_seen", "true");
         } catch (_) {}
 
         document.documentElement.classList.add("karnish-route-transitioning");
@@ -218,9 +218,63 @@ export default function RouteTransitionHandler() {
       }
     };
 
+    // Global programmatic navigation helper with transition
+    window.karnishNavigate = (targetUrl) => {
+      if (!targetUrl || navigatingRef.current) return;
+      navigatingRef.current = true;
+      try {
+        sessionStorage.setItem("karnishPageTransition", "true");
+        sessionStorage.setItem("karnish_intro_seen", "true");
+      } catch (_) {}
+      document.documentElement.classList.add("karnish-route-transitioning");
+      const bar = progressBarRef.current;
+      bar?.classList.remove("kt-progress-finish");
+      bar?.classList.add("kt-progress-active");
+      const preloader = preloaderRef.current;
+      const path = pathRef.current;
+      if (preloader && path) {
+        path.setAttribute("d", FLAT_CLOSED);
+        preloader.style.transition = "none";
+        preloader.style.transform = "none";
+        preloader.style.opacity = "1";
+        preloader.style.display = "flex";
+        preloader.style.visibility = "visible";
+        preloader.classList.add("kt-loader-active");
+      }
+      window.setTimeout(() => {
+        window.location.assign(targetUrl);
+      }, 80);
+    };
+
+    // Clean up transition state if user navigated via browser Back/Forward (bfcache)
+    const handlePageShow = () => {
+      navigatingRef.current = false;
+      try {
+        sessionStorage.removeItem("karnishPageTransition");
+        document.documentElement.classList.remove("karnish-route-transitioning");
+      } catch (_) {}
+      const bar = progressBarRef.current;
+      if (bar) {
+        bar.classList.remove("kt-progress-active", "kt-progress-finish");
+        bar.style.width = "0%";
+      }
+      const preloader = preloaderRef.current;
+      if (preloader) {
+        preloader.classList.remove("kt-loader-active");
+        preloader.style.display = "none";
+        preloader.style.visibility = "hidden";
+      }
+    };
+
     document.addEventListener("click", handleClick, { capture: true });
+    window.addEventListener("pageshow", handlePageShow);
+    window.addEventListener("popstate", handlePageShow);
+
     return () => {
       document.removeEventListener("click", handleClick, { capture: true });
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener("popstate", handlePageShow);
+      delete window.karnishNavigate;
     };
   }, []);
 

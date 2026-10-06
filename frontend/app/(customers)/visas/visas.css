@@ -1476,3 +1476,13 @@
     flex-direction: column;
   }
 }
+
+@media (max-width: 430px) {
+  .kt-visa-hero { padding: 92px 0 48px; }
+  .kt-visa-hero h1 { font-size: clamp(36px, 12vw, 48px); overflow-wrap: anywhere; }
+  .kt-visa-application-card,
+  .kt-checklist-card { padding: 20px 16px; }
+  .kt-strip-actions,
+  .kt-strip-actions a { width: 100%; }
+  .kt-strip-actions a { justify-content: center; }
+}

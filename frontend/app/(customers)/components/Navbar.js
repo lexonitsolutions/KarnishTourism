@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Show } from "@clerk/nextjs";
-import NavUtilityMenu from "./NavUtilityMenu";
+import { useUser, useClerk } from "@clerk/nextjs";
 import HeaderAuthBox from "@shared/components/HeaderAuthBox";
+import AccountPopover from "./AccountPopover";
 
 function RollingNavText({ text }) {
   const chars = Array.from(text);
@@ -28,10 +28,52 @@ function RollingNavText({ text }) {
 
 export default function Navbar() {
   const pathname = usePathname() || "";
-  const router = useRouter();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [accountMenu, setAccountMenu] = useState(null); // null | 'desktop' | 'mobile'
   const [authBox, setAuthBox] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const { isLoaded, isSignedIn, user } = useUser();
+  const { signOut } = useClerk();
+  const [demoUser, setDemoUser] = useState(null);
+
+  useEffect(() => {
+    const syncDemoUser = () => {
+      try {
+        const stored = localStorage.getItem("karnish_demo_user");
+        setDemoUser(stored ? JSON.parse(stored) : null);
+      } catch (_) {
+        setDemoUser(null);
+      }
+    };
+    syncDemoUser();
+    window.addEventListener("storage", syncDemoUser);
+    return () => window.removeEventListener("storage", syncDemoUser);
+  }, []);
+
+  const activeUser = isSignedIn && user ? {
+    name: user.fullName || user.firstName || "Traveller",
+    email: user.primaryEmailAddress?.emailAddress || "",
+    imageUrl: user.imageUrl || null,
+  } : demoUser ? {
+    name: demoUser.name || "Traveller",
+    email: demoUser.email || "",
+    imageUrl: null,
+  } : null;
+
+  const handleLogout = async () => {
+    try {
+      if (isSignedIn) {
+        await signOut();
+      }
+    } catch (_) {}
+    try {
+      localStorage.removeItem("karnish_demo_user");
+      document.cookie = "karnish_demo_role=; Path=/; Max-Age=0; SameSite=Lax";
+      setDemoUser(null);
+    } catch (_) {}
+    setAccountMenu(null);
+  };
 
   useEffect(() => {
     const updateNavbar = () => setIsScrolled(window.scrollY > 90);
@@ -44,9 +86,33 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => setIsMobileNavOpen(false));
+    const frame = window.requestAnimationFrame(() => {
+      setIsMobileNavOpen(false);
+      setAccountMenu(null);
+    });
     return () => window.cancelAnimationFrame(frame);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!isMobileNavOpen) return undefined;
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setIsMobileNavOpen(false);
+    };
+    const closeAtDesktop = () => {
+      if (window.innerWidth >= 992) setIsMobileNavOpen(false);
+    };
+
+    document.documentElement.classList.add("kt-mobile-nav-open");
+    window.addEventListener("keydown", closeOnEscape);
+    window.addEventListener("resize", closeAtDesktop, { passive: true });
+
+    return () => {
+      document.documentElement.classList.remove("kt-mobile-nav-open");
+      window.removeEventListener("keydown", closeOnEscape);
+      window.removeEventListener("resize", closeAtDesktop);
+    };
+  }, [isMobileNavOpen]);
 
   useEffect(() => {
     const requestedMode = new URLSearchParams(window.location.search).get("auth");
@@ -54,6 +120,16 @@ export default function Navbar() {
     const frame = window.requestAnimationFrame(() => setAuthBox(requestedMode));
     return () => window.cancelAnimationFrame(frame);
   }, []);
+
+  const openAuth = (mode) => {
+    setAccountMenu(null);
+    setAuthBox(mode);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set("auth", mode);
+      window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+    } catch (_) {}
+  };
 
   const closeAuthBox = () => {
     setAuthBox(null);
@@ -102,19 +178,29 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile Actions: Utility Menu + Person Icon + Toggle Button */}
-          <div className="d-flex align-items-center d-lg-none ms-auto me-2 gap-2">
-            <NavUtilityMenu isMobile={true} />
-            <Show when="signed-out">
-              <button suppressHydrationWarning type="button" className="nav-person-btn nav-person-btn-mobile" onClick={() => setAuthBox("signin")} aria-label="Open account" title="Sign in or open account">
-                <i className="ti-user"></i>
-              </button>
-            </Show>
-            <Show when="signed-in">
-              <button suppressHydrationWarning type="button" className="nav-person-btn nav-person-btn-mobile" onClick={() => router.push("/account")} aria-label="Open account" title="Open my account">
-                <i className="ti-user"></i>
-              </button>
-            </Show>
+          {/* Mobile Actions: Account Button + Menu Toggle */}
+          <div className="d-flex align-items-center d-lg-none ms-auto me-2 gap-2 position-relative">
+            <button
+              suppressHydrationWarning
+              type="button"
+              className={`nav-person-btn nav-person-btn-mobile ${accountMenu === "mobile" ? "active" : ""}`}
+              onClick={() => setAccountMenu((prev) => (prev === "mobile" ? null : "mobile"))}
+              aria-label="Account"
+              aria-expanded={accountMenu === "mobile"}
+              title="Account"
+            >
+              <i className="ti-user"></i>
+            </button>
+            {accountMenu === "mobile" && (
+              <AccountPopover
+                isMobile={true}
+                user={activeUser}
+                onClose={() => setAccountMenu(null)}
+                onOpenLogin={() => openAuth("signin")}
+                onOpenSignup={() => openAuth("signup")}
+                onLogout={handleLogout}
+              />
+            )}
           </div>
 
           {/* Mobile Toggle Button */}
@@ -171,28 +257,42 @@ export default function Navbar() {
                 </Link>
               </li>
 
-              {/* Utility Menu in Desktop Navbar: Language, Currency, Customer Care */}
-              <li className="nav-item nav-utility-nav-item ms-lg-3 d-none d-lg-flex align-items-center">
-                <NavUtilityMenu />
-              </li>
-
-              {/* Person Icon in Desktop Navbar */}
-              <li className="nav-item nav-auth-item ms-lg-2 d-none d-lg-flex">
-                <Show when="signed-out">
-                  <button suppressHydrationWarning type="button" className="nav-person-btn" onClick={() => setAuthBox("signin")} aria-label="Open account" title="Sign in or open account">
-                    <i className="ti-user"></i>
-                  </button>
-                </Show>
-                <Show when="signed-in">
-                  <button suppressHydrationWarning type="button" className="nav-person-btn" onClick={() => router.push("/account")} aria-label="Open account" title="Open my account">
-                    <i className="ti-user"></i>
-                  </button>
-                </Show>
+              {/* Account Button in Desktop Navbar */}
+              <li className="nav-item nav-auth-item ms-lg-3 d-none d-lg-flex position-relative">
+                <button
+                  suppressHydrationWarning
+                  type="button"
+                  className={`nav-person-btn ${accountMenu === "desktop" ? "active" : ""}`}
+                  onClick={() => setAccountMenu((prev) => (prev === "desktop" ? null : "desktop"))}
+                  aria-label="Account"
+                  aria-expanded={accountMenu === "desktop"}
+                  title="Account"
+                >
+                  <i className="ti-user"></i>
+                </button>
+                {accountMenu === "desktop" && (
+                  <AccountPopover
+                    isMobile={false}
+                    user={activeUser}
+                    onClose={() => setAccountMenu(null)}
+                    onOpenLogin={() => openAuth("signin")}
+                    onOpenSignup={() => openAuth("signup")}
+                    onLogout={handleLogout}
+                  />
+                )}
               </li>
             </ul>
           </div>
         </div>
       </nav>
+      {isMobileNavOpen && (
+        <button
+          type="button"
+          className="kt-mobile-nav-backdrop d-lg-none"
+          onClick={() => setIsMobileNavOpen(false)}
+          aria-label="Close navigation menu"
+        />
+      )}
       {authBox && (
         <>
           <button className="kt-header-auth-backdrop" onClick={closeAuthBox} aria-label="Close authentication" />

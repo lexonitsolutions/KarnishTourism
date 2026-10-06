@@ -905,3 +905,10 @@
   background: #e2e8f0;
   color: #0f2454;
 }
+
+@media (max-width: 600px) {
+  .kt-service-modal { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); padding: 26px 16px 18px; border-radius: 14px; }
+  .kt-modal-close-btn { top: 12px; right: 12px; min-width: 44px; min-height: 44px; }
+  .kt-primary-btn,
+  .kt-secondary-btn { width: 100%; min-height: 46px; }
+}

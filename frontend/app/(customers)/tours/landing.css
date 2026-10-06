@@ -117,6 +117,7 @@
 @keyframes ktlScrollDepth{from{opacity:.45;transform:perspective(1400px) translate3d(0,34px,-70px) rotateX(6deg)}to{opacity:1;transform:perspective(1400px) translate3d(0,0,0) rotateX(0)}}
 @keyframes ktlScrollShelf{from{opacity:.6;transform:perspective(1200px) translate3d(0,22px,-45px) rotateX(4deg)}to{opacity:1;transform:perspective(1200px) translate3d(0,0,0) rotateX(0)}}
 @media(max-width:700px){.ktl-mini-strip>.ktl-mini-card{grid-template-columns:58px minmax(0,1fr) 32px;height:88px;min-height:88px;min-width:310px;padding:12px}.ktl-mini-card>.ktl-mini-image{width:58px!important;height:58px!important}}
+@media(max-width:430px){.ktl-video-hero{min-height:660px}.ktl-hero-content h1{font-size:40px}.ktl-hero-content>p{font-size:14px}.ktl-search-float{width:calc(100% - 24px)}.ktl-search-tabs{left:12px}.ktl-section-head h2,.ktl-trust-head h2{font-size:35px}.ktl-mini-strip>.ktl-mini-card{min-width:min(290px,calc(100vw - 40px))}.ktl-package-price{grid-template-columns:1fr}.ktl-package-price a{grid-column:1}.ktl-card-copy h3{min-height:0}}
 @media(prefers-reduced-motion:reduce){.ktl-international-grid,.ktl-domestic-grid,.ktl-package-rows,.ktl-trust-grid,.ktl-mini-strip{animation:none!important;transform:none!important}.ktl-mini-strip>.ktl-mini-card:before{display:none}}
 
 /* Modern Smart Finder result cards with isolated, non-clipping content */

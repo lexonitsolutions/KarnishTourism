@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 
-const LANGUAGES = [
+export const LANGUAGES = [
   { code: "EN", name: "English", native: "English", flag: "🇬🇧" },
   { code: "AR", name: "Arabic", native: "العربية", flag: "🇦🇪" },
   { code: "RU", name: "Russian", native: "Русский", flag: "🇷🇺" },
@@ -13,7 +13,7 @@ const LANGUAGES = [
   { code: "ZH", name: "Chinese", native: "中文", flag: "🇨🇳" },
 ];
 
-const CURRENCIES = [
+export const CURRENCIES = [
   { code: "AED", symbol: "د.إ", name: "UAE Dirham", flag: "🇦🇪" },
   { code: "USD", symbol: "$", name: "US Dollar", flag: "🇺🇸" },
   { code: "EUR", symbol: "€", name: "Euro", flag: "🇪🇺" },
