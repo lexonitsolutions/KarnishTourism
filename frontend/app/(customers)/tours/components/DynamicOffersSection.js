@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { fetchPublic } from "@/lib/api";
+
+const MOCK_OFFERS = [
+  { title: "Early Bird Holiday Sale", discountType: "percentage", discountValue: 15, description: "Book selected international journeys 45 days ahead and save instantly.", code: "EARLY15", featured: true },
+  { title: "Family Escape Bonus", discountType: "fixed", discountValue: 5000, description: "Extra savings for two adults travelling with children.", code: "FAMILY5K", featured: true },
+  { title: "Honeymoon Celebration", discountType: "perk", description: "Complimentary room décor and a private dining experience.", code: "JUSTMARRIED", featured: true },
+];
 
 export default function DynamicOffersSection() {
   const [offers, setOffers] = useState([]);
@@ -12,19 +19,15 @@ export default function DynamicOffersSection() {
     fetchPublic("offers", { limit: 12 })
       .then((data) => {
         if (active && Array.isArray(data?.items)) {
-          setOffers(data.items);
+          setOffers(data.items.length ? data.items : MOCK_OFFERS);
         }
       })
-      .catch(() => {})
+      .catch(() => { if (active) setOffers(MOCK_OFFERS); })
       .finally(() => {
         if (active) setLoading(false);
       });
     return () => { active = false; };
   }, []);
-
-  if (!loading && offers.length === 0) {
-    return null;
-  }
 
   const displayOffers = offers.map((item) => {
     const saving = item.discountType === "percentage"
@@ -51,9 +54,9 @@ export default function DynamicOffersSection() {
             <h2>Offers &amp; Promotions</h2>
             <p>Handpicked deals for every kind of celebration, escape and group journey.</p>
           </div>
-          <a href="/tours/inquiry?offer=seasonal">
+          <Link href="/tours/inquiry?offer=seasonal">
             Ask About Current Offers <i className="ti-arrow-right" />
-          </a>
+          </Link>
         </div>
         <div className="ktl-offers-grid">
           {displayOffers.map(({ icon, title, saving, description, code, badge }, index) => (
@@ -67,9 +70,9 @@ export default function DynamicOffersSection() {
                 <small>Use code</small>
                 <code>{code}</code>
               </div>
-              <a href={`/tours/inquiry?offer=${code}`}>
+              <Link href={`/tours/inquiry?offer=${code}`}>
                 Claim offer <i className="ti-arrow-right" />
-              </a>
+              </Link>
             </article>
           ))}
         </div>

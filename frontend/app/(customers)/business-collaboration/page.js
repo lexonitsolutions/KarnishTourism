@@ -37,7 +37,7 @@ export default function BusinessCollaborationPage() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
     const id = `COL-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-    const request = { id, ...form, status: "New", adminNotes: "", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    const request = { id, ...form, status: "New", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
     try {
       const existing = JSON.parse(localStorage.getItem("karnish_collaboration_requests") || "[]");
       localStorage.setItem("karnish_collaboration_requests", JSON.stringify([request, ...existing]));

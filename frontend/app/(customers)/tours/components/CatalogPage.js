@@ -1,7 +1,8 @@
 import Image from "next/image";
+import Link from "next/link";
 import CatalogExplorer from "./CatalogExplorer";
 import TourSearch from "./TourSearch";
-import { departureCities, normalizeDestination } from "../data";
+import { departureCities, destinations, normalizeDestination } from "../data";
 
 async function fetchCatalogDestinations(type) {
   try {
@@ -20,7 +21,9 @@ async function fetchCatalogDestinations(type) {
 
 export default async function CatalogPage({ type }) {
   const domestic = type === "domestic";
-  const items = await fetchCatalogDestinations(type);
+  const liveItems = await fetchCatalogDestinations(type);
+  const mockItems = destinations.filter((item) => item.type === type).map(normalizeDestination);
+  const items = liveItems.length && liveItems.some((item) => Number(item.startingPrice) > 0) ? liveItems : mockItems;
   return (
     <main>
       <header className="ktours-catalog-hero">
@@ -54,7 +57,7 @@ export default async function CatalogPage({ type }) {
       <section className="ktours-catalog-cta">
         <div className="container">
           <div><div className="ktours-kicker"><span /> Designed around you</div><h2>Can’t find your perfect holiday?</h2><p>Tell our specialists what you love and we’ll tailor the route, stays and experiences.</p></div>
-          <a className="ktours-button ktours-button-light" href="/tours/inquiry">Get a custom quote <i className="ti-arrow-right" /></a>
+          <Link className="ktours-button ktours-button-light" href="/tours/inquiry">Get a custom quote <i className="ti-arrow-right" /></Link>
         </div>
       </section>
     </main>

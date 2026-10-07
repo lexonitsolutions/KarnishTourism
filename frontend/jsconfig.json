@@ -3,7 +3,6 @@
     "paths": {
       "@/*": ["./*"],
       "@customers/*": ["./src/customers/*"],
-      "@admin/*": ["./src/admin/*"],
       "@collaborators/*": ["./src/collaborators/*"],
       "@shared/*": ["./src/shared/*"]
     }

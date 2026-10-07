@@ -5,15 +5,14 @@ const rawApi = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 const API_URL = rawApi.endsWith("/api") ? rawApi : `${rawApi}/api`;
 const DEMO_AUTH_ENABLED = process.env.NEXT_PUBLIC_DEMO_AUTH === "true";
 const customerRoutes = ["/dashboard", "/profile", "/bookings", "/wishlist", "/payments"];
-const homeFor = (role) => ["admin", "super_admin"].includes(role) ? "/admin/dashboard" : ["b2b", "collaborator"].includes(role) ? "/b2b/dashboard" : "/dashboard";
+const homeFor = (role) => ["b2b", "collaborator"].includes(role) ? "/b2b/dashboard" : "/dashboard";
 
 export default clerkMiddleware(async (_auth, request) => {
   const path = request.nextUrl.pathname;
-  const isAdmin = path === "/admin" || path.startsWith("/admin/");
   const isB2B = path.startsWith("/b2b/");
   const isCustomer = customerRoutes.some((route) => path === route || path.startsWith(`${route}/`));
   const isAuth = path === "/signin" || path === "/signup";
-  if (!isAdmin && !isB2B && !isCustomer && !isAuth) return NextResponse.next();
+  if (!isB2B && !isCustomer && !isAuth) return NextResponse.next();
 
   let user = null;
 
@@ -45,7 +44,7 @@ export default clerkMiddleware(async (_auth, request) => {
   // 3. Fallback demo role cookie
   if (!user && DEMO_AUTH_ENABLED) {
     const demoRole = request.cookies.get("karnish_demo_role")?.value;
-    if (["customer", "collaborator", "b2b", "admin", "super_admin"].includes(demoRole)) {
+    if (["customer", "collaborator", "b2b"].includes(demoRole)) {
       user = { role: demoRole };
     }
   }
@@ -56,7 +55,6 @@ export default clerkMiddleware(async (_auth, request) => {
     signin.searchParams.set("next", path);
     return NextResponse.redirect(signin);
   }
-  if (isAdmin && !["admin", "super_admin"].includes(user.role)) return NextResponse.redirect(new URL(homeFor(user.role), request.url));
   if (isB2B && !["b2b", "collaborator"].includes(user.role)) return NextResponse.redirect(new URL(homeFor(user.role), request.url));
   if (isCustomer && user.role !== "customer") return NextResponse.redirect(new URL(homeFor(user.role), request.url));
   return NextResponse.next();

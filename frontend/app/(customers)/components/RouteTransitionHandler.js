@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 function isModifiedClick(event) {
   return event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey;
@@ -27,11 +28,15 @@ const CURVED_SWEEP = "M0 502S175 272 500 272s500 230 500 230V0H0Z";
 const FLAT_TOP = "M0 2S175 1 500 1s500 1 500 1V0H0Z";
 
 export default function RouteTransitionHandler() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const progressBarRef = useRef(null);
   const preloaderRef = useRef(null);
   const pathRef = useRef(null);
   const headingRef = useRef(null);
   const navigatingRef = useRef(false);
+  const hasMountedRef = useRef(false);
 
   // Execute the smooth curved SVG reveal sweep when the new page is ready
   const revealNewPage = () => {
@@ -146,6 +151,16 @@ export default function RouteTransitionHandler() {
     }
   }, []);
 
+  // The customer layout persists between App Router pages. Reveal the new page
+  // after its pathname/query has changed instead of forcing a document reload.
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+    if (navigatingRef.current) requestAnimationFrame(revealNewPage);
+  }, [pathname, searchParams]);
+
   // Intercept internal link clicks to automatically reload the page on navigation
   useEffect(() => {
     const handleClick = (event) => {
@@ -205,9 +220,9 @@ export default function RouteTransitionHandler() {
         }
 
         const fullDestination = `${target}${destination.hash}`;
-        // Automatically reload and navigate to the destination page cleanly
+        // Navigate through the App Router while the curtain covers the update.
         window.setTimeout(() => {
-          window.location.assign(fullDestination);
+          router.push(fullDestination);
         }, 80);
       } catch (_) {
         navigatingRef.current = false;
@@ -242,7 +257,7 @@ export default function RouteTransitionHandler() {
         preloader.classList.add("kt-loader-active");
       }
       window.setTimeout(() => {
-        window.location.assign(targetUrl);
+        router.push(targetUrl);
       }, 80);
     };
 
@@ -276,7 +291,7 @@ export default function RouteTransitionHandler() {
       window.removeEventListener("popstate", handlePageShow);
       delete window.karnishNavigate;
     };
-  }, []);
+  }, [router]);
 
   return (
     <>

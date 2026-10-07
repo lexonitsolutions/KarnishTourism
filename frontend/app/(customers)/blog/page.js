@@ -19,11 +19,11 @@ export default function BlogHubPage() {
       .then((data) => {
         if (active) {
           const items = Array.isArray(data?.items) ? data.items : [];
-          setPosts(items);
+          setPosts(items.length ? items : getAllPosts());
         }
       })
       .catch(() => {
-        if (active) setPosts([]);
+        if (active) setPosts(getAllPosts());
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -108,30 +108,12 @@ export default function BlogHubPage() {
                 placeholder="Search guides, visas, tips..."
               />
             </div>
-            <Link
-              href="/admin/blog"
-              className="kt-blog-tab d-none d-md-inline-flex align-items-center gap-1"
-              title="Editorial Admin CMS"
-            >
-              <i className="ti-settings" /> Admin CMS
-            </Link>
           </div>
         </div>
 
         {loading ? (
           <div style={{ padding: "80px 0", textAlign: "center", color: "#64748b" }}>
             <p>Loading journal articles...</p>
-          </div>
-        ) : normalizedPosts.length === 0 ? (
-          <div style={{ padding: "80px 20px", textAlign: "center" }}>
-            <i className="ti-bookmark-alt" style={{ fontSize: "40px", color: "#2095ae", marginBottom: "16px", display: "block" }} />
-            <h3 style={{ color: "#0f2454", fontSize: "24px", marginBottom: "8px" }}>No Articles Published Yet</h3>
-            <p style={{ color: "#64748b", fontSize: "15px", maxWidth: "500px", margin: "0 auto 20px" }}>
-              Articles published via the Admin Portal will appear here live.
-            </p>
-            <Link href="/admin/blog" className="kt-read-more-btn" style={{ display: "inline-flex" }}>
-              Create First Article in Admin CMS <i className="ti-arrow-right" />
-            </Link>
           </div>
         ) : (
           <>

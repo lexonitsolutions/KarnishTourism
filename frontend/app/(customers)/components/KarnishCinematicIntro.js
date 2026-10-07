@@ -214,9 +214,17 @@ export default function KarnishCinematicIntro() {
       let xTop = 0;
       let xBot = 0;
 
+      // Screen extent bounds that completely exceed any window, screen or viewport dimensions
+      const rightBound = Math.max(W * 3, 10000);
+      const bottomBound = Math.max(H * 3, 10000);
+      const topBound = -500;
+
       if (pullX <= 0) {
         // Pristine full white screen covers everything
-        cloth.setAttribute("d", `M 0 0 L 0 ${H} L ${W + 200} ${H} L ${W + 200} 0 Z`);
+        cloth.setAttribute(
+          "d",
+          `M -500 ${topBound} L -500 ${bottomBound} L ${rightBound} ${bottomBound} L ${rightBound} ${topBound} Z`
+        );
         if (fold1) fold1.setAttribute("d", "");
         if (fold2) fold2.setAttribute("d", "");
         if (high)  high.setAttribute("d", "");
@@ -255,13 +263,15 @@ export default function KarnishCinematicIntro() {
         const cp4X = xBot + (pullX - xBot) * 0.34 + waveBot * 1.2;
         const cp4Y = pullY + (H - pullY) * 0.68;
 
-        // Fabric stays on the RIGHT side of the curve, revealing website on the LEFT!
+        // Fabric stays on the RIGHT side of the curve, completely covering window to far right and bottom!
         const clothPath = [
-          `M ${xTop} 0`,
+          `M ${xTop} ${topBound}`,
+          `L ${xTop} 0`,
           `C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${pullX} ${pullY}`,
           `C ${cp3X} ${cp3Y}, ${cp4X} ${cp4Y}, ${xBot} ${H}`,
-          `L ${W + 200} ${H}`,
-          `L ${W + 200} 0`,
+          `L ${xBot} ${bottomBound}`,
+          `L ${rightBound} ${bottomBound}`,
+          `L ${rightBound} ${topBound}`,
           `Z`,
         ].join(" ");
         cloth.setAttribute("d", clothPath);
@@ -270,8 +280,8 @@ export default function KarnishCinematicIntro() {
         if (fold1) {
           const upperFold = [
             `M ${pullX} ${pullY}`,
-            `Q ${pullX + 65} ${pullY * 0.52}, ${xTop + 160} 0`,
-            `L ${xTop + 210} 0`,
+            `Q ${pullX + 65} ${pullY * 0.52}, ${xTop + 160} ${topBound}`,
+            `L ${xTop + 210} ${topBound}`,
             `Q ${pullX + 85} ${pullY * 0.55}, ${pullX} ${pullY}`,
             `Z`,
           ].join(" ");
@@ -282,8 +292,8 @@ export default function KarnishCinematicIntro() {
         if (fold2) {
           const lowerFold = [
             `M ${pullX} ${pullY}`,
-            `Q ${pullX + 70} ${pullY + (H - pullY) * 0.48}, ${xBot + 180} ${H}`,
-            `L ${xBot + 230} ${H}`,
+            `Q ${pullX + 70} ${pullY + (H - pullY) * 0.48}, ${xBot + 180} ${bottomBound}`,
+            `L ${xBot + 230} ${bottomBound}`,
             `Q ${pullX + 90} ${pullY + (H - pullY) * 0.52}, ${pullX} ${pullY}`,
             `Z`,
           ].join(" ");
@@ -294,8 +304,8 @@ export default function KarnishCinematicIntro() {
         if (high) {
           const highlight = [
             `M ${pullX - 10} ${pullY}`,
-            `Q ${pullX + 35} ${pullY * 0.46}, ${xTop + 90} 0`,
-            `L ${xTop + 115} 0`,
+            `Q ${pullX + 35} ${pullY * 0.46}, ${xTop + 90} ${topBound}`,
+            `L ${xTop + 115} ${topBound}`,
             `Q ${pullX + 45} ${pullY * 0.48}, ${pullX - 10} ${pullY}`,
             `Z`,
           ].join(" ");
@@ -360,9 +370,14 @@ export default function KarnishCinematicIntro() {
       aria-modal="true"
       style={{
         position: "fixed",
-        inset: 0,
-        width: "100vw",
-        height: "100dvh",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: "100%",
+        height: "100%",
+        minWidth: "100vw",
+        minHeight: "100vh",
         zIndex: 2147483647,
         overflow: "hidden",
         userSelect: "none",
@@ -376,14 +391,17 @@ export default function KarnishCinematicIntro() {
       {/* ── SVG 3D Fabric Canvas ────────────────────────────────────────── */}
       <svg
         className="karnish-cloth-svg"
-        width="100%"
-        height="100%"
         preserveAspectRatio="none"
         style={{
           position: "absolute",
-          inset: 0,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
           width: "100%",
           height: "100%",
+          minWidth: "100%",
+          minHeight: "100%",
           pointerEvents: "none",
           zIndex: 2,
         }}
@@ -418,7 +436,7 @@ export default function KarnishCinematicIntro() {
           </linearGradient>
 
           {/* Realistic Fabric Drape Edge Drop Shadow */}
-          <filter id="ktEdgeShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <filter id="ktEdgeShadow" x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="-16" dy="0" stdDeviation="18" floodColor="#0f2454" floodOpacity="0.28" />
             <feDropShadow dx="-4" dy="0" stdDeviation="6" floodColor="#000000" floodOpacity="0.15" />
           </filter>
@@ -430,7 +448,7 @@ export default function KarnishCinematicIntro() {
           id="kt-cloth"
           fill="url(#ktClothGrad)"
           filter="url(#ktEdgeShadow)"
-          d="M 0 0 L 0 5000 L 5000 5000 L 5000 0 Z"
+          d="M -500 -500 L -500 10000 L 10000 10000 L 10000 -500 Z"
         />
 
         {/* Dynamic Folds & Specular Highlights */}

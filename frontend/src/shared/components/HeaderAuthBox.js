@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSignIn, useSignUp } from "@clerk/nextjs/legacy";
-import { authRequest, roleHome } from "../services/auth";
+import { authRequest } from "../services/auth";
 
 const getClerkError = (error) => error?.errors?.[0]?.longMessage || error?.errors?.[0]?.message || error?.message || "Something went wrong. Please try again.";
 
@@ -40,28 +40,7 @@ export default function HeaderAuthBox({ initialMode = "signin", onClose }) {
       if (mode === "signin") {
         const identifier = String(values.identifier || "").trim();
         const password = String(values.password || "");
-        const isAdmin = identifier.toLowerCase().includes("admin") || identifier.toLowerCase().includes("karnish");
-
-        // 1. Direct path for administrator credentials
-        if (isAdmin) {
-          try {
-            const backendRes = await authRequest("/login", {
-              method: "POST",
-              body: JSON.stringify({ identifier, password }),
-            });
-            if (backendRes && (backendRes.success || backendRes.user)) {
-              onClose();
-              const targetUrl = backendRes.redirectTo || roleHome(backendRes.user?.role) || "/admin/dashboard";
-              window.location.href = targetUrl;
-              return;
-            }
-          } catch (backendErr) {
-            setError(backendErr.message || "Invalid administrator credentials.");
-            return;
-          }
-        }
-
-        // 2. Try Clerk for customer accounts
+        // Try Clerk for customer accounts.
         let clerkErr = null;
         if (signInLoaded) {
           try {
@@ -78,7 +57,7 @@ export default function HeaderAuthBox({ initialMode = "signin", onClose }) {
           }
         }
 
-        // 3. Fallback to backend authentication
+        // Fall back to backend authentication.
         try {
           const backendRes = await authRequest("/login", {
             method: "POST",
@@ -86,7 +65,7 @@ export default function HeaderAuthBox({ initialMode = "signin", onClose }) {
           });
           if (backendRes && (backendRes.success || backendRes.user)) {
             onClose();
-            const targetUrl = backendRes.redirectTo || roleHome(backendRes.user?.role) || "/admin/dashboard";
+            const targetUrl = backendRes.redirectTo || "/dashboard";
             window.location.href = targetUrl;
             return;
           }

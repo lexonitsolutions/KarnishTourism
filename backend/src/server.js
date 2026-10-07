@@ -3,8 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const { connectDatabase, disconnectDatabase } = require("./config/database");
-const { authRouter, ensureAdmin } = require("./routes/auth");
-const adminRouter = require("./routes/admin");
+const { authRouter } = require("./routes/auth");
 const publicRouter = require("./routes/public");
 const resourceRouter = require("./routes/resources");
 const bookingRouter = require("./routes/bookings");
@@ -22,7 +21,6 @@ app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 app.get("/", (_req, res) => res.json({ success: true, service: "Karnish Tourism Backend API" }));
 app.get("/api/health", (_req, res) => { const connected = mongoose.connection.readyState === 1; res.status(connected ? 200 : 503).json({ success: connected, database: connected ? "connected" : "disconnected" }); });
 app.use("/api/auth", authRouter);
-app.use("/api/admin", adminRouter);
 app.use("/api/catalog", publicRouter);
 app.use("/api/bookings", bookingRouter);
 app.use("/api/inquiries", inquiryRouter);
@@ -38,7 +36,6 @@ async function start() {
   server = app.listen(port, () => console.log(`[Backend] Server listening on port ${port}`));
   try {
     await connectDatabase();
-    await ensureAdmin();
     await ensureDestinations();
   } catch (error) {
     console.warn("[Backend] Database initial connect warning:", error.message);
@@ -49,7 +46,6 @@ async function start() {
     if (mongoose.connection.readyState !== 1) {
       try {
         await connectDatabase();
-        await ensureAdmin();
         await ensureDestinations();
       } catch (_) {}
     }

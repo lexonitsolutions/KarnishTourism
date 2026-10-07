@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import DestinationCard from "./DestinationCard";
 
 export default function CatalogExplorer({ items, type }) {
@@ -28,11 +29,9 @@ export default function CatalogExplorer({ items, type }) {
       {items.length === 0 ? (
         <div className="ktours-empty" style={{ padding: "60px 20px" }}>
           <i className="ti-map-alt" />
-          <h3>No {type} destinations published yet</h3>
-          <p>Upload new destinations anytime through the Admin Dashboard to have them appear here immediately.</p>
-          <a href="/admin/destinations" className="ktours-button" style={{ display: "inline-block", marginTop: "15px" }}>
-            Go to Admin Dashboard
-          </a>
+          <h3>Fresh {type} journeys are on the way</h3>
+          <p>Our travel team is curating new departures. Explore all tours in the meantime.</p>
+          <Link href="/tours" className="ktours-button" style={{ display: "inline-block", marginTop: "15px" }}>Explore tours</Link>
         </div>
       ) : filtered.length ? (
         <div className="ktours-destination-grid">

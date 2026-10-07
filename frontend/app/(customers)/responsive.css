@@ -70,7 +70,6 @@ textarea {
   padding: clamp(10px, 3vw, 24px);
 }
 
-.admin-modal,
 .ops-modal-dialog,
 [role="dialog"] {
   max-width: calc(100vw - (2 * var(--kt-page-gutter)));

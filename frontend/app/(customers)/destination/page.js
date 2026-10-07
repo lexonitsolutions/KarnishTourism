@@ -4,16 +4,17 @@ import { useEffect, useState } from "react";
 import Script from "next/script";
 import SiteFooter from "../components/SiteFooter";
 import { fetchPublic } from "@/lib/api";
+import { destinations as defaultDestinations } from "../tours/data";
 
 export default function Destination() {
-  const [destinations, setDestinations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [destinations, setDestinations] = useState(defaultDestinations);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let active = true;
     fetchPublic("destinations", { limit: 100 })
       .then((data) => {
-        if (active && Array.isArray(data?.items)) {
+        if (active && Array.isArray(data?.items) && data.items.length > 0) {
           setDestinations(data.items);
         }
       })
@@ -133,7 +134,7 @@ export default function Destination() {
                   </div>
                 ) : (
                   <div className="text-center py-5" style={{ color: "#667085" }}>
-                    <p style={{ fontSize: "16px" }}>No destinations published yet. Add destinations from the Admin Portal.</p>
+                    <p style={{ fontSize: "16px" }}>Our newest destinations are being curated. Please check back soon.</p>
                   </div>
                 )}
               </div>

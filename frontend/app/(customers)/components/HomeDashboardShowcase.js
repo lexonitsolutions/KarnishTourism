@@ -2,8 +2,39 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+const MOCK_DESTINATIONS = [
+  { id: "dubai", slug: "dubai", title: "Dubai", country: "United Arab Emirates", imageUrl: "/images/destination-01.jpg" },
+  { id: "bali", slug: "bali", title: "Bali", country: "Indonesia", imageUrl: "/images/destination-02.jpg" },
+  { id: "maldives", slug: "maldives", title: "Maldives", country: "Indian Ocean", imageUrl: "/images/destination-03.jpg" },
+  { id: "kashmir", slug: "kashmir", title: "Kashmir", country: "India", imageUrl: "/images/destination-04.jpg" },
+  { id: "singapore", slug: "singapore", title: "Singapore", country: "Singapore", imageUrl: "/images/destination-05.jpg" },
+  { id: "switzerland", slug: "switzerland", title: "Switzerland", country: "Europe", imageUrl: "/images/destination-06.jpg" },
+];
+const MOCK_INTERNATIONAL = [
+  { id: "dubai-escape", slug: "dubai-city-desert", title: "Dubai City & Desert Escape", destination: { title: "Dubai, UAE" }, durationDays: 6, price: 84500, currency: "INR", status: "active", imageUrl: "/images/destination-a.jpg", summary: "Skyline stays, old Dubai, a premium desert safari and private transfers.", inclusions: ["Hotels", "Transfers", "Breakfast", "Safari"] },
+  { id: "bali-discovery", slug: "bali-island-discovery", title: "Bali Island Discovery", destination: { title: "Bali, Indonesia" }, durationDays: 7, price: 72499, currency: "INR", status: "active", imageUrl: "/images/destination-b.jpg", summary: "Temples, rice terraces, beach sunsets and a private island day tour.", inclusions: ["Flights", "Resort", "Tours", "Breakfast"] },
+  { id: "swiss-panorama", slug: "swiss-panorama-trail", title: "Swiss Panorama Trail", destination: { title: "Lucerne & Interlaken" }, durationDays: 8, price: 148900, currency: "INR", status: "active", imageUrl: "/images/destination-c.jpg", summary: "Scenic rail journeys, alpine villages and hand-picked lakefront stays.", inclusions: ["Hotels", "Rail Pass", "Breakfast", "Excursions"] },
+];
+const MOCK_DOMESTIC = [
+  { id: "kashmir-retreat", slug: "kashmir-alpine-retreat", title: "Kashmir Alpine Retreat", destination: { title: "Srinagar & Gulmarg" }, durationDays: 6, price: 67900, currency: "INR", status: "active", imageUrl: "/images/01.jpg", summary: "Houseboat nights, mountain panoramas and private valley sightseeing.", inclusions: ["Flights", "Hotels", "Transfers", "Breakfast"] },
+  { id: "kerala-backwaters", slug: "kerala-backwaters", title: "Kerala Backwater Escape", destination: { title: "Kochi, Munnar & Alleppey" }, durationDays: 7, price: 58900, currency: "INR", status: "active", imageUrl: "/images/02.jpg", summary: "Tea gardens, a private houseboat and a relaxed coastal finale.", inclusions: ["Hotels", "Houseboat", "Meals", "Transfers"] },
+  { id: "rajasthan-royal", slug: "royal-rajasthan", title: "Royal Rajasthan Circuit", destination: { title: "Jaipur, Jodhpur & Udaipur" }, durationDays: 8, price: 74900, currency: "INR", status: "active", imageUrl: "/images/03.jpg", summary: "Heritage palaces, desert culture and curated local dining experiences.", inclusions: ["Hotels", "Chauffeur", "Breakfast", "Guides"] },
+];
+const MOCK_ACTIVITIES = [
+  { title: "Dubai Desert Safari", place: "Dubai", duration: "6 hours", price: "₹4,999", rating: "4.9", image: "/images/4.jpg", tag: "Bestseller" },
+  { title: "Burj Khalifa Sky Experience", place: "Downtown Dubai", duration: "2 hours", price: "₹3,499", rating: "4.8", image: "/images/5.jpg", tag: "Skip the line" },
+  { title: "Luxury Marina Dhow Cruise", place: "Dubai Marina", duration: "3 hours", price: "₹5,750", rating: "4.7", image: "/images/06.jpg", tag: "Dinner included" },
+  { title: "Abu Dhabi Grand City Tour", place: "Abu Dhabi", duration: "Full day", price: "₹7,250", rating: "4.9", image: "/images/7.jpg", tag: "Small group" },
+];
+const MOCK_OFFERS = [
+  { id: "earlybird", title: "Early Bird Holiday Sale", description: "Save on selected international departures booked 45 days ahead.", discountType: "percentage", discountValue: 15, code: "EARLY15", featured: true },
+  { id: "family", title: "Family Escape Bonus", description: "Instant savings for two adults travelling with children.", discountType: "fixed", discountValue: 5000, code: "FAMILY5K", featured: true },
+  { id: "honeymoon", title: "Honeymoon Celebration", description: "Complimentary room décor and a private dining experience.", discountType: "perk", discountValue: 0, code: "JUSTMARRIED", featured: true },
+];
 
 async function apiFetch(resource, params = {}) {
   const qs = new URLSearchParams();
@@ -40,10 +71,10 @@ export default function HomeDashboardShowcase() {
         apiFetch("tours", { type: "international", featured: "true", limit: 6 }),
         apiFetch("tours", { type: "domestic", featured: "true", limit: 6 }),
       ]);
-      setDestinations(dests);
-      setOffers(offs);
-      setInternationalPackages(intPkgs);
-      setDomesticPackages(domPkgs);
+      setDestinations(dests.length ? dests : MOCK_DESTINATIONS);
+      setOffers(offs.length ? offs : MOCK_OFFERS);
+      setInternationalPackages(intPkgs.length ? intPkgs : MOCK_INTERNATIONAL);
+      setDomesticPackages(domPkgs.length ? domPkgs : MOCK_DOMESTIC);
       setLoading(false);
     }
     load();
@@ -57,13 +88,13 @@ export default function HomeDashboardShowcase() {
     setTimeout(() => setCopiedCoupon(""), 2500);
   };
 
-  // ── helpers ──────────────────────────────────────────────────────────────
+  // â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const fmtPrice = (val, currency = "INR") => {
     if (!val && val !== 0) return "Price on request";
     return currency === "INR" ? `₹${Number(val).toLocaleString("en-IN")}` : `${currency} ${Number(val).toLocaleString()}`;
   };
 
-  const pkgDuration = (pkg) => pkg.durationDays ? `${pkg.durationDays} Days · ${pkg.durationDays - 1} Nights` : "";
+  const pkgDuration = (pkg) => pkg.durationDays ? `${pkg.durationDays} Days Â· ${pkg.durationDays - 1} Nights` : "";
   const pkgLocation = (pkg) => pkg.destination?.title || pkg.location || "";
 
   return (
@@ -82,7 +113,7 @@ export default function HomeDashboardShowcase() {
       <section className="container kt-dest-strip-section">
         <div className="kt-dest-strip-title-row">
           <h3><i className="ti-location-pin" /> Popular Destinations</h3>
-          <a href="/tours">View All Destinations <i className="ti-arrow-right" /></a>
+          <Link href="/tours">View All Destinations <i className="ti-arrow-right" /></Link>
         </div>
         <div className="kt-dest-chips-row">
           {loading ? (
@@ -119,7 +150,7 @@ export default function HomeDashboardShowcase() {
               <h2>Special Offers, Instant Savings &amp; Promo Codes</h2>
               <p>Apply these exclusive coupon codes to unlock guaranteed discounts and complimentary holiday perks.</p>
             </div>
-            <a href="/tours" className="kt-btn-claim-link">Explore All Offers <i className="ti-arrow-right" /></a>
+            <Link href="/tours" className="kt-btn-claim-link">Explore All Offers <i className="ti-arrow-right" /></Link>
           </div>
 
           <div className="kt-offers-grid">
@@ -271,7 +302,21 @@ export default function HomeDashboardShowcase() {
         </div>
       </section>
 
-      {/* 5. Visa Services Quick Desk */}
+      {/* 5. Bookable Activities */}
+      <section className="container kt-activity-showcase">
+        <div className="kt-activity-heading">
+          <div><span>Things to do</span><h2>Popular activities &amp; experiences</h2><p>Hand-picked experiences with instant confirmation and local support.</p></div>
+          <a href="/activities">Explore all activities <i className="ti-arrow-right" /></a>
+        </div>
+        <div className="kt-activity-grid">
+          {MOCK_ACTIVITIES.map((activity) => <article className="kt-activity-card" key={activity.title}>
+            <div className="kt-activity-image"><Image src={activity.image} alt={activity.title} fill sizes="(max-width: 700px) 100vw, 300px" /><span>{activity.tag}</span></div>
+            <div className="kt-activity-body"><small><i className="ti-location-pin" /> {activity.place}</small><h3>{activity.title}</h3><div className="kt-activity-meta"><span><i className="ti-time" /> {activity.duration}</span><span><i className="ti-star" /> {activity.rating}</span></div><footer><p>From <strong>{activity.price}</strong></p><a href="/activities">View activity</a></footer></div>
+          </article>)}
+        </div>
+      </section>
+
+      {/* 6. Visa Services Quick Desk */}
       <section className="container kt-visa-section">
         <div className="kt-visa-dash-banner">
           <div className="kt-visa-copy">
@@ -283,7 +328,7 @@ export default function HomeDashboardShowcase() {
               <span><i className="ti-check" /> End-to-end tracking</span>
               <span><i className="ti-check" /> 99.4% approval success</span>
             </div>
-            <a href="/visas" className="kt-visa-main-cta">Explore all visa services <i className="ti-arrow-right" /></a>
+            <Link href="/visas" className="kt-visa-main-cta">Explore all visa services <i className="ti-arrow-right" /></Link>
           </div>
           <div className="kt-visa-card-grid">
             {[

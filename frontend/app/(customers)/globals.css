@@ -99,9 +99,14 @@ html.karnish-intro-active body {
 html.karnish-intro-active body::before {
   content: "";
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100vw;
-  height: 100dvh;
+  height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
   background-color: #ffffff;
   z-index: 2147483640;
   pointer-events: none;
@@ -116,6 +121,12 @@ html.karnish-intro-completed body::before {
 html.karnish-intro-active .karnish-intro-overlay {
   display: block !important;
 }
+
+/* Keep content below the hero from peeking around the cinematic cloth. */
+html.karnish-intro-active .kt-home-page-root > :not(header) {
+  visibility: hidden !important;
+}
+
 
 /* ==========================================================================
    Smooth Page Transitions & Progress Glow
@@ -396,16 +407,20 @@ html.karnish-intro-active .karnish-intro-overlay {
 .karnish-intro-overlay,
 #karnish-intro-overlay {
   display: none !important;
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100dvh;
-  z-index: 2147483647; /* Maximum possible z-index */
-  overflow: hidden;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100vw !important;
+  min-height: 100vh !important;
+  z-index: 2147483647 !important; /* Maximum possible z-index */
+  overflow: hidden !important;
   user-select: none;
   -webkit-user-select: none;
   pointer-events: auto;
-  contain: strict;
   will-change: opacity;
 }
 
@@ -416,11 +431,15 @@ html.karnish-intro-active #karnish-intro-overlay {
 
 /* SVG Cloth Canvas */
 .karnish-cloth-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
   pointer-events: none;
   z-index: 2;
   will-change: transform;
@@ -3041,11 +3060,16 @@ html.karnish-intro-completed .karnish-intro-overlay {
 }
 #karnish-intro-overlay, .karnish-intro-overlay {
   display: none !important;
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100dvh;
-  z-index: 2147483647;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100vw !important;
+  min-height: 100vh !important;
+  z-index: 2147483647 !important;
 }
 html.karnish-intro-active #karnish-intro-overlay,
 html.karnish-intro-active .karnish-intro-overlay {

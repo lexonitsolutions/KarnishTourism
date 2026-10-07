@@ -33,8 +33,8 @@ function demoResponse(path, options) {
   if (path !== "/login" && path !== "/signup") throw new Error("Authentication service unavailable");
   const body = JSON.parse(options.body || "{}");
   const identifier = String(body.identifier || body.email || "demo@karnishtourism.com").toLowerCase();
-  const role = identifier.includes("admin") ? "super_admin" : identifier.includes("partner") || identifier.includes("b2b") ? "collaborator" : "customer";
-  const user = { id: "demo-user", name: body.fullName || (role === "super_admin" ? "Karnish Administrator" : role === "collaborator" ? "Demo Travel Partner" : "Demo Traveller"), email: identifier, role, status: "active" };
+  const role = identifier.includes("partner") || identifier.includes("b2b") ? "collaborator" : "customer";
+  const user = { id: "demo-user", name: body.fullName || (role === "collaborator" ? "Demo Travel Partner" : "Demo Traveller"), email: identifier, role, status: "active" };
   saveDemoUser(user);
   return { user, redirectTo: roleHome(role), demoMode: true };
 }
@@ -55,4 +55,4 @@ export async function authRequest(path, options = {}) {
   }
 }
 
-export const roleHome = (role) => ["admin","super_admin"].includes(role) ? "/admin/dashboard" : ["b2b","collaborator"].includes(role) ? "/b2b/dashboard" : "/dashboard";
+export const roleHome = (role) => ["b2b","collaborator"].includes(role) ? "/b2b/dashboard" : "/dashboard";

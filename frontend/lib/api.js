@@ -1,7 +1,7 @@
 /**
- * Karnish Tourism – Frontend API Utility
+ * Karnish Tourism â€“ Frontend API Utility
  * All calls go to the Express backend (port 5000).
- * NEVER expose MONGODB_URI to the frontend — always go through this layer.
+ * NEVER expose MONGODB_URI to the frontend â€” always go through this layer.
  */
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -42,11 +42,5 @@ export async function fetchPublicOne(resource, idOrSlug) {
 }
 
 /**
- * Admin API calls — include JWT token from localStorage.
+ * Admin API calls â€” include JWT token from localStorage.
  */
-export async function adminFetch(path, options = {}) {
-  const token = typeof window !== "undefined" ? localStorage.getItem("karnish_admin_token") : null;
-  const headers = { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) };
-  const res = await fetch(`${BASE_URL}/api/admin${path}`, { ...options, headers });
-  return res.json();
-}

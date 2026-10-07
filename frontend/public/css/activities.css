@@ -431,8 +431,16 @@
    ===================================================== */
 
 .activity-page-heading {
-  padding: 60px 0 30px;
+  padding: 150px 0 34px;
   text-align: center;
+}
+
+@media (max-width: 991px) {
+  .activity-page-heading { padding-top: 125px; }
+}
+
+@media (max-width: 575px) {
+  .activity-page-heading { padding-top: 112px; }
 }
 
 .activity-page-heading .section-subtitle {

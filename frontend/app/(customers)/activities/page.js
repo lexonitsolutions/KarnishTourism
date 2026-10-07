@@ -2,12 +2,36 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react";
 import Script from "next/script";
-import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import SiteFooter from "../components/SiteFooter";
 import WishlistButton from "../components/WishlistButton";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 const ACTIVITIES_API = `${API_BASE.replace(/\/$/, "").replace(/\/api$/, "")}/api/activities?limit=500`;
+
+const MOCK_ACTIVITIES = [
+  { id: "desert-safari", slug: "dubai-desert-safari", title: "Dubai Desert Safari & BBQ Dinner", destinations: ["Dubai"], activities: ["Desert Safari"], tripTypes: ["Adventure", "Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 4999, currency: "INR", image: "/images/4.jpg" },
+  { id: "burj-khalifa", slug: "burj-khalifa-sky", title: "Burj Khalifa At The Top", destinations: ["Dubai"], activities: ["City Experience"], tripTypes: ["Family", "Luxury"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 3499, currency: "INR", image: "/images/5.jpg" },
+  { id: "marina-cruise", slug: "dubai-marina-dhow", title: "Dubai Marina Dhow Cruise", destinations: ["Dubai"], activities: ["Cruises"], tripTypes: ["Couples", "Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 5750, currency: "INR", image: "/images/06.jpg" },
+  { id: "abu-dhabi", slug: "abu-dhabi-city-tour", title: "Abu Dhabi Grand City Tour", destinations: ["Abu Dhabi"], activities: ["Cultural"], tripTypes: ["Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 7250, currency: "INR", image: "/images/7.jpg" },
+  { id: "kashmir-gondola", slug: "gulmarg-gondola", title: "Gulmarg Gondola & Alpine Day", destinations: ["Kashmir"], activities: ["Mountain Experience"], tripTypes: ["Adventure", "Family"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 4200, currency: "INR", image: "/images/destination-04.jpg" },
+  { id: "bali-temples", slug: "bali-temples-waterfalls", title: "Bali Temples & Waterfalls Trail", destinations: ["Bali"], activities: ["Cultural"], tripTypes: ["Couples", "Adventure"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 6800, currency: "INR", image: "/images/destination-02.jpg" },
+  { id: "maldives-cruise", slug: "maldives-sunset-cruise", title: "Maldives Sunset Dolphin Cruise", destinations: ["Maldives"], activities: ["Cruises"], tripTypes: ["Couples", "Luxury"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 8900, currency: "INR", image: "/images/destination-03.jpg" },
+  { id: "singapore-night", slug: "singapore-night-safari", title: "Singapore Night Safari", destinations: ["Singapore"], activities: ["Wildlife"], tripTypes: ["Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 5400, currency: "INR", image: "/images/destination-05.jpg" },
+  { id: "himachal-camp", slug: "himachal-desert-camp", title: "Spiti Cold Desert Camp Adventure", destinations: ["Himachal"], activities: ["Desert Safari"], tripTypes: ["Adventure"], difficulty: ["Moderate"], duration: { days: 2, nights: 1 }, price: 8900, currency: "INR", image: "/images/destination-f.jpg" },
+  { id: "dubai-aquarium", slug: "dubai-aquarium", title: "Dubai Aquarium & Underwater Zoo", destinations: ["Dubai"], activities: ["Family Attraction"], tripTypes: ["Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 2999, currency: "INR", image: "/images/a1.jpg" },
+  { id: "dubai-helicopter", slug: "dubai-helicopter-tour", title: "Dubai Skyline Helicopter Tour", destinations: ["Dubai"], activities: ["Air Experience"], tripTypes: ["Luxury", "Adventure"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 16900, currency: "INR", image: "/images/a2.jpg" },
+  { id: "abu-dhabi-themepark", slug: "yas-island-theme-parks", title: "Yas Island Theme Park Day", destinations: ["Abu Dhabi"], activities: ["Theme Parks"], tripTypes: ["Family", "Adventure"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 8999, currency: "INR", image: "/images/a3.jpg" },
+  { id: "bali-rafting", slug: "bali-river-rafting", title: "Ayung River Rafting Adventure", destinations: ["Bali"], activities: ["Water Adventure"], tripTypes: ["Adventure"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 4599, currency: "INR", image: "/images/a4.jpg" },
+  { id: "bali-sunset", slug: "uluwatu-sunset-dance", title: "Uluwatu Sunset & Kecak Dance", destinations: ["Bali"], activities: ["Cultural"], tripTypes: ["Couples", "Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 3900, currency: "INR", image: "/images/destination-a.jpg" },
+  { id: "singapore-sentosa", slug: "sentosa-island-pass", title: "Sentosa Island Adventure Pass", destinations: ["Singapore"], activities: ["Theme Parks"], tripTypes: ["Family", "Adventure"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 7600, currency: "INR", image: "/images/destination-b.jpg" },
+  { id: "singapore-gardens", slug: "gardens-by-the-bay", title: "Gardens by the Bay & Marina Tour", destinations: ["Singapore"], activities: ["City Experience"], tripTypes: ["Family", "Couples"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 3200, currency: "INR", image: "/images/destination-c.jpg" },
+  { id: "maldives-snorkel", slug: "maldives-snorkelling", title: "Maldives Reef Snorkelling Safari", destinations: ["Maldives"], activities: ["Water Adventure"], tripTypes: ["Adventure", "Couples"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 7900, currency: "INR", image: "/images/destination-d.jpg" },
+  { id: "kashmir-shikara", slug: "dal-lake-shikara", title: "Dal Lake Shikara & Old City Tour", destinations: ["Kashmir"], activities: ["Cultural"], tripTypes: ["Family", "Couples"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 2800, currency: "INR", image: "/images/destination-e.jpg" },
+  { id: "himachal-paragliding", slug: "bir-billing-paragliding", title: "Bir Billing Paragliding Flight", destinations: ["Himachal"], activities: ["Air Experience"], tripTypes: ["Adventure"], difficulty: ["Challenging"], duration: { days: 1, nights: 0 }, price: 4500, currency: "INR", image: "/images/01_1.jpg" },
+  { id: "himachal-trek", slug: "triund-sunrise-trek", title: "Triund Sunrise Trek", destinations: ["Himachal"], activities: ["Mountain Experience"], tripTypes: ["Adventure"], difficulty: ["Moderate"], duration: { days: 2, nights: 1 }, price: 5200, currency: "INR", image: "/images/02_1.jpg" },
+  { id: "swiss-jungfrau", slug: "jungfrau-top-of-europe", title: "Jungfrau Top of Europe Excursion", destinations: ["Switzerland"], activities: ["Mountain Experience"], tripTypes: ["Family", "Luxury"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 18900, currency: "INR", image: "/images/03_1.jpg" },
+].map(normalizeActivity);
 
 function asArray(value) {
   if (Array.isArray(value)) return value.filter(Boolean);
@@ -27,7 +51,7 @@ function normalizeActivity(item) {
     tripTypes: asArray(item.tripTypes),
     difficulty: asArray(item.difficulty),
     image: item.image || item.imageUrl || "/images/a4.jpg",
-    link: item.link || `/contact?activity=${encodeURIComponent(item.slug || item.title || "")}`,
+    link: `/activities/${encodeURIComponent(item.slug || item.id || String(item.title || "activity").toLowerCase().replace(/[^a-z0-9]+/g, "-"))}`,
   };
 }
 
@@ -88,15 +112,13 @@ function ActivityCard({ activity, viewMode }) {
         {activity.activities && activity.activities[0] ? (
           <span className="ac-card-tag">{activity.activities[0]}</span>
         ) : null}
-        <a
+        <Link
           className="ac-card-link"
           href={activity.link}
-          target="_blank"
-          rel="noopener noreferrer"
           aria-label={`View ${activity.title}`}
         >
           <i className="ti-arrow-top-right"></i>
-        </a>
+        </Link>
       </div>
       <div className="ac-card-body">
         <div className="ac-card-location">
@@ -139,9 +161,9 @@ function ActivityCard({ activity, viewMode }) {
           ) : (
             <div className="ac-card-price request">Price on request</div>
           )}
-          <a className="ac-card-cta" href={activity.link} target="_blank" rel="noopener noreferrer">
+          <Link className="ac-card-cta" href={activity.link}>
             View <i className="ti-arrow-right"></i>
-          </a>
+          </Link>
         </div>
       </div>
     </div>
@@ -149,8 +171,6 @@ function ActivityCard({ activity, viewMode }) {
 }
 
 function ActivitiesResults() {
-  const searchParams = useSearchParams();
-
   // API state
   const [allActivities, setAllActivities] = useState([]);
   const [apiLoading, setApiLoading] = useState(true);
@@ -160,10 +180,12 @@ function ActivitiesResults() {
     fetch(ACTIVITIES_API, { cache: "no-store" })
       .then((r) => r.ok ? r.json() : { items: [] })
       .then((data) => {
-        setAllActivities(Array.isArray(data.items) ? data.items.map(normalizeActivity) : []);
+        const items = Array.isArray(data.items) ? data.items.map(normalizeActivity) : [];
+        const liveIds = new Set(items.map((item) => item.id || item.slug));
+        setAllActivities([...items, ...MOCK_ACTIVITIES.filter((item) => !liveIds.has(item.id || item.slug))]);
         setApiLoading(false);
       })
-      .catch(() => { setAllActivities([]); setApiLoading(false); });
+      .catch(() => { setAllActivities(MOCK_ACTIVITIES); setApiLoading(false); });
   }, []);
 
   // Derive filter options dynamically from DB data
@@ -172,30 +194,18 @@ function ActivitiesResults() {
   const tripTypeOptions    = useMemo(() => uniqueOptions(allActivities, "tripTypes"), [allActivities]);
   const difficultyOptions  = useMemo(() => uniqueOptions(allActivities, "difficulty"), [allActivities]);
 
-  const [selectedDestinations, setSelectedDestinations] = useState(() => {
-    const v = searchParams.get("destination");
-    return v ? new Set([v]) : new Set();
-  });
-  const [selectedActivities, setSelectedActivities] = useState(() => {
-    const v = searchParams.get("activity");
-    return v ? new Set([v]) : new Set();
-  });
-  const [selectedTypes, setSelectedTypes] = useState(() => {
-    const v = searchParams.get("type");
-    return v ? new Set([v]) : new Set();
-  });
-  const [selectedDifficulties, setSelectedDifficulties] = useState(() => {
-    const v = searchParams.get("difficulty");
-    return v ? new Set([v]) : new Set();
-  });
+  // Always begin with the complete collection. Filters are customer-controlled
+  // and are applied only after a choice is made on this page.
+  const [selectedDestinations, setSelectedDestinations] = useState(() => new Set());
+  const [selectedActivities, setSelectedActivities] = useState(() => new Set());
+  const [selectedTypes, setSelectedTypes] = useState(() => new Set());
+  const [selectedDifficulties, setSelectedDifficulties] = useState(() => new Set());
 
   const [searchText, setSearchText] = useState("");
   const [sortBy, setSortBy] = useState("recent");
   const [viewMode, setViewMode] = useState("grid");
   const [collapsedGroups, setCollapsedGroups] = useState(() => new Set());
   const [expandedGroups, setExpandedGroups] = useState(() => new Set());
-  const [page, setPage] = useState(1);
-  const PAGE_SIZE = 12;
 
   const groupsMeta = [
     { key: "destinations", label: "Destination", field: "destinations", options: destinationOptions, selected: selectedDestinations, toggle: (name) => toggleInSet(setSelectedDestinations, name) },
@@ -215,7 +225,7 @@ function ActivitiesResults() {
         matchesGroup(a, "difficulty", selectedDifficulties) &&
         matchesSearchText(a, searchText)
     );
-  }, [selectedDestinations, selectedActivities, selectedTypes, selectedDifficulties, searchText]);
+  }, [activities, selectedDestinations, selectedActivities, selectedTypes, selectedDifficulties, searchText]);
 
   const sorted = useMemo(() => {
     const arr = [...filtered];
@@ -239,20 +249,7 @@ function ActivitiesResults() {
     return arr;
   }, [filtered, sortBy]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [selectedDestinations, selectedActivities, selectedTypes, selectedDifficulties, searchText, sortBy]);
-
-  const pageCount = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
-  const currentPage = Math.min(page, pageCount);
-  const pageItems = sorted.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-
-  function goToPage(n) {
-    const next = Math.max(1, Math.min(pageCount, n));
-    setPage(next);
-    const resultsEl = document.getElementById("activity-results-top");
-    if (resultsEl) resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+  const pageItems = sorted;
 
   function countsExcluding(excludeKey) {
     return activities.filter(
@@ -400,56 +397,6 @@ function ActivitiesResults() {
                   ))}
                 </div>
 
-                {pageCount > 1 ? (
-                  <div className="activity-pagination">
-                    <button
-                      type="button"
-                      className="ap-nav"
-                      disabled={currentPage === 1}
-                      onClick={() => goToPage(currentPage - 1)}
-                      aria-label="Previous page"
-                    >
-                      <i className="ti-angle-left"></i>
-                    </button>
-
-                    {Array.from({ length: pageCount }, (_, i) => i + 1)
-                      .filter(
-                        (n) =>
-                          n === 1 ||
-                          n === pageCount ||
-                          Math.abs(n - currentPage) <= 1
-                      )
-                      .reduce((acc, n, idx, arr) => {
-                        if (idx > 0 && n - arr[idx - 1] > 1) acc.push("...");
-                        acc.push(n);
-                        return acc;
-                      }, [])
-                      .map((n, idx) =>
-                        n === "..." ? (
-                          <span className="ap-ellipsis" key={`ellipsis-${idx}`}>&hellip;</span>
-                        ) : (
-                          <button
-                            type="button"
-                            key={n}
-                            className={`ap-page${n === currentPage ? " active" : ""}`}
-                            onClick={() => goToPage(n)}
-                          >
-                            {n}
-                          </button>
-                        )
-                      )}
-
-                    <button
-                      type="button"
-                      className="ap-nav"
-                      disabled={currentPage === pageCount}
-                      onClick={() => goToPage(currentPage + 1)}
-                      aria-label="Next page"
-                    >
-                      <i className="ti-angle-right"></i>
-                    </button>
-                  </div>
-                ) : null}
               </>
             )}
           </div>

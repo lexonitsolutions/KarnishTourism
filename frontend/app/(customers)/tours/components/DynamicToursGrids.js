@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import LandingDestinationCard from "./LandingDestinationCard";
 import SignatureShowcase from "./SignatureShowcase";
-import { normalizeDestination, normalizeTourPackage } from "../data";
+import { destinations as mockDestinations, normalizeDestination, normalizeTourPackage } from "../data";
 import { fetchPublic } from "@/lib/api";
 
 export default function DynamicToursGrids() {
@@ -19,11 +20,12 @@ export default function DynamicToursGrids() {
       fetchPublic("tours", { limit: 50 }).catch(() => null)
     ]).then(([destRes, tourRes]) => {
       if (active) {
-        if (Array.isArray(destRes?.items) && destRes.items.length > 0) {
-          setLiveDestinations(destRes.items.map(normalizeDestination));
-        }
         if (Array.isArray(tourRes?.items) && tourRes.items.length > 0) {
+          if (Array.isArray(destRes?.items) && destRes.items.length > 0) setLiveDestinations(destRes.items.map(normalizeDestination));
           setLivePackages(tourRes.items);
+        } else {
+          setLiveDestinations(mockDestinations.map(normalizeDestination));
+          setLivePackages(mockDestinations.flatMap((destination) => destination.packages.map((pkg) => ({ ...pkg, destination: destination.id }))));
         }
         setLoaded(true);
       }
@@ -75,9 +77,9 @@ export default function DynamicToursGrids() {
             <span>Global escapes</span>
             <h2>Curated International Holidays</h2>
           </div>
-          <a href="/tours/international">
+          <Link href="/tours/international">
             View All International Destinations <i className="ti-arrow-right" />
-          </a>
+          </Link>
         </div>
         {international.length > 0 ? (
           <div className="ktl-international-grid">
@@ -87,10 +89,7 @@ export default function DynamicToursGrids() {
           </div>
         ) : loaded ? (
           <div style={{ textAlign: "center", padding: "40px 20px", background: "rgba(255,255,255,0.03)", borderRadius: "12px", border: "1px dashed rgba(255,255,255,0.15)", color: "#a0aec0" }}>
-            <p style={{ margin: 0, fontSize: "15px" }}>No international destinations uploaded yet.</p>
-            <a href="/admin/destinations" style={{ display: "inline-block", marginTop: "10px", color: "#2095ae", fontSize: "13px", fontWeight: "600" }}>
-              Upload from Admin Portal &rarr;
-            </a>
+            <p style={{ margin: 0, fontSize: "15px" }}>New international journeys are being curated.</p>
           </div>
         ) : null}
       </section>
@@ -103,9 +102,9 @@ export default function DynamicToursGrids() {
               <span>Incredible India</span>
               <h2>Popular Domestic Voyages</h2>
             </div>
-            <a href="/tours/domestic">
+            <Link href="/tours/domestic">
               Explore Complete India Collection <i className="ti-arrow-right" />
-            </a>
+            </Link>
           </div>
           {domestic.length > 0 ? (
             <div className="ktl-domestic-grid">
@@ -115,10 +114,7 @@ export default function DynamicToursGrids() {
             </div>
           ) : loaded ? (
             <div style={{ textAlign: "center", padding: "40px 20px", background: "rgba(0,0,0,0.02)", borderRadius: "12px", border: "1px dashed #cbd5e1", color: "#64748b" }}>
-              <p style={{ margin: 0, fontSize: "15px" }}>No domestic voyages uploaded yet.</p>
-              <a href="/admin/destinations" style={{ display: "inline-block", marginTop: "10px", color: "#2095ae", fontSize: "13px", fontWeight: "600" }}>
-                Upload from Admin Portal &rarr;
-              </a>
+              <p style={{ margin: 0, fontSize: "15px" }}>New domestic voyages are being curated.</p>
             </div>
           ) : null}
         </div>
