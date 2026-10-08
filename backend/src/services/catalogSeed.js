@@ -3,24 +3,24 @@ const TourPackage = require("../models/TourPackage");
 
 const STARTER_DESTINATIONS = [
   // International
-  { title: "Dubai", country: "United Arab Emirates", type: "international", slug: "dubai", imageUrl: "/images/destination-01.jpg", description: "Experience ultramodern luxury, iconic desert dunes, and panoramic marina views in the Emirates.", featured: true, status: "active" },
-  { title: "Singapore", country: "Singapore", type: "international", slug: "singapore", imageUrl: "/images/destination-02.jpg", description: "Discover futuristic gardens, world-class entertainment, and rich culinary culture in Southeast Asia.", featured: true, status: "active" },
-  { title: "Bali", country: "Indonesia", type: "international", slug: "bali", imageUrl: "/images/destination-03.jpg", description: "Immerse in tropical paradise, spiritual temples, lush rice terraces, and serene beachside luxury.", featured: true, status: "active" },
-  { title: "Thailand", country: "Thailand", type: "international", slug: "thailand", imageUrl: "/images/destination-04.jpg", description: "A vibrant fusion of ornate shrines, crystal waters, island-hopping adventures, and world-renowned cuisine.", featured: true, status: "active" },
-  { title: "Maldives", country: "Maldives", type: "international", slug: "maldives", imageUrl: "/images/destination-05.jpg", description: "Pure barefoot elegance with overwater villas, turquoise lagoons, and private coral reef sanctuaries.", featured: true, status: "active" },
-  { title: "Vietnam", country: "Vietnam", type: "international", slug: "vietnam", imageUrl: "/images/destination-06.jpg", description: "UNESCO limestone karsts, lantern-lit ancient towns, and French-colonial heritage.", featured: true, status: "active" },
-  { title: "Switzerland", country: "Switzerland", type: "international", slug: "switzerland", imageUrl: "/images/destination-01.jpg", description: "Majestic alpine summits, panoramic scenic trains, pristine glacial lakes, and timeless European charm.", featured: true, status: "active" },
-  { title: "Malaysia", country: "Malaysia", type: "international", slug: "malaysia", imageUrl: "/images/destination-02.jpg", description: "Modern twin towers, bustling street night markets, and captivating rainforest canopy trails.", featured: true, status: "active" },
+  { title: "Dubai", country: "United Arab Emirates", type: "international", slug: "dubai", imageUrl: "/images/destinations/dubai/hero.jpg", description: "Experience ultramodern luxury, iconic desert dunes, and panoramic marina views in the Emirates.", featured: true, status: "active" },
+  { title: "Singapore", country: "Singapore", type: "international", slug: "singapore", imageUrl: "/images/destinations/singapore/hero.jpg", description: "Discover futuristic gardens, world-class entertainment, and rich culinary culture in Southeast Asia.", featured: true, status: "active" },
+  { title: "Bali", country: "Indonesia", type: "international", slug: "bali", imageUrl: "/images/destinations/bali/hero.jpg", description: "Immerse in tropical paradise, spiritual temples, lush rice terraces, and serene beachside luxury.", featured: true, status: "active" },
+  { title: "Thailand", country: "Thailand", type: "international", slug: "thailand", imageUrl: "/images/destinations/thailand/hero.jpg", description: "A vibrant fusion of ornate shrines, crystal waters, island-hopping adventures, and world-renowned cuisine.", featured: true, status: "active" },
+  { title: "Maldives", country: "Maldives", type: "international", slug: "maldives", imageUrl: "/images/destinations/maldives/hero.jpg", description: "Pure barefoot elegance with overwater villas, turquoise lagoons, and private coral reef sanctuaries.", featured: true, status: "active" },
+  { title: "Vietnam", country: "Vietnam", type: "international", slug: "vietnam", imageUrl: "/images/destinations/vietnam/hero.jpg", description: "UNESCO limestone karsts, lantern-lit ancient towns, and French-colonial heritage.", featured: true, status: "active" },
+  { title: "Switzerland", country: "Switzerland", type: "international", slug: "switzerland", imageUrl: "/images/destinations/switzerland/hero.jpg", description: "Majestic alpine summits, panoramic scenic trains, pristine glacial lakes, and timeless European charm.", featured: true, status: "active" },
+  { title: "Malaysia", country: "Malaysia", type: "international", slug: "malaysia", imageUrl: "/images/destinations/malaysia/hero.jpg", description: "Modern twin towers, bustling street night markets, and captivating rainforest canopy trails.", featured: true, status: "active" },
 
   // Domestic (India)
-  { title: "Kashmir", country: "India", type: "domestic", slug: "kashmir", imageUrl: "/images/destination-a.jpg", description: "Paradise on Earth with snow-capped Pir Panjal peaks, tranquil Dal Lake shikaras, and pine valleys.", featured: true, status: "active" },
-  { title: "Goa", country: "India", type: "domestic", slug: "goa", imageUrl: "/images/destination-b.jpg", description: "Golden coastlines, Portuguese colonial architecture, vibrant beach culture, and coastal seafood feasts.", featured: true, status: "active" },
-  { title: "Kerala", country: "India", type: "domestic", slug: "kerala", imageUrl: "/images/destination-c.jpg", description: "God's Own Country with emerald backwater houseboats, misty tea plantations, and ayurvedic sanctuaries.", featured: true, status: "active" },
-  { title: "Himachal", country: "India", type: "domestic", slug: "himachal", imageUrl: "/images/destination-d.jpg", description: "Majestic Himalayan passes, colonial hill retreats, rushing Beas river waters, and cedar forests.", featured: true, status: "active" },
-  { title: "Rajasthan", country: "India", type: "domestic", slug: "rajasthan", imageUrl: "/images/destination-e.jpg", description: "Regal desert palaces, majestic hilltop forts, vibrant cultural bazaars, and royal heritage.", featured: true, status: "active" },
-  { title: "Leh & Ladakh", country: "India", type: "domestic", slug: "ladakh", imageUrl: "/images/destination-f.jpg", description: "High-altitude desert wonderland, ancient Buddhist gompas, Pangong Tso azure waters, and rugged passes.", featured: true, status: "active" },
-  { title: "Andaman & Nicobar Islands", country: "India", type: "domestic", slug: "andaman", imageUrl: "/images/destination-05.jpg", description: "Pristine white sand beaches, vibrant coral reefs, crystal clear scuba waters, and tropical solitude.", featured: true, status: "active" },
-  { title: "Uttarakhand", country: "India", type: "domestic", slug: "uttarakhand", imageUrl: "/images/destination-06.jpg", description: "Sacred Devbhoomi with Ganga river aartis, whitewater rafting, and misty Queen of Hills Mussoorie.", featured: true, status: "active" },
+  { title: "Kashmir", country: "India", type: "domestic", slug: "kashmir", imageUrl: "/images/destinations/kashmir/hero.jpg", description: "Paradise on Earth with snow-capped Pir Panjal peaks, tranquil Dal Lake shikaras, and pine valleys.", featured: true, status: "active" },
+  { title: "Goa", country: "India", type: "domestic", slug: "goa", imageUrl: "/images/destinations/goa/hero.jpg", description: "Golden coastlines, Portuguese colonial architecture, vibrant beach culture, and coastal seafood feasts.", featured: true, status: "active" },
+  { title: "Kerala", country: "India", type: "domestic", slug: "kerala", imageUrl: "/images/destinations/kerala/hero.jpg", description: "God's Own Country with emerald backwater houseboats, misty tea plantations, and ayurvedic sanctuaries.", featured: true, status: "active" },
+  { title: "Himachal", country: "India", type: "domestic", slug: "himachal", imageUrl: "/images/destinations/himachal/hero.jpg", description: "Majestic Himalayan passes, colonial hill retreats, rushing Beas river waters, and cedar forests.", featured: true, status: "active" },
+  { title: "Rajasthan", country: "India", type: "domestic", slug: "rajasthan", imageUrl: "/images/destinations/rajasthan/hero.jpg", description: "Regal desert palaces, majestic hilltop forts, vibrant cultural bazaars, and royal heritage.", featured: true, status: "active" },
+  { title: "Leh & Ladakh", country: "India", type: "domestic", slug: "ladakh", imageUrl: "/images/destinations/ladakh/hero.jpg", description: "High-altitude desert wonderland, ancient Buddhist gompas, Pangong Tso azure waters, and rugged passes.", featured: true, status: "active" },
+  { title: "Andaman & Nicobar Islands", country: "India", type: "domestic", slug: "andaman", imageUrl: "/images/destinations/andaman/hero.jpg", description: "Pristine white sand beaches, vibrant coral reefs, crystal clear scuba waters, and tropical solitude.", featured: true, status: "active" },
+  { title: "Uttarakhand", country: "India", type: "domestic", slug: "uttarakhand", imageUrl: "/images/destinations/uttarakhand/hero.jpg", description: "Sacred Devbhoomi with Ganga river aartis, whitewater rafting, and misty Queen of Hills Mussoorie.", featured: true, status: "active" },
 ];
 
 const STARTER_PACKAGES = [
@@ -31,8 +31,8 @@ const STARTER_PACKAGES = [
     type: "international",
     durationDays: 5,
     price: 58999,
-    imageUrl: "/images/destination-a.jpg",
-    gallery: ["/images/destination-a.jpg", "/images/destination-01.jpg", "/images/01.jpg"],
+    imageUrl: "/images/destinations/dubai/desert-safari.jpg",
+    gallery: ["/images/destinations/dubai/desert-safari.jpg", "/images/destinations/dubai/burj-khalifa.jpg", "/images/destinations/dubai/dubai-marina.jpg"],
     summary: "The quintessential Dubai holiday: panoramic Burj Khalifa entry, thrilling desert dune safari with BBQ, luxury Marina cruise, and private city touring.",
     inclusions: ["4 Nights in 4-Star Downtown Hotel", "Daily breakfast buffet", "Burj Khalifa 124th floor tickets", "Red dunes desert safari with BBQ dinner & fire show", "Dubai Marina dhow cruise with dinner", "Private airport transfers"],
     exclusions: ["Airfare", "Personal expenses", "Tourism Dirham tax"],
@@ -53,8 +53,8 @@ const STARTER_PACKAGES = [
     type: "international",
     durationDays: 7,
     price: 68900,
-    imageUrl: "/images/destination-b.jpg",
-    gallery: ["/images/destination-b.jpg", "/images/destination-02.jpg", "/images/02.jpg"],
+    imageUrl: "/images/destinations/bali/tegallalang-rice-terrace.jpg",
+    gallery: ["/images/destinations/bali/tegallalang-rice-terrace.jpg", "/images/destinations/bali/hero.jpg", "/images/destinations/bali/nusa-penida.jpg"],
     summary: "7-day romantic escape featuring split stays in lush Ubud jungle villas and chic Seminyak beach resorts, Nusa Penida island trip, and Uluwatu sunset.",
     inclusions: ["3 Nights in Ubud Jungle Resort + 3 Nights in Seminyak Beach Resort", "Daily Breakfast + 1 Romantic Candlelit Dinner", "Full-day Nusa Penida Island Speedboat tour", "Tegallalang Rice Terrace & Giant Jungle Swing", "Uluwatu Temple & Sunset Kecak Fire Dance", "All private airport and inter-hotel transfers"],
     exclusions: ["Flights", "Visa on Arrival ($35 USD)", "Personal expenses"],
@@ -77,8 +77,8 @@ const STARTER_PACKAGES = [
     type: "domestic",
     durationDays: 6,
     price: 38900,
-    imageUrl: "/images/01.jpg",
-    gallery: ["/images/01.jpg", "/images/destination-04.jpg", "/images/02.jpg"],
+    imageUrl: "/images/destinations/kashmir/gulmarg-gondola.jpg",
+    gallery: ["/images/destinations/kashmir/gulmarg-gondola.jpg", "/images/destinations/kashmir/dal-lake-shikara.jpg", "/images/destinations/kashmir/hero.jpg"],
     summary: "6-day dream journey through Srinagar's shikaras, Gulmarg's snow-peaked gondola, and Pahalgam's pine valleys with breakfast and dinner included.",
     inclusions: ["1 Night Luxury Houseboat on Dal Lake + 4 Nights Premium Hotel Stays", "Daily Breakfast and 4-Course Dinners", "1-Hour Sunset Shikara Ride on Dal Lake", "Gulmarg Gondola Ride Phase 1 & 2 Passes", "Pahalgam Betaab & Aru Valley excursion in private vehicle", "All airport transfers and sightseeing in private AC vehicle"],
     exclusions: ["Airfare", "Personal pony rides / snow gear rentals", "Tips & laundry"],
@@ -100,8 +100,8 @@ const STARTER_PACKAGES = [
     type: "domestic",
     durationDays: 6,
     price: 34900,
-    imageUrl: "/images/destination-06.jpg",
-    gallery: ["/images/destination-06.jpg", "/images/02.jpg"],
+    imageUrl: "/images/destinations/kerala/alleppey-houseboat.jpg",
+    gallery: ["/images/destinations/kerala/alleppey-houseboat.jpg", "/images/destinations/kerala/munnar-tea-gardens.jpg", "/images/destinations/kerala/thekkady-periyar.jpg"],
     summary: "6-day classic Kerala discovery featuring misty tea gardens of Munnar, wildlife in Thekkady, and a private luxury overnight houseboat in Alleppey.",
     inclusions: ["2 Nights Munnar Hill Resort + 1 Night Thekkady + 1 Night Private Alleppey Houseboat + 1 Night Kochi", "Daily Breakfast + All Meals on Board Houseboat", "Periyar Spice Plantation Guided Tour", "Private Chauffeur Sedan throughout the tour"],
     exclusions: ["Airfare", "Personal expenses", "Optional elephant ride"],
@@ -126,6 +126,10 @@ async function ensureDestinations() {
       });
       if (!exists) {
         await Destination.create(item);
+      } else if (!exists.imageUrl || exists.imageUrl.startsWith("/images/destination-") || exists.imageUrl.startsWith("/images/0")) {
+        // Upgrade legacy placeholder image with authentic location image
+        exists.imageUrl = item.imageUrl;
+        await exists.save();
       }
     }
     console.log("[Seed] Verified starter destinations in MongoDB");
@@ -141,6 +145,10 @@ async function ensureDestinations() {
             destination: dest._id
           });
         }
+      } else if (!exists.imageUrl || exists.imageUrl.startsWith("/images/destination-") || exists.imageUrl.startsWith("/images/0")) {
+        exists.imageUrl = pkg.imageUrl;
+        exists.gallery = pkg.gallery;
+        await exists.save();
       }
     }
     console.log("[Seed] Verified starter tour packages in MongoDB");

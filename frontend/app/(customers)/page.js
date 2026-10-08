@@ -78,8 +78,50 @@ export default function Home() {
     };
   }, []);
 
-  // ── DB-driven sections ────────────────────────────────────────────────────
-  const [homeTours, setHomeTours] = useState([]);
+  // ── DB-driven sections with robust fallbacks ──────────────────────────────
+  const defaultFeaturedTours = [
+    {
+      id: "kashmir-paradise-retreat",
+      _id: "kashmir-paradise-retreat",
+      title: "Kashmir Alpine Paradise: Srinagar, Gulmarg & Pahalgam",
+      slug: "kashmir-paradise-retreat",
+      destination: { title: "Kashmir", slug: "kashmir" },
+      type: "domestic",
+      durationDays: 6,
+      price: 38900,
+      currency: "INR",
+      imageUrl: "/images/destinations/kashmir/gulmarg-gondola.jpg",
+      summary: "6-day dream journey through Srinagar's shikaras, Gulmarg's snow-peaked gondola, and Pahalgam's pine valleys.",
+    },
+    {
+      id: "bali-ubud-seminyak-bliss",
+      _id: "bali-ubud-seminyak-bliss",
+      title: "Bali Ubud Jungle & Seminyak Coastal Bliss",
+      slug: "bali-ubud-seminyak-bliss",
+      destination: { title: "Bali", slug: "bali" },
+      type: "international",
+      durationDays: 7,
+      price: 68900,
+      currency: "INR",
+      imageUrl: "/images/destinations/bali/tegallalang-rice-terrace.jpg",
+      summary: "7-day romantic escape featuring split stays in lush Ubud jungle villas, Seminyak beach resorts, and Nusa Penida.",
+    },
+    {
+      id: "kerala-backwaters-munnar-bliss",
+      _id: "kerala-backwaters-munnar-bliss",
+      title: "Kerala Backwaters & Misty Munnar Escape",
+      slug: "kerala-backwaters-munnar-bliss",
+      destination: { title: "Kerala", slug: "kerala" },
+      type: "domestic",
+      durationDays: 6,
+      price: 34900,
+      currency: "INR",
+      imageUrl: "/images/destinations/kerala/alleppey-houseboat.jpg",
+      summary: "6-day classic Kerala discovery featuring misty tea gardens of Munnar, Thekkady wildlife, and an Alleppey houseboat cruise.",
+    },
+  ];
+
+  const [homeTours, setHomeTours] = useState(defaultFeaturedTours);
   const [homeTestimonials, setHomeTestimonials] = useState([]);
   const [homePosts, setHomePosts] = useState([]);
 
@@ -89,9 +131,16 @@ export default function Home() {
       apiFetch("reviews", { limit: 3 }),
       apiFetch("posts", { featured: "true", limit: 3 }),
     ]).then(([tours, reviews, posts]) => {
-      setHomeTours(tours);
+      if (Array.isArray(tours) && tours.length > 0) {
+        setHomeTours(tours);
+      }
       setHomeTestimonials(reviews);
       setHomePosts(posts);
+      if (typeof window !== "undefined") {
+        setTimeout(() => {
+          window.ScrollTrigger?.refresh?.();
+        }, 150);
+      }
     });
   }, []);
 
@@ -242,40 +291,66 @@ export default function Home() {
               <div className="container">
                 <div className="row justify-content-between">
                   <div className="col-lg-4">
-                    <div className="stack-title mb-30">
+                    <div className="stack-title mb-30" style={{ position: "sticky", top: "120px", zIndex: 2 }}>
                       <div className="section-subtitle wow fadeInRight">Choose your place</div>
                       <div className="section-title d-rotate wow"><span className="rotate-text">Discover dream <i>destinations</i></span></div>
                       <p className="wow fadeInRight" data-wow-delay=".3s">Turn your dream destinations into unforgettable experiences with guidance. From hidden gems to iconic landmarks, we craft personalized journeys for you.</p>
                       <a href="/tours" className="butn-arrow wow fadeInUp" data-wow-delay=".8s"> <span className="btn-text">See all tours</span> <span className="arrow-wrap"><span className="arrow-inner"><i className="ti-arrow-right"></i><i className="ti-arrow-right"></i></span></span></a>
                     </div>
                   </div>
-                  <div className="col-lg-7 offset-lg-1 items">
-                    {homeTours.map((tour, idx) => (
-                    <div className="item" key={tour.id || tour._id || `${tour.slug}-${idx}` || `tour-${idx}`}>
-                      <div className="tour-media">
-                        <img src={tour.imageUrl || "/images/01.jpg"} alt={tour.title} className="height2" data-speed="0.8" data-lag="0" />
-                        <div className="clicko"><a href={`/tour-details/${tour.slug}`}><span className="icon-wrap"><span className="icon"><i className="ti-arrow-top-right"></i></span></span></a></div>
-                      </div>
-                      <div className="tour-content">
-                        <div className="tour-header">
-                          <div className="tour-location"> <i className="ti-location-pin"></i> <span>{tour.destination?.title || tour.type}</span> </div>
-                          <h4 className="tour-title">{tour.title}</h4>
+                  <div className="col-lg-8 items">
+                    {homeTours.map((tour, idx) => {
+                      const destTitle = tour.destination?.title || (typeof tour.destination === "string" ? tour.destination : null) || tour.type || "Special Tour";
+                      return (
+                      <div className="item" key={tour.id || tour._id || `${tour.slug}-${idx}` || `tour-${idx}`}>
+                        <div className="tour-media">
+                          <img src={tour.imageUrl || "/images/01.jpg"} alt={tour.title} className="height2" />
+                          <div className="clicko"><a href={`/tour-details/${tour.slug}`}><span className="icon-wrap"><span className="icon"><i className="ti-arrow-top-right"></i></span></span></a></div>
                         </div>
-                        <div className="tour-info">
-                          <div className="tour-duration">
-                            <div className="tour-icon"> <i className="fa-light fa-calendar"></i> </div>
-                            <div className="tour-meta"> <small>Duration</small> <span>{tour.durationDays ? `${tour.durationDays} Days - ${tour.durationDays - 1} Nights` : "–"}</span> </div>
+                        <div className="tour-content">
+                          <div className="tour-top-bar">
+                            <div className="tour-location">
+                              <i className="ti-location-pin"></i> <span>{destTitle}</span>
+                            </div>
+                            <div className="tour-rating">
+                              <i className="fa-solid fa-star"></i> 4.9
+                            </div>
+                          </div>
+                          <div className="tour-header">
+                            <h4 className="tour-title">
+                              <a href={`/tour-details/${tour.slug}`}>{tour.title}</a>
+                            </h4>
+                            {tour.summary && (
+                              <p className="tour-summary">{tour.summary}</p>
+                            )}
+                          </div>
+                          <div className="tour-bottom-bar">
+                            <div className="tour-info">
+                              <div className="tour-duration">
+                                <div className="tour-icon"> <i className="fa-light fa-calendar"></i> </div>
+                                <div className="tour-meta">
+                                  <small>Duration</small>
+                                  <span>{tour.durationDays ? `${tour.durationDays} Days - ${tour.durationDays - 1} Nights` : "–"}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="d-flex align-items-center gap-3">
+                              {fmtPrice(tour.price, tour.currency) && (
+                                <div className="tour-price-wrap">
+                                  <div className="tour-price">
+                                    {fmtPrice(tour.price, tour.currency)} <span>/ Traveler</span>
+                                  </div>
+                                </div>
+                              )}
+                              <a href={`/tour-details/${tour.slug}`} className="btn-tour-action">
+                                <span>Explore</span> <i className="ti-arrow-right"></i>
+                              </a>
+                            </div>
                           </div>
                         </div>
-                        <div className="tour-price-wrap">
-                          <div className="tour-rating"> <i className="fa-solid fa-star"></i> 4.9 </div>
-                          {fmtPrice(tour.price, tour.currency) && (
-                            <div className="tour-price"> {fmtPrice(tour.price, tour.currency)} <span>/ Traveler</span> </div>
-                          )}
-                        </div>
                       </div>
-                    </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>

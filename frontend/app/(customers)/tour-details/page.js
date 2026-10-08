@@ -31,7 +31,7 @@ export default function TourDetails() {
               <div className="container-fluid">
                 <div className="height1">
                   <div className="radius-mask">
-                    <div className="bg-img height2" data-background="/images/destination-01.jpg" style={{ backgroundImage: "url('/images/destination-01.jpg')" }}></div>
+                    <div className="bg-img height2" data-background="/images/destinations/maldives/hero.jpg" style={{ backgroundImage: "url('/images/destinations/maldives/hero.jpg')" }}></div>
                   </div>
                 </div>
               </div>
@@ -153,29 +153,29 @@ export default function TourDetails() {
                       <div className="swiper-wrapper">
                         <div className="swiper-slide">
                           <div className="item">
-                            <a href="/images/destination-a.jpg" title="" className="img-zoom">
-                              <div className="img"> <img src="/images/destination-a.jpg" className="img-fluid mx-auto d-block" alt="" /> </div>
+                            <a href="/images/destinations/maldives/hero.jpg" title="" className="img-zoom">
+                              <div className="img"> <img src="/images/destinations/maldives/hero.jpg" className="img-fluid mx-auto d-block" alt="Maldives Lagoon" /> </div>
                             </a>
                           </div>
                         </div>
                         <div className="swiper-slide">
                           <div className="item">
-                            <a href="/images/destination-b.jpg" title="" className="img-zoom">
-                              <div className="img"> <img src="/images/destination-b.jpg" className="img-fluid mx-auto d-block" alt="" /> </div>
+                            <a href="/images/destinations/maldives/overwater-villa.jpg" title="" className="img-zoom">
+                              <div className="img"> <img src="/images/destinations/maldives/overwater-villa.jpg" className="img-fluid mx-auto d-block" alt="Overwater Villa" /> </div>
                             </a>
                           </div>
                         </div>
                         <div className="swiper-slide">
                           <div className="item">
-                            <a href="/images/destination-c.jpg" title="" className="img-zoom">
-                              <div className="img"> <img src="/images/destination-c.jpg" className="img-fluid mx-auto d-block" alt="" /> </div>
+                            <a href="/images/destinations/maldives/dolphin-cruise.jpg" title="" className="img-zoom">
+                              <div className="img"> <img src="/images/destinations/maldives/dolphin-cruise.jpg" className="img-fluid mx-auto d-block" alt="Dolphin Cruise" /> </div>
                             </a>
                           </div>
                         </div>
                         <div className="swiper-slide">
                           <div className="item">
-                            <a href="/images/destination-d.jpg" title="" className="img-zoom">
-                              <div className="img"> <img src="/images/destination-d.jpg" className="img-fluid mx-auto d-block" alt="" /> </div>
+                            <a href="/images/destinations/maldives/coral-reef.jpg" title="" className="img-zoom">
+                              <div className="img"> <img src="/images/destinations/maldives/coral-reef.jpg" className="img-fluid mx-auto d-block" alt="Coral Reef Snorkeling" /> </div>
                             </a>
                           </div>
                         </div>
@@ -191,7 +191,7 @@ export default function TourDetails() {
                 <div className="row">
                   <div className="col-md-5 rest">
                     <div className="prv">
-                      <div className="img bg-img" data-background="/images/destination-03.jpg">
+                      <div className="img bg-img" data-background="/images/destinations/dubai/hero.jpg">
                         <div className="text-left ontop">
                           <h5><a href="/tour-details">Dubai Luxury Journey</a></h5>
                         </div>
@@ -204,9 +204,9 @@ export default function TourDetails() {
                   </div>
                   <div className="col-md-5 rest">
                     <div className="nxt">
-                      <div className="img bg-img" data-background="/images/destination-02.jpg">
+                      <div className="img bg-img" data-background="/images/destinations/switzerland/hero.jpg">
                         <div className="text-right ontop">
-                          <h5><a href="/tour-details">Canadian Nature Tour</a></h5>
+                          <h5><a href="/tour-details">Swiss Alps Discovery</a></h5>
                         </div>
                         <div className="overly"></div>
                       </div>

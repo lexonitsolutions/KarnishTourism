@@ -208,10 +208,10 @@ export const destinations = [
       "Explore the Dubai Frame, Museum of the Future, Miracle Garden and glamorous Dubai Mall."
     ],
     highlights: [
-      { title: "Burj Khalifa & Dubai Mall", description: "Stand atop the 124th floor and marvel at the world's largest fountain show.", image: "/images/destination-01.jpg" },
-      { title: "Red Dunes Desert Safari", description: "Thrilling 4x4 dune bashing, camel trek, falconry and Arabic BBQ buffet.", image: "/images/destination-a.jpg" },
-      { title: "Dubai Marina Yacht Cruise", description: "Spectacular evening skyline views with international gourmet dinner.", image: "/images/01.jpg" },
-      { title: "Museum of the Future", description: "Journey into 2071 inside the architectural marvel named National Geographic's most beautiful building.", image: "/images/destination-hero.jpg" }
+      { title: "Burj Khalifa & Dubai Mall", description: "Stand atop the 124th floor and marvel at the world's largest fountain show.", image: "/images/destinations/dubai/burj-khalifa.jpg" },
+      { title: "Red Dunes Desert Safari", description: "Thrilling 4x4 dune bashing, camel trek, falconry and Arabic BBQ buffet.", image: "/images/destinations/dubai/desert-safari.jpg" },
+      { title: "Dubai Marina Yacht Cruise", description: "Spectacular evening skyline views with international gourmet dinner.", image: "/images/destinations/dubai/dubai-marina.jpg" },
+      { title: "Museum of the Future", description: "Journey into 2071 inside the architectural marvel named National Geographic's most beautiful building.", image: "/images/destinations/dubai/museum-of-the-future.jpg" }
     ],
     seasons: [
       { months: "Nov - Mar", label: "Peak Season · Perfect 24°C winter weather for outdoor exploration", tone: "peak" },
@@ -223,9 +223,9 @@ export const destinations = [
       { q: "Is vegetarian and Indian food widely available in Dubai?", a: "Yes, Dubai has thousands of authentic Indian and pure-vegetarian restaurants across Bur Dubai, Deira, Marina, and Downtown." },
       { q: "What should tourists wear in Dubai?", a: "Dubai is very cosmopolitan. Casual summer resort wear is normal at malls, hotels, and beaches. Modest attire covering shoulders and knees is recommended when visiting cultural sites and mosques." }
     ],
-    image: "/images/destination-01.jpg",
-    imageUrl: "/images/destination-01.jpg",
-    gallery: ["/images/destination-01.jpg", "/images/destination-a.jpg", "/images/01.jpg", "/images/destination-hero.jpg"],
+    image: "/images/destinations/dubai/hero.jpg",
+    imageUrl: "/images/destinations/dubai/hero.jpg",
+    gallery: ["/images/destinations/dubai/hero.jpg", "/images/destinations/dubai/burj-khalifa.jpg", "/images/destinations/dubai/desert-safari.jpg", "/images/destinations/dubai/dubai-marina.jpg", "/images/destinations/dubai/museum-of-the-future.jpg"],
     packages: [
       createPackage({
         id: "dubai-city-desert-escape",
@@ -233,8 +233,8 @@ export const destinations = [
         name: "Dubai City & Red Dune Desert Escape",
         days: 5,
         price: 58999,
-        image: "/images/destination-a.jpg",
-        images: ["/images/destination-a.jpg", "/images/destination-01.jpg", "/images/01.jpg"],
+        image: "/images/destinations/dubai/desert-safari.jpg",
+        images: ["/images/destinations/dubai/desert-safari.jpg", "/images/destinations/dubai/burj-khalifa.jpg", "/images/destinations/dubai/dubai-marina.jpg"],
         cities: ["Dubai"],
         hotel: "Millennium Central Downtown / Four Points by Sheraton",
         hotelRating: 4,
@@ -259,8 +259,8 @@ export const destinations = [
         name: "Grand Dubai & Abu Dhabi Royal Experience",
         days: 7,
         price: 84500,
-        image: "/images/destination-01.jpg",
-        images: ["/images/destination-01.jpg", "/images/destination-a.jpg", "/images/destination-hero.jpg"],
+        image: "/images/destinations/dubai/hero.jpg",
+        images: ["/images/destinations/dubai/hero.jpg", "/images/destinations/dubai/burj-khalifa.jpg", "/images/destinations/dubai/museum-of-the-future.jpg"],
         cities: ["Dubai", "Abu Dhabi"],
         hotel: "JW Marriott Marquis / Grand Hyatt Dubai",
         hotelRating: 5,
@@ -312,10 +312,10 @@ export const destinations = [
       "Pamper yourself with authentic Balinese herbal spa treatments and floating flower breakfasts."
     ],
     highlights: [
-      { title: "Ubud Jungle Swing & Rice Terraces", description: "Iconic Bali swing over emerald jungle greenery and cascading waterfalls.", image: "/images/destination-02.jpg" },
-      { title: "Uluwatu Sunset & Kecak Dance", description: "Dramatic 70-meter limestone clifftop temple with mesmerizing sunset choir.", image: "/images/destination-b.jpg" },
-      { title: "Nusa Penida Island Speedboat Day Tour", description: "Pristine beaches, crystal clear manta bay, and Kelingking cliff viewpoints.", image: "/images/02.jpg" },
-      { title: "Handara Gate & Ulun Danu Beratan", description: "Misty mountain lake temple and Bali's most photographed stone gate.", image: "/images/04.jpg" }
+      { title: "Ubud Jungle Swing & Rice Terraces", description: "Iconic Bali swing over emerald jungle greenery and cascading waterfalls.", image: "/images/destinations/bali/tegallalang-rice-terrace.jpg" },
+      { title: "Uluwatu Sunset & Kecak Dance", description: "Dramatic 70-meter limestone clifftop temple with mesmerizing sunset choir.", image: "/images/destinations/bali/uluwatu-temple.jpg" },
+      { title: "Nusa Penida Island Speedboat Day Tour", description: "Pristine beaches, crystal clear manta bay, and Kelingking cliff viewpoints.", image: "/images/destinations/bali/nusa-penida.jpg" },
+      { title: "Handara Gate & Ulun Danu Beratan", description: "Misty mountain lake temple and Bali's most photographed stone gate.", image: "/images/destinations/bali/ulun-danu-beratan.jpg" }
     ],
     seasons: [
       { months: "May - Sep", label: "Peak Season · Dry, sunny, low humidity and prime surf conditions", tone: "peak" },
@@ -326,9 +326,9 @@ export const destinations = [
       { q: "Can Indians get Visa on Arrival in Bali?", a: "Yes, Indian travellers receive a 30-day Visa on Arrival at Denpasar (DPS) airport upon payment of 500,000 IDR (~$35 USD). Valid passport (6+ months) required." },
       { q: "Is Bali good for pure vegetarian and Indian food?", a: "Extremely good. Ubud, Seminyak, Kuta and Nusa Dua feature dozens of pure Indian restaurants like Queen's Tandoor, Ganesha ek Sanskriti, and plant-based vegan cafes." }
     ],
-    image: "/images/destination-02.jpg",
-    imageUrl: "/images/destination-02.jpg",
-    gallery: ["/images/destination-02.jpg", "/images/destination-b.jpg", "/images/02.jpg", "/images/04.jpg"],
+    image: "/images/destinations/bali/hero.jpg",
+    imageUrl: "/images/destinations/bali/hero.jpg",
+    gallery: ["/images/destinations/bali/hero.jpg", "/images/destinations/bali/tegallalang-rice-terrace.jpg", "/images/destinations/bali/uluwatu-temple.jpg", "/images/destinations/bali/nusa-penida.jpg", "/images/destinations/bali/ulun-danu-beratan.jpg"],
     packages: [
       createPackage({
         id: "bali-ubud-seminyak-bliss",
@@ -336,8 +336,8 @@ export const destinations = [
         name: "Bali Ubud Jungle & Seminyak Coastal Bliss",
         days: 7,
         price: 68900,
-        image: "/images/destination-b.jpg",
-        images: ["/images/destination-b.jpg", "/images/destination-02.jpg", "/images/02.jpg"],
+        image: "/images/destinations/bali/tegallalang-rice-terrace.jpg",
+        images: ["/images/destinations/bali/tegallalang-rice-terrace.jpg", "/images/destinations/bali/uluwatu-temple.jpg", "/images/destinations/bali/nusa-penida.jpg"],
         cities: ["Ubud", "Seminyak"],
         hotel: "The Kayon Jungle Resort (Ubud) + Courtyard by Marriott (Seminyak)",
         hotelRating: 5,
@@ -389,9 +389,9 @@ export const destinations = [
       "Enjoy complimentary non-motorized water sports, infinity pools, and sunset dolphin cruises."
     ],
     highlights: [
-      { title: "Overwater Villa Living", description: "Direct lagoon ladder access, glass floor panels, and private sunrise plunge pool.", image: "/images/destination-03.jpg" },
-      { title: "Sunset Dolphin Cruise", description: "Spot pods of wild spinner dolphins leaping alongside your traditional wooden dhoni.", image: "/images/destination-c.jpg" },
-      { title: "House Reef Scuba & Snorkelling", description: "Guided marine biology snorkel over vibrant live coral beds.", image: "/images/03.jpg" }
+      { title: "Overwater Villa Living", description: "Direct lagoon ladder access, glass floor panels, and private sunrise plunge pool.", image: "/images/destinations/maldives/overwater-villa.jpg" },
+      { title: "Sunset Dolphin Cruise", description: "Spot pods of wild spinner dolphins leaping alongside your traditional wooden dhoni.", image: "/images/destinations/maldives/dolphin-cruise.jpg" },
+      { title: "House Reef Scuba & Snorkelling", description: "Guided marine biology snorkel over vibrant live coral beds.", image: "/images/destinations/maldives/coral-reef.jpg" }
     ],
     seasons: [
       { months: "Dec - Apr", label: "Peak Dry Season · Crystal clear calm seas, brilliant sunny blue skies", tone: "peak" },
@@ -402,9 +402,9 @@ export const destinations = [
       { q: "Is visa required for Indians visiting Maldives?", a: "No prior visa is needed. Indian passport holders are granted a free 30-day tourist visa on arrival at Velana International Airport (Malé). IMUGA health declaration completed 96h prior." },
       { q: "What does an All-Inclusive package include in Maldives?", a: "All-Inclusive packages at our partner private island resorts include all three meals (breakfast, lunch, dinner), unlimited alcoholic and non-alcoholic beverages, minibar replenishment, and select watersports." }
     ],
-    image: "/images/destination-03.jpg",
-    imageUrl: "/images/destination-03.jpg",
-    gallery: ["/images/destination-03.jpg", "/images/destination-c.jpg", "/images/03.jpg"],
+    image: "/images/destinations/maldives/hero.jpg",
+    imageUrl: "/images/destinations/maldives/hero.jpg",
+    gallery: ["/images/destinations/maldives/hero.jpg", "/images/destinations/maldives/overwater-villa.jpg", "/images/destinations/maldives/dolphin-cruise.jpg", "/images/destinations/maldives/coral-reef.jpg"],
     packages: [
       createPackage({
         id: "maldives-luxury-water-villa",
@@ -412,8 +412,8 @@ export const destinations = [
         name: "Maldives All-Inclusive Overwater Villa Dream",
         days: 5,
         price: 94500,
-        image: "/images/destination-c.jpg",
-        images: ["/images/destination-c.jpg", "/images/destination-03.jpg", "/images/03.jpg"],
+        image: "/images/destinations/maldives/overwater-villa.jpg",
+        images: ["/images/destinations/maldives/overwater-villa.jpg", "/images/destinations/maldives/hero.jpg", "/images/destinations/maldives/coral-reef.jpg"],
         cities: ["Malé Atoll"],
         hotel: "Adaaran Prestige Vadoo / Sun Siyam Olhuveli",
         hotelRating: 5,
@@ -464,9 +464,9 @@ export const destinations = [
       "Visa-free entry for Indian citizens makes travel spontaneous and effortless."
     ],
     highlights: [
-      { title: "Phi Phi Islands & Maya Bay", description: "Emerald waters, dramatic limestone cliffs, and coral snorkeling.", image: "/images/destination-04.jpg" },
-      { title: "Bangkok Grand Palace & Wat Arun", description: "Golden spires, sacred Emerald Buddha, and Chao Phraya river cruise.", image: "/images/04.jpg" },
-      { title: "Krabi 4-Island Speedboat Tour", description: "Chicken Island, Koh Poda, and the sandbar walk at Tub Island.", image: "/images/destination-d.jpg" }
+      { title: "Phi Phi Islands & Maya Bay", description: "Emerald waters, dramatic limestone cliffs, and coral snorkeling.", image: "/images/destinations/thailand/phi-phi-islands.jpg" },
+      { title: "Bangkok Grand Palace & Wat Arun", description: "Golden spires, sacred Emerald Buddha, and Chao Phraya river cruise.", image: "/images/destinations/thailand/wat-arun.jpg" },
+      { title: "Krabi 4-Island Speedboat Tour", description: "Chicken Island, Koh Poda, and the sandbar walk at Tub Island.", image: "/images/destinations/thailand/krabi-islands.jpg" }
     ],
     seasons: [
       { months: "Nov - Feb", label: "Cool & Dry Season · Gentle breezes, perfect blue seas for island hopping", tone: "peak" },
@@ -477,9 +477,9 @@ export const destinations = [
       { q: "Do Indians need a visa for Thailand currently?", a: "Indian passport holders enjoy Visa-Free entry into Thailand for tourist stays up to 30 days. No embassy fee or paperwork required at arrival." },
       { q: "Is Krabi or Phuket better for families?", a: "Phuket offers larger theme parks, water parks, and entertainment shows (Fantasea, Carnival Magic), while Krabi offers scenic relaxation and quieter beaches. We often combine both!" }
     ],
-    image: "/images/destination-04.jpg",
-    imageUrl: "/images/destination-04.jpg",
-    gallery: ["/images/destination-04.jpg", "/images/04.jpg", "/images/destination-d.jpg"],
+    image: "/images/destinations/thailand/hero.jpg",
+    imageUrl: "/images/destinations/thailand/hero.jpg",
+    gallery: ["/images/destinations/thailand/hero.jpg", "/images/destinations/thailand/phi-phi-islands.jpg", "/images/destinations/thailand/wat-arun.jpg", "/images/destinations/thailand/krabi-islands.jpg"],
     packages: [
       createPackage({
         id: "thailand-phuket-krabi-bangkok",
@@ -487,8 +487,8 @@ export const destinations = [
         name: "Thailand Island Hopper: Phuket, Krabi & Bangkok",
         days: 7,
         price: 52999,
-        image: "/images/destination-04.jpg",
-        images: ["/images/destination-04.jpg", "/images/04.jpg", "/images/destination-d.jpg"],
+        image: "/images/destinations/thailand/phi-phi-islands.jpg",
+        images: ["/images/destinations/thailand/phi-phi-islands.jpg", "/images/destinations/thailand/wat-arun.jpg", "/images/destinations/thailand/krabi-islands.jpg"],
         cities: ["Phuket", "Krabi", "Bangkok"],
         hotel: "Novotel Phuket Resort + Centara Krabi + Rembrandt Bangkok",
         hotelRating: 4,
@@ -540,9 +540,9 @@ export const destinations = [
       "Indulge in Michelin-starred street food at Lau Pa Sat and Chinatown hawker centers."
     ],
     highlights: [
-      { title: "Gardens by the Bay & Flower Dome", description: "Avatar-like Supertree Grove and indoor mist waterfalls.", image: "/images/destination-05.jpg" },
-      { title: "Universal Studios Sentosa", description: "Thrill rollercoasters, Transformers ride, and Hollywood movie zones.", image: "/images/05.jpg" },
-      { title: "Marina Bay Sands SkyPark", description: "Panoramic 57-story skyline observation deck over the Singapore Strait.", image: "/images/destination-e.jpg" }
+      { title: "Gardens by the Bay & Flower Dome", description: "Avatar-like Supertree Grove and indoor mist waterfalls.", image: "/images/destinations/singapore/gardens-by-the-bay.jpg" },
+      { title: "Universal Studios Sentosa", description: "Thrill rollercoasters, Transformers ride, and Hollywood movie zones.", image: "/images/destinations/singapore/universal-studios.jpg" },
+      { title: "Marina Bay Sands SkyPark", description: "Panoramic 57-story skyline observation deck over the Singapore Strait.", image: "/images/destinations/singapore/marina-bay-sands.jpg" }
     ],
     seasons: [
       { months: "Feb - Apr", label: "Dry & Pleasant · Ideal for outdoor theme parks and garden walking", tone: "peak" },
@@ -553,9 +553,9 @@ export const destinations = [
       { q: "Is Singapore suitable for elderly and small children?", a: "Singapore is the most stroller- and wheelchair-friendly destination in Asia, with barrier-free sidewalks, efficient MRT trains, and world-class hygiene standards." },
       { q: "How long does a Singapore tourist visa take for Indians?", a: "Singapore eVisa takes 3 to 4 business days. Karnish Tourism processes authorized applications directly with the Singapore High Commission." }
     ],
-    image: "/images/destination-05.jpg",
-    imageUrl: "/images/destination-05.jpg",
-    gallery: ["/images/destination-05.jpg", "/images/05.jpg", "/images/destination-e.jpg"],
+    image: "/images/destinations/singapore/hero.jpg",
+    imageUrl: "/images/destinations/singapore/hero.jpg",
+    gallery: ["/images/destinations/singapore/hero.jpg", "/images/destinations/singapore/gardens-by-the-bay.jpg", "/images/destinations/singapore/universal-studios.jpg", "/images/destinations/singapore/marina-bay-sands.jpg"],
     packages: [
       createPackage({
         id: "singapore-family-fun",
@@ -563,8 +563,8 @@ export const destinations = [
         name: "Singapore Family Explorer & Universal Studios",
         days: 5,
         price: 58900,
-        image: "/images/destination-05.jpg",
-        images: ["/images/destination-05.jpg", "/images/05.jpg"],
+        image: "/images/destinations/singapore/gardens-by-the-bay.jpg",
+        images: ["/images/destinations/singapore/gardens-by-the-bay.jpg", "/images/destinations/singapore/universal-studios.jpg", "/images/destinations/singapore/marina-bay-sands.jpg"],
         cities: ["Singapore", "Sentosa Island"],
         hotel: "PARKROYAL on Beach Road / Furama Riverfront",
         hotelRating: 4,
@@ -614,9 +614,9 @@ export const destinations = [
       "Enjoy delicious Vietnamese pho, egg coffee, spring rolls, and Indian culinary options."
     ],
     highlights: [
-      { title: "Ha Long Bay Luxury Overnight Cruise", description: "Limestone karsts, sunset sundeck, and Sung Sot surprise cave.", image: "/images/destination-06.jpg" },
-      { title: "Ba Na Hills Golden Bridge", description: "Walk the iconic bridge held by giant mossy stone hands 1,400m high.", image: "/images/destination-f.jpg" },
-      { title: "Hoi An Ancient Lantern Town", description: "UNESCO canal town illuminated with thousands of silk lanterns.", image: "/images/06.jpg" }
+      { title: "Ha Long Bay Luxury Overnight Cruise", description: "Limestone karsts, sunset sundeck, and Sung Sot surprise cave.", image: "/images/destinations/vietnam/ha-long-bay.jpg" },
+      { title: "Ba Na Hills Golden Bridge", description: "Walk the iconic bridge held by giant mossy stone hands 1,400m high.", image: "/images/destinations/vietnam/golden-bridge.jpg" },
+      { title: "Hoi An Ancient Lantern Town", description: "UNESCO canal town illuminated with thousands of silk lanterns.", image: "/images/destinations/vietnam/hoi-an.jpg" }
     ],
     seasons: [
       { months: "Nov - Apr", label: "Peak Dry Season · Mild, sunny weather ideal for cruising and walking", tone: "peak" },
@@ -627,9 +627,9 @@ export const destinations = [
       { q: "How easy is the Vietnam eVisa for Indian citizens?", a: "Very simple and 100% online. Indians can get a 30-day or 90-day multiple entry eVisa through the official immigration portal within 3 working days." },
       { q: "Is vegetarian food available in Vietnam?", a: "Yes! 'Chay' means vegetarian in Vietnamese. Indian restaurants and Buddhist vegetarian eateries are abundant in Hanoi, Da Nang, and Ho Chi Minh." }
     ],
-    image: "/images/destination-06.jpg",
-    imageUrl: "/images/destination-06.jpg",
-    gallery: ["/images/destination-06.jpg", "/images/destination-f.jpg", "/images/06.jpg"],
+    image: "/images/destinations/vietnam/hero.jpg",
+    imageUrl: "/images/destinations/vietnam/hero.jpg",
+    gallery: ["/images/destinations/vietnam/hero.jpg", "/images/destinations/vietnam/ha-long-bay.jpg", "/images/destinations/vietnam/golden-bridge.jpg", "/images/destinations/vietnam/hoi-an.jpg"],
     packages: [
       createPackage({
         id: "vietnam-classic-halong-danang",
@@ -637,8 +637,8 @@ export const destinations = [
         name: "Classic Vietnam: Hanoi, Ha Long Bay & Da Nang",
         days: 6,
         price: 54999,
-        image: "/images/destination-06.jpg",
-        images: ["/images/destination-06.jpg", "/images/destination-f.jpg", "/images/06.jpg"],
+        image: "/images/destinations/vietnam/ha-long-bay.jpg",
+        images: ["/images/destinations/vietnam/ha-long-bay.jpg", "/images/destinations/vietnam/golden-bridge.jpg", "/images/destinations/vietnam/hoi-an.jpg"],
         cities: ["Hanoi", "Ha Long Bay", "Da Nang", "Hoi An"],
         hotel: "Silk Path Hotel Hanoi + 5-Star Cruise + Vanda Hotel Da Nang",
         hotelRating: 5,
@@ -689,9 +689,9 @@ export const destinations = [
       "Travel with the Swiss Travel Pass across scenic panoramic trains, boats, and mountain rails."
     ],
     highlights: [
-      { title: "Mt. Titlis Revolving Cable Car", description: "Glacier cave, cliff walk suspension bridge, and year-round snow.", image: "/images/destination-01.jpg" },
-      { title: "Jungfraujoch Top of Europe", description: "Highest railway station in Europe with panoramic ice palace.", image: "/images/destination-b.jpg" },
-      { title: "Lake Lucerne & Interlaken", description: "Twin turquoise lakes nestled between the Eiger, Mönch, and Jungfrau peaks.", image: "/images/01.jpg" }
+      { title: "Mt. Titlis Revolving Cable Car", description: "Glacier cave, cliff walk suspension bridge, and year-round snow.", image: "/images/destinations/switzerland/titlis.jpg" },
+      { title: "Jungfraujoch Top of Europe", description: "Highest railway station in Europe with panoramic ice palace.", image: "/images/destinations/switzerland/jungfraujoch.jpg" },
+      { title: "Lake Lucerne & Interlaken", description: "Twin turquoise lakes nestled between the Eiger, Mönch, and Jungfrau peaks.", image: "/images/destinations/switzerland/lake-lucerne.jpg" }
     ],
     seasons: [
       { months: "Jun - Sep", label: "Summer Alpine · Wildflower meadows, lake swimming, clear hiking trails", tone: "peak" },
@@ -702,9 +702,9 @@ export const destinations = [
       { q: "Does Karnish Tourism assist with Schengen Visa for Switzerland?", a: "Yes. Our dedicated visa team assists with VFS appointment bookings, itinerary documentation, flight reservations, and hotel voucher attestations." },
       { q: "What is the Swiss Travel Pass?", a: "The Swiss Travel Pass allows unlimited travel across the entire Swiss national rail, bus, and boat network, including free access to over 500 museums and mountain discounts." }
     ],
-    image: "/images/destination-01.jpg",
-    imageUrl: "/images/destination-01.jpg",
-    gallery: ["/images/destination-01.jpg", "/images/destination-b.jpg", "/images/01.jpg"],
+    image: "/images/destinations/switzerland/hero.jpg",
+    imageUrl: "/images/destinations/switzerland/hero.jpg",
+    gallery: ["/images/destinations/switzerland/hero.jpg", "/images/destinations/switzerland/titlis.jpg", "/images/destinations/switzerland/jungfraujoch.jpg", "/images/destinations/switzerland/lake-lucerne.jpg"],
     packages: [
       createPackage({
         id: "swiss-alps-grand-discovery",
@@ -712,8 +712,8 @@ export const destinations = [
         name: "Swiss Alps Dream: Zurich, Lucerne & Interlaken",
         days: 7,
         price: 145000,
-        image: "/images/destination-01.jpg",
-        images: ["/images/destination-01.jpg", "/images/destination-b.jpg", "/images/01.jpg"],
+        image: "/images/destinations/switzerland/jungfraujoch.jpg",
+        images: ["/images/destinations/switzerland/jungfraujoch.jpg", "/images/destinations/switzerland/titlis.jpg", "/images/destinations/switzerland/hero.jpg"],
         cities: ["Zurich", "Lucerne", "Interlaken"],
         hotel: "Radisson Blu Zurich + Hotel Astoria Lucerne + Metropole Interlaken",
         hotelRating: 4,
@@ -766,9 +766,9 @@ export const destinations = [
       "Soar above Langkawi's ancient rainforest on the SkyCab and curved SkyBridge suspension bridge."
     ],
     highlights: [
-      { title: "Petronas Twin Towers & KLCC Park", description: "World's tallest twin towers with skybridge observation deck.", image: "/images/destination-02.jpg" },
-      { title: "Batu Caves Rainbow Steps", description: "Majestic limestone caves and iconic 140-foot golden Lord Murugan statue.", image: "/images/02.jpg" },
-      { title: "Genting Highlands & SkyWay Cable Car", description: "Mountain resort with indoor & outdoor theme parks and cool 18°C climate.", image: "/images/destination-a.jpg" }
+      { title: "Petronas Twin Towers & KLCC Park", description: "World's tallest twin towers with skybridge observation deck.", image: "/images/destinations/malaysia/petronas-towers.jpg" },
+      { title: "Batu Caves Rainbow Steps", description: "Majestic limestone caves and iconic 140-foot golden Lord Murugan statue.", image: "/images/destinations/malaysia/batu-caves.jpg" },
+      { title: "Genting Highlands & SkyWay Cable Car", description: "Mountain resort with indoor & outdoor theme parks and cool 18°C climate.", image: "/images/destinations/malaysia/genting-highlands.jpg" }
     ],
     seasons: [
       { months: "Dec - Apr", label: "Best Season · Pleasant sunny weather across western islands and KL", tone: "peak" },
@@ -779,9 +779,9 @@ export const destinations = [
       { q: "Is visa required for Indians traveling to Malaysia?", a: "No! Malaysia offers Visa-Free entry for Indian passport holders for tourist stays up to 30 days. Complete the online MDAC card before departure." },
       { q: "Is vegetarian and South Indian food easy to find in KL?", a: "Extremely easy. Brickfields (Little India) in Kuala Lumpur has hundreds of traditional South Indian, Chettinad, and pure vegetarian restaurants." }
     ],
-    image: "/images/destination-02.jpg",
-    imageUrl: "/images/destination-02.jpg",
-    gallery: ["/images/destination-02.jpg", "/images/02.jpg", "/images/destination-a.jpg"],
+    image: "/images/destinations/malaysia/hero.jpg",
+    imageUrl: "/images/destinations/malaysia/hero.jpg",
+    gallery: ["/images/destinations/malaysia/hero.jpg", "/images/destinations/malaysia/petronas-towers.jpg", "/images/destinations/malaysia/batu-caves.jpg", "/images/destinations/malaysia/genting-highlands.jpg"],
     packages: [
       createPackage({
         id: "kuala-lumpur-genting-escape",
@@ -789,8 +789,8 @@ export const destinations = [
         name: "Kuala Lumpur Highlights & Genting Highlands",
         days: 5,
         price: 44500,
-        image: "/images/destination-02.jpg",
-        images: ["/images/destination-02.jpg", "/images/02.jpg"],
+        image: "/images/destinations/malaysia/petronas-towers.jpg",
+        images: ["/images/destinations/malaysia/petronas-towers.jpg", "/images/destinations/malaysia/batu-caves.jpg", "/images/destinations/malaysia/genting-highlands.jpg"],
         cities: ["Kuala Lumpur", "Genting Highlands"],
         hotel: "Dorsett Kuala Lumpur / Ibis KLCC",
         hotelRating: 4,
@@ -840,10 +840,10 @@ export const destinations = [
       "Stay in an authentic luxury pine-wood heritage houseboat with warm Kashmiri kahwa tea."
     ],
     highlights: [
-      { title: "Gulmarg Gondola Ride", description: "World's second highest operating cable car to Apharwat peak snow summit.", image: "/images/destination-04.jpg" },
-      { title: "Dal Lake Shikara & Houseboat", description: "Romantic sunset boat ride and heritage cedar-wood luxury houseboat stay.", image: "/images/01.jpg" },
-      { title: "Pahalgam & Betaab Valley", description: "Pristine pine forests, rushing Lidder river waters, and snow-capped peaks.", image: "/images/02.jpg" },
-      { title: "Sonamarg Meadow of Gold", description: "Thajiwas glacier pony trek and glistening trout streams.", image: "/images/03.jpg" }
+      { title: "Gulmarg Gondola Ride", description: "World's second highest operating cable car to Apharwat peak snow summit.", image: "/images/destinations/kashmir/gulmarg-gondola.jpg" },
+      { title: "Dal Lake Shikara & Houseboat", description: "Romantic sunset boat ride and heritage cedar-wood luxury houseboat stay.", image: "/images/destinations/kashmir/dal-lake-shikara.jpg" },
+      { title: "Pahalgam & Betaab Valley", description: "Pristine pine forests, rushing Lidder river waters, and snow-capped peaks.", image: "/images/destinations/kashmir/pahalgam-betaab.jpg" },
+      { title: "Sonamarg Meadow of Gold", description: "Thajiwas glacier pony trek and glistening trout streams.", image: "/images/destinations/kashmir/sonamarg.jpg" }
     ],
     seasons: [
       { months: "Apr - Jun", label: "Spring & Summer · 15-25°C pleasant weather, blooming tulip gardens", tone: "peak" },
@@ -854,9 +854,9 @@ export const destinations = [
       { q: "Is Gulmarg Gondola Phase 2 open throughout the year?", a: "Yes, subject to daily weather and wind conditions. Phase 2 reaches 13,780 ft with deep snow till May and skiing from December to March. We recommend booking tickets well in advance." },
       { q: "Is it safe to travel to Kashmir with family?", a: "Extremely safe. Tourism is the heartbeat of Kashmir, and local hospitality (Kashmiriyat) is renowned for warmth and genuine respect for travelers." }
     ],
-    image: "/images/destination-04.jpg",
-    imageUrl: "/images/destination-04.jpg",
-    gallery: ["/images/destination-04.jpg", "/images/01.jpg", "/images/02.jpg", "/images/03.jpg"],
+    image: "/images/destinations/kashmir/hero.jpg",
+    imageUrl: "/images/destinations/kashmir/hero.jpg",
+    gallery: ["/images/destinations/kashmir/hero.jpg", "/images/destinations/kashmir/gulmarg-gondola.jpg", "/images/destinations/kashmir/dal-lake-shikara.jpg", "/images/destinations/kashmir/pahalgam-betaab.jpg", "/images/destinations/kashmir/sonamarg.jpg"],
     packages: [
       createPackage({
         id: "kashmir-paradise-retreat",
@@ -864,8 +864,8 @@ export const destinations = [
         name: "Kashmir Alpine Paradise: Srinagar, Gulmarg & Pahalgam",
         days: 6,
         price: 38900,
-        image: "/images/01.jpg",
-        images: ["/images/01.jpg", "/images/destination-04.jpg", "/images/02.jpg"],
+        image: "/images/destinations/kashmir/gulmarg-gondola.jpg",
+        images: ["/images/destinations/kashmir/gulmarg-gondola.jpg", "/images/destinations/kashmir/dal-lake-shikara.jpg", "/images/destinations/kashmir/hero.jpg"],
         cities: ["Srinagar", "Gulmarg", "Pahalgam"],
         hotel: "Welcomhotel Pine N Peak (Pahalgam) + Luxury Dal Lake Houseboat",
         hotelRating: 4,
@@ -916,9 +916,9 @@ export const destinations = [
       "Experience authentic Kathakali dance dramas, Kalaripayattu martial arts, and ayurvedic massages."
     ],
     highlights: [
-      { title: "Alleppey Private Houseboat Cruise", description: "All meals freshly cooked on board while gliding past tranquil backwaters.", image: "/images/destination-06.jpg" },
-      { title: "Munnar Tea Plantations & Mattupetty", description: "Emerald rolling hills, tea museum, and panoramic dam views.", image: "/images/02.jpg" },
-      { title: "Thekkady Spice Garden & Periyar Lake", description: "Aromatic spice plantation walks and wildlife boat safari.", image: "/images/destination-c.jpg" }
+      { title: "Alleppey Private Houseboat Cruise", description: "All meals freshly cooked on board while gliding past tranquil backwaters.", image: "/images/destinations/kerala/alleppey-houseboat.jpg" },
+      { title: "Munnar Tea Plantations & Mattupetty", description: "Emerald rolling hills, tea museum, and panoramic dam views.", image: "/images/destinations/kerala/munnar-tea-gardens.jpg" },
+      { title: "Thekkady Spice Garden & Periyar Lake", description: "Aromatic spice plantation walks and wildlife boat safari.", image: "/images/destinations/kerala/thekkady-periyar.jpg" }
     ],
     seasons: [
       { months: "Sep - Mar", label: "Peak Winter · 18-28°C pleasant cool breeze, best for backwaters and hills", tone: "peak" },
@@ -928,9 +928,9 @@ export const destinations = [
     faqs: [
       { q: "What is included on an Alleppey houseboat overnight stay?", a: "A private houseboat booking includes exclusive access to the boat with captain, chef, and engine driver, air-conditioned bedroom, and freshly cooked welcome drink, lunch, evening tea with banana fritters, dinner, and breakfast." }
     ],
-    image: "/images/destination-06.jpg",
-    imageUrl: "/images/destination-06.jpg",
-    gallery: ["/images/destination-06.jpg", "/images/02.jpg", "/images/destination-c.jpg"],
+    image: "/images/destinations/kerala/hero.jpg",
+    imageUrl: "/images/destinations/kerala/hero.jpg",
+    gallery: ["/images/destinations/kerala/hero.jpg", "/images/destinations/kerala/alleppey-houseboat.jpg", "/images/destinations/kerala/munnar-tea-gardens.jpg", "/images/destinations/kerala/thekkady-periyar.jpg"],
     packages: [
       createPackage({
         id: "kerala-backwaters-munnar-bliss",
@@ -938,8 +938,8 @@ export const destinations = [
         name: "Kerala Backwaters & Misty Munnar Escape",
         days: 6,
         price: 34900,
-        image: "/images/destination-06.jpg",
-        images: ["/images/destination-06.jpg", "/images/02.jpg"],
+        image: "/images/destinations/kerala/alleppey-houseboat.jpg",
+        images: ["/images/destinations/kerala/alleppey-houseboat.jpg", "/images/destinations/kerala/munnar-tea-gardens.jpg", "/images/destinations/kerala/thekkady-periyar.jpg"],
         cities: ["Munnar", "Thekkady", "Alleppey", "Kochi"],
         hotel: "Fragrant Nature Munnar + Private Luxury Houseboat (Alleppey)",
         hotelRating: 4,
@@ -990,9 +990,9 @@ export const destinations = [
       "Stay in heritage havelis with traditional folk music, puppet shows, and royal thali dining."
     ],
     highlights: [
-      { title: "Amer Fort & Hawa Mahal (Jaipur)", description: "Majestic Rajput architecture and the iconic pink Palace of Winds.", image: "/images/destination-e.jpg" },
-      { title: "City Palace & Lake Pichola (Udaipur)", description: "Romantic boat cruise past floating marble palace pavilions.", image: "/images/03.jpg" },
-      { title: "Mehrangarh Fort (Jodhpur)", description: "Towering cliff fortress overlooking the indigo blue painted houses.", image: "/images/05.jpg" }
+      { title: "Amer Fort & Hawa Mahal (Jaipur)", description: "Majestic Rajput architecture and the iconic pink Palace of Winds.", image: "/images/destinations/rajasthan/amer-fort.jpg" },
+      { title: "City Palace & Lake Pichola (Udaipur)", description: "Romantic boat cruise past floating marble palace pavilions.", image: "/images/destinations/rajasthan/lake-pichola-udaipur.jpg" },
+      { title: "Mehrangarh Fort (Jodhpur)", description: "Towering cliff fortress overlooking the indigo blue painted houses.", image: "/images/destinations/rajasthan/mehrangarh-fort.jpg" }
     ],
     seasons: [
       { months: "Oct - Mar", label: "Peak Heritage Season · 14-26°C pleasant sunny winter weather", tone: "peak" },
@@ -1002,9 +1002,9 @@ export const destinations = [
     faqs: [
       { q: "What cities are included in the Golden Triangle and Royal Rajasthan tours?", a: "The classic Royal Rajasthan tour combines Jaipur (Pink City), Jodhpur (Blue City), and Udaipur (City of Lakes) with seamless private highway transfers." }
     ],
-    image: "/images/destination-e.jpg",
-    imageUrl: "/images/destination-e.jpg",
-    gallery: ["/images/destination-e.jpg", "/images/03.jpg", "/images/05.jpg"],
+    image: "/images/destinations/rajasthan/hero.jpg",
+    imageUrl: "/images/destinations/rajasthan/hero.jpg",
+    gallery: ["/images/destinations/rajasthan/hero.jpg", "/images/destinations/rajasthan/amer-fort.jpg", "/images/destinations/rajasthan/lake-pichola-udaipur.jpg", "/images/destinations/rajasthan/mehrangarh-fort.jpg"],
     packages: [
       createPackage({
         id: "royal-rajasthan-heritage-circuit",
@@ -1012,8 +1012,8 @@ export const destinations = [
         name: "Royal Rajasthan Circuit: Jaipur, Jodhpur & Udaipur",
         days: 7,
         price: 46900,
-        image: "/images/destination-e.jpg",
-        images: ["/images/destination-e.jpg", "/images/03.jpg"],
+        image: "/images/destinations/rajasthan/amer-fort.jpg",
+        images: ["/images/destinations/rajasthan/amer-fort.jpg", "/images/destinations/rajasthan/lake-pichola-udaipur.jpg", "/images/destinations/rajasthan/mehrangarh-fort.jpg"],
         cities: ["Jaipur", "Jodhpur", "Udaipur"],
         hotel: "Heritage Haveli Stay (Jaipur) + Indana Palace (Jodhpur) + Trident Udaipur",
         hotelRating: 4,
@@ -1065,9 +1065,9 @@ export const destinations = [
       "Take a catamaran yacht cruise on the Mandovi river with sunset music."
     ],
     highlights: [
-      { title: "North Goa Beach Circuit", description: "Baga, Calangute, Anjuna flea market, and historic Fort Aguada.", image: "/images/destination-f.jpg" },
-      { title: "Dudhsagar Waterfalls Day Trek", description: "Spectacular 4-tiered 310m waterfall inside Bhagwan Mahavir sanctuary.", image: "/images/04.jpg" },
-      { title: "Old Goa Churches & Fontainhas", description: "Basilica of Bom Jesus and Portuguese colonial pastel houses.", image: "/images/destination-b.jpg" }
+      { title: "North Goa Beach Circuit", description: "Baga, Calangute, Anjuna flea market, and historic Fort Aguada.", image: "/images/destinations/goa/baga-beach.jpg" },
+      { title: "Dudhsagar Waterfalls Day Trek", description: "Spectacular 4-tiered 310m waterfall inside Bhagwan Mahavir sanctuary.", image: "/images/destinations/goa/dudhsagar-waterfalls.jpg" },
+      { title: "Old Goa Churches & Fontainhas", description: "Basilica of Bom Jesus and Portuguese colonial pastel houses.", image: "/images/destinations/goa/basilica-bom-jesus.jpg" }
     ],
     seasons: [
       { months: "Nov - Feb", label: "Peak Season · Crisp sunny beach days, buzzing night markets, Christmas celebrations", tone: "peak" },
@@ -1077,9 +1077,9 @@ export const destinations = [
     faqs: [
       { q: "Is North Goa or South Goa better for my holiday?", a: "North Goa is lively with water sports, beach shacks, night markets, and dining. South Goa is tranquil, with luxury 5-star private beachfront resorts, quiet sand, and heritage walks." }
     ],
-    image: "/images/destination-f.jpg",
-    imageUrl: "/images/destination-f.jpg",
-    gallery: ["/images/destination-f.jpg", "/images/04.jpg", "/images/destination-b.jpg"],
+    image: "/images/destinations/goa/hero.jpg",
+    imageUrl: "/images/destinations/goa/hero.jpg",
+    gallery: ["/images/destinations/goa/hero.jpg", "/images/destinations/goa/baga-beach.jpg", "/images/destinations/goa/dudhsagar-waterfalls.jpg", "/images/destinations/goa/basilica-bom-jesus.jpg"],
     packages: [
       createPackage({
         id: "goa-coastal-beach-break",
@@ -1087,8 +1087,8 @@ export const destinations = [
         name: "Goa Coastal Beach Escape & Water Sports",
         days: 5,
         price: 24900,
-        image: "/images/destination-f.jpg",
-        images: ["/images/destination-f.jpg", "/images/04.jpg"],
+        image: "/images/destinations/goa/baga-beach.jpg",
+        images: ["/images/destinations/goa/baga-beach.jpg", "/images/destinations/goa/dudhsagar-waterfalls.jpg", "/images/destinations/goa/hero.jpg"],
         cities: ["Goa"],
         hotel: "Lemon Tree Amarante Beach Resort / Vivanta Goa",
         hotelRating: 4,
@@ -1138,9 +1138,9 @@ export const destinations = [
       "Visit ancient wooden Hadimba Temple nestled inside towering deodar pine forests."
     ],
     highlights: [
-      { title: "Solang Valley & Atal Tunnel", description: "Adventure paragliding, snow activities, and engineering marvel tunnel.", image: "/images/destination-d.jpg" },
-      { title: "Hadimba Temple & Manali Mall Road", description: "Ancient 1553 pagoda wooden temple inside towering deodar cedar woods.", image: "/images/01.jpg" },
-      { title: "Shimla Mall Road & Ridge", description: "Colonial British architecture, Christ Church, and panoramic snow peaks.", image: "/images/05.jpg" }
+      { title: "Solang Valley & Atal Tunnel", description: "Adventure paragliding, snow activities, and engineering marvel tunnel.", image: "/images/destinations/himachal/solang-valley.jpg" },
+      { title: "Hadimba Temple & Manali Mall Road", description: "Ancient 1553 pagoda wooden temple inside towering deodar cedar woods.", image: "/images/destinations/himachal/hadimba-temple.jpg" },
+      { title: "Shimla Mall Road & Ridge", description: "Colonial British architecture, Christ Church, and panoramic snow peaks.", image: "/images/destinations/himachal/shimla-ridge.jpg" }
     ],
     seasons: [
       { months: "Apr - Jun", label: "Pleasant Summer · 15-28°C cool mountain escape, green valleys", tone: "peak" },
@@ -1150,9 +1150,9 @@ export const destinations = [
     faqs: [
       { q: "Is Atal Tunnel open throughout the winter?", a: "Atal Tunnel remains open almost year-round except during rare heavy blizzards. It connects Manali to snow-covered Sissu in Lahaul within 30 minutes." }
     ],
-    image: "/images/destination-d.jpg",
-    imageUrl: "/images/destination-d.jpg",
-    gallery: ["/images/destination-d.jpg", "/images/01.jpg", "/images/05.jpg"],
+    image: "/images/destinations/himachal/hero.jpg",
+    imageUrl: "/images/destinations/himachal/hero.jpg",
+    gallery: ["/images/destinations/himachal/hero.jpg", "/images/destinations/himachal/solang-valley.jpg", "/images/destinations/himachal/hadimba-temple.jpg", "/images/destinations/himachal/shimla-ridge.jpg"],
     packages: [
       createPackage({
         id: "himachal-shimla-manali-escape",
@@ -1160,8 +1160,8 @@ export const destinations = [
         name: "Himachal Magic: Shimla, Kullu & Manali",
         days: 6,
         price: 32900,
-        image: "/images/destination-d.jpg",
-        images: ["/images/destination-d.jpg", "/images/01.jpg"],
+        image: "/images/destinations/himachal/solang-valley.jpg",
+        images: ["/images/destinations/himachal/solang-valley.jpg", "/images/destinations/himachal/hadimba-temple.jpg", "/images/destinations/himachal/shimla-ridge.jpg"],
         cities: ["Shimla", "Manali"],
         hotel: "Sterling Kufri (Shimla) + The Orchid Manali",
         hotelRating: 4,
@@ -1212,9 +1212,9 @@ export const destinations = [
       "Attend the moving Light and Sound Show at historic Cellular Jail in Port Blair."
     ],
     highlights: [
-      { title: "Radhanagar Beach Sunset (Havelock)", description: "Consistently ranked among the top 10 most beautiful beaches on Earth.", image: "/images/destination-03.jpg" },
-      { title: "Elephant Beach Scuba & Snorkel", description: "Crystal clear shallow waters and vibrant live coral colonies.", image: "/images/destination-c.jpg" },
-      { title: "Cellular Jail Light & Sound Show", description: "Historic national memorial with heroic freedom struggle narrative.", image: "/images/03.jpg" }
+      { title: "Radhanagar Beach Sunset (Havelock)", description: "Consistently ranked among the top 10 most beautiful beaches on Earth.", image: "/images/destinations/andaman/radhanagar-beach.jpg" },
+      { title: "Elephant Beach Scuba & Snorkel", description: "Crystal clear shallow waters and vibrant live coral colonies.", image: "/images/destinations/andaman/elephant-beach.jpg" },
+      { title: "Cellular Jail Light & Sound Show", description: "Historic national memorial with heroic freedom struggle narrative.", image: "/images/destinations/andaman/cellular-jail.jpg" }
     ],
     seasons: [
       { months: "Oct - Apr", label: "Peak Season · Calm turquoise seas, sunny days, perfect underwater visibility", tone: "peak" },
@@ -1224,9 +1224,9 @@ export const destinations = [
     faqs: [
       { q: "Do Indian citizens need a passport or permit for Andaman?", a: "No passport is required for Indian citizens. Any valid government photo ID (Aadhaar, Voter ID, Driving License) is sufficient to travel to Port Blair and Havelock Island." }
     ],
-    image: "/images/destination-03.jpg",
-    imageUrl: "/images/destination-03.jpg",
-    gallery: ["/images/destination-03.jpg", "/images/destination-c.jpg", "/images/03.jpg"],
+    image: "/images/destinations/andaman/hero.jpg",
+    imageUrl: "/images/destinations/andaman/hero.jpg",
+    gallery: ["/images/destinations/andaman/hero.jpg", "/images/destinations/andaman/radhanagar-beach.jpg", "/images/destinations/andaman/elephant-beach.jpg", "/images/destinations/andaman/cellular-jail.jpg"],
     packages: [
       createPackage({
         id: "andaman-havelock-island-escape",
@@ -1234,8 +1234,8 @@ export const destinations = [
         name: "Andaman Tropical Escape: Port Blair & Havelock Island",
         days: 5,
         price: 38900,
-        image: "/images/destination-03.jpg",
-        images: ["/images/destination-03.jpg", "/images/destination-c.jpg"],
+        image: "/images/destinations/andaman/radhanagar-beach.jpg",
+        images: ["/images/destinations/andaman/radhanagar-beach.jpg", "/images/destinations/andaman/elephant-beach.jpg", "/images/destinations/andaman/cellular-jail.jpg"],
         cities: ["Port Blair", "Havelock Island (Swaraj Dweep)"],
         hotel: "Symphony Palms Beach Resort (Havelock) + Sea Shell Port Blair",
         hotelRating: 4,
@@ -1286,9 +1286,9 @@ export const destinations = [
       "Visit Kempty Falls, George Everest's Peak, and Company Garden in Mussoorie."
     ],
     highlights: [
-      { title: "Rishikesh Ganga Aarti & Rafting", description: "Sacred lamps on holy river waters and 16km rafting excitement.", image: "/images/destination-05.jpg" },
-      { title: "Mussoorie Queen of Hills", description: "Kempty Falls, colonial Mall Road, and panoramic Himalayan vistas.", image: "/images/05.jpg" },
-      { title: "Haridwar Har Ki Pauri", description: "Ancient sacred river ghat with evening devotional brass bell ceremonies.", image: "/images/01.jpg" }
+      { title: "Rishikesh Ganga Aarti & Rafting", description: "Sacred lamps on holy river waters and 16km rafting excitement.", image: "/images/destinations/uttarakhand/rishikesh-ganga-aarti.jpg" },
+      { title: "Mussoorie Queen of Hills", description: "Kempty Falls, colonial Mall Road, and panoramic Himalayan vistas.", image: "/images/destinations/uttarakhand/mussoorie-hills.jpg" },
+      { title: "Haridwar Har Ki Pauri", description: "Ancient sacred river ghat with evening devotional brass bell ceremonies.", image: "/images/destinations/uttarakhand/har-ki-pauri.jpg" }
     ],
     seasons: [
       { months: "Oct - Mar", label: "Winter Season · Crisp sunny days, cool evenings, prime rafting waters", tone: "peak" },
@@ -1298,9 +1298,9 @@ export const destinations = [
     faqs: [
       { q: "What is the best way to reach Rishikesh and Mussoorie?", a: "Fly directly into Dehradun Jolly Grant Airport (DED), just 30 minutes drive from Rishikesh and 1.5 hours from Mussoorie." }
     ],
-    image: "/images/destination-05.jpg",
-    imageUrl: "/images/destination-05.jpg",
-    gallery: ["/images/destination-05.jpg", "/images/05.jpg", "/images/01.jpg"],
+    image: "/images/destinations/uttarakhand/hero.jpg",
+    imageUrl: "/images/destinations/uttarakhand/hero.jpg",
+    gallery: ["/images/destinations/uttarakhand/hero.jpg", "/images/destinations/uttarakhand/rishikesh-ganga-aarti.jpg", "/images/destinations/uttarakhand/mussoorie-hills.jpg", "/images/destinations/uttarakhand/har-ki-pauri.jpg"],
     packages: [
       createPackage({
         id: "uttarakhand-rishikesh-mussoorie",
@@ -1308,8 +1308,8 @@ export const destinations = [
         name: "Uttarakhand Serenity: Rishikesh, Haridwar & Mussoorie",
         days: 5,
         price: 28900,
-        image: "/images/destination-05.jpg",
-        images: ["/images/destination-05.jpg", "/images/05.jpg"],
+        image: "/images/destinations/uttarakhand/rishikesh-ganga-aarti.jpg",
+        images: ["/images/destinations/uttarakhand/rishikesh-ganga-aarti.jpg", "/images/destinations/uttarakhand/mussoorie-hills.jpg", "/images/destinations/uttarakhand/har-ki-pauri.jpg"],
         cities: ["Rishikesh", "Haridwar", "Mussoorie"],
         hotel: "Aloha On The Ganges (Rishikesh) + Jaypee Residency Manor (Mussoorie)",
         hotelRating: 4,
@@ -1359,10 +1359,10 @@ export const destinations = [
       "Experience the spiritual tranquility of ancient cliffside Thiksey and Hemis Gompas."
     ],
     highlights: [
-      { title: "Pangong Tso Lake (14,270 ft)", description: "Color-changing saline lake stretching from India into Tibet.", image: "/images/destination-f.jpg" },
-      { title: "Khardung La Pass (17,582 ft)", description: "World-famous high-altitude motorable mountain pass.", image: "/images/04.jpg" },
-      { title: "Nubra Valley & Hunder Sand Dunes", description: "Bactrian double-humped camel safari amidst snowy mountain backdrops.", image: "/images/02.jpg" },
-      { title: "Magnetic Hill & Sangam Confluence", description: "Gravity-defying optical phenomenon and meeting of Indus and Zanskar rivers.", image: "/images/01.jpg" }
+      { title: "Pangong Tso Lake (14,270 ft)", description: "Color-changing saline lake stretching from India into Tibet.", image: "/images/destinations/ladakh/pangong-tso.jpg" },
+      { title: "Khardung La Pass (17,582 ft)", description: "World-famous high-altitude motorable mountain pass.", image: "/images/destinations/ladakh/khardung-la.jpg" },
+      { title: "Nubra Valley & Hunder Sand Dunes", description: "Bactrian double-humped camel safari amidst snowy mountain backdrops.", image: "/images/destinations/ladakh/nubra-valley.jpg" },
+      { title: "Magnetic Hill & Sangam Confluence", description: "Gravity-defying optical phenomenon and meeting of Indus and Zanskar rivers.", image: "/images/destinations/ladakh/sangam-confluence.jpg" }
     ],
     seasons: [
       { months: "Jun - Sep", label: "Peak Summer Season · 15-25°C pleasant sunny days, all passes fully open", tone: "peak" },
@@ -1372,9 +1372,9 @@ export const destinations = [
     faqs: [
       { q: "Is acclimatization necessary in Leh Ladakh?", a: "Yes, mandatory. Since Leh is at 11,500 ft, day 1 is kept strictly for resting, hydrating, and adapting to the altitude. Inner line permits are processed by our team." }
     ],
-    image: "/images/destination-f.jpg",
-    imageUrl: "/images/destination-f.jpg",
-    gallery: ["/images/destination-f.jpg", "/images/04.jpg", "/images/02.jpg", "/images/01.jpg"],
+    image: "/images/destinations/ladakh/hero.jpg",
+    imageUrl: "/images/destinations/ladakh/hero.jpg",
+    gallery: ["/images/destinations/ladakh/hero.jpg", "/images/destinations/ladakh/pangong-tso.jpg", "/images/destinations/ladakh/khardung-la.jpg", "/images/destinations/ladakh/nubra-valley.jpg", "/images/destinations/ladakh/sangam-confluence.jpg"],
     packages: [
       createPackage({
         id: "ladakh-pangong-nubra-discovery",
@@ -1382,8 +1382,8 @@ export const destinations = [
         name: "Ladakh Explorer: Leh, Nubra Valley & Pangong Tso",
         days: 7,
         price: 44900,
-        image: "/images/destination-f.jpg",
-        images: ["/images/destination-f.jpg", "/images/04.jpg", "/images/02.jpg"],
+        image: "/images/destinations/ladakh/pangong-tso.jpg",
+        images: ["/images/destinations/ladakh/pangong-tso.jpg", "/images/destinations/ladakh/nubra-valley.jpg", "/images/destinations/ladakh/khardung-la.jpg"],
         cities: ["Leh", "Nubra Valley", "Pangong Tso"],
         hotel: "The Grand Dragon Ladakh (Leh) + Luxury Swiss Tents (Nubra & Pangong)",
         hotelRating: 4,
@@ -1437,8 +1437,8 @@ export function normalizeDestination(item) {
     badge: item.badge || localMatch?.badge || (item.featured ? "Featured" : ""),
     tagline: item.description || item.tagline || localMatch?.tagline || "",
     idealFor: Array.isArray(item.idealFor) && item.idealFor.length > 0 ? item.idealFor : localMatch?.idealFor || ["Families", "Couples"],
-    image: item.imageUrl || item.image || localMatch?.image || "/images/destination-01.jpg",
-    gallery: Array.isArray(item.gallery) && item.gallery.length > 0 ? item.gallery : localMatch?.gallery || ["/images/destination-01.jpg"],
+    image: item.imageUrl || item.image || localMatch?.image || "/images/destinations/dubai/hero.jpg",
+    gallery: Array.isArray(item.gallery) && item.gallery.length > 0 ? item.gallery : localMatch?.gallery || ["/images/destinations/dubai/hero.jpg"],
     currency: item.currency || localMatch?.currency || "INR",
     language: item.language || localMatch?.language || "English",
     visa: item.visa || localMatch?.visa || "Visa guidance provided",
@@ -1464,8 +1464,8 @@ export function normalizeTourPackage(item) {
     id: item._id || item.id || item.slug,
     slug: item.slug,
     name: item.title || item.name || "",
-    image: item.imageUrl || item.image || "/images/destination-01.jpg",
-    images: Array.isArray(item.gallery) && item.gallery.length > 0 ? item.gallery : (Array.isArray(item.images) ? item.images : [item.imageUrl || item.image || "/images/destination-01.jpg"]),
+    image: item.imageUrl || item.image || "/images/destinations/dubai/hero.jpg",
+    images: Array.isArray(item.gallery) && item.gallery.length > 0 ? item.gallery : (Array.isArray(item.images) ? item.images : [item.imageUrl || item.image || "/images/destinations/dubai/hero.jpg"]),
     days,
     nights,
     salePrice,

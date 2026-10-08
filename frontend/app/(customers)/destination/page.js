@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Script from "next/script";
+import Link from "next/link";
 import SiteFooter from "../components/SiteFooter";
 import { fetchPublic } from "@/lib/api";
 import { destinations as defaultDestinations } from "../tours/data";
@@ -46,7 +47,7 @@ export default function Destination() {
                 <div className="row mb-60 justify-content-center">
                   <div className="col-md-6 text-center">
                     <div className="section-subtitle">Explore Our Tours</div>
-                    <div className="section-title">Explore the world's <i>best destinations</i></div>
+                    <div className="section-title">Explore the world&apos;s <i>best destinations</i></div>
                   </div>
                 </div>
               </div>
@@ -109,7 +110,7 @@ export default function Destination() {
                 ) : destinations.length > 0 ? (
                   <div className="row">
                     {destinations.map((item, idx) => {
-                      const image = item.imageUrl || item.image || `/images/destination-${["a","b","c","d","e","f"][idx % 6]}.jpg`;
+                      const image = item.imageUrl || item.image || (item.slug ? `/images/destinations/${item.slug}/hero.jpg` : "/images/destinations/dubai/hero.jpg");
                       const linkHref = `/tours/${item.type || "international"}/${item.slug}`;
                       return (
                         <div className="col-lg-4 col-md-12 mb-60" key={item.id || item._id || `${item.slug}-${idx}` || `dest-${idx}`}>
@@ -119,10 +120,10 @@ export default function Destination() {
                               <div className="wrap">
                                 <span className="title">{item.title}</span>
                                 <div className="link">
-                                  <a href={linkHref}>
+                                  <Link href={linkHref}>
                                     <div className="category">{item.country || (item.type === "domestic" ? "India" : "International")}</div>
                                     <i className="fa-light fa-arrow-right-long"></i>
-                                  </a>
+                                  </Link>
                                 </div>
                                 <div className="overlay"></div>
                               </div>
@@ -202,11 +203,11 @@ export default function Destination() {
                   <div className="col-lg-7 col-md-12 text-center">
                     <div className="links">
                       <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/tours">Tours</a></li>
-                        <li><a href="/destination">Destinations</a></li>
-                        <li><a href="/blog">Blog</a></li>
-                        <li><a href="/contact">Contact</a></li>
+                        <li><Link href="/">Home</Link></li>
+                        <li><Link href="/tours">Tours</Link></li>
+                        <li><Link href="/destination">Destinations</Link></li>
+                        <li><Link href="/blog">Blog</Link></li>
+                        <li><Link href="/contact">Contact</Link></li>
                       </ul>
                     </div>
                   </div>

@@ -319,7 +319,7 @@ const ALL_SERVICES_DATA = [
     subtitle: "Chauffeured Airport Pickups, Intercity Limousines & VIP Fleet Hire",
     badge: "Flight Delay Guarantee",
     icon: "fa-thin fa-van-shuttle",
-    heroImage: "/images/destination-b.jpg",
+    heroImage: "/images/destinations/dubai/dubai-marina.jpg",
     accentColor: "#0f2454",
     shortDescription: "Reliable airport and city transfer solutions for stress-free, luxurious travel.",
     fullDescription:

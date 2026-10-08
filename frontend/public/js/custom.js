@@ -920,34 +920,36 @@
                     }
                 });
                 let cardsList = gsap.utils.toArray(".stackCard");
-                let stickDistance = 0;
-                let lastCardST = ScrollTrigger.create({
-                    trigger: cardsList[cardsList.length - 1],
-                    start: "center center"
-                });
-                cardsList.forEach((card, index) => {
-                    ScrollTrigger.create({
-                        trigger: card,
-                        start: "center center",
-                        end: () => lastCardST.start + stickDistance,
-                        pin: true,
-                        pinSpacing: false,
-                        scrub: true,
-                        snap: true,
-                        ease: "power4.out",
-                        onUpdate: (self) => {
-                            const progress = self.progress;
-                            const EvenOdd = index % 2 === 0;
-                            gsap.to(card, {
-                                scaleX: 1 - progress * 0.2,
-                                x: index * 20,
-                                filter: `grayscale(${progress * 20}%)`,
-                                top: index * 20,
-                                rotate: EvenOdd ? -3 * progress : 3 * progress,
-                            });
-                        }
+                if (cardsList.length > 0) {
+                    let stickDistance = 0;
+                    let lastCardST = ScrollTrigger.create({
+                        trigger: cardsList[cardsList.length - 1],
+                        start: "center center"
                     });
-                });
+                    cardsList.forEach((card, index) => {
+                        ScrollTrigger.create({
+                            trigger: card,
+                            start: "center center",
+                            end: () => lastCardST.start + stickDistance,
+                            pin: true,
+                            pinSpacing: false,
+                            scrub: true,
+                            snap: true,
+                            ease: "power4.out",
+                            onUpdate: (self) => {
+                                const progress = self.progress;
+                                const EvenOdd = index % 2 === 0;
+                                gsap.to(card, {
+                                    scaleX: 1 - progress * 0.2,
+                                    x: index * 20,
+                                    filter: `grayscale(${progress * 20}%)`,
+                                    top: index * 20,
+                                    rotate: EvenOdd ? -3 * progress : 3 * progress,
+                                });
+                            }
+                        });
+                    });
+                }
             }
         }
     

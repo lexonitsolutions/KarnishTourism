@@ -10,27 +10,27 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 const ACTIVITIES_API = `${API_BASE.replace(/\/$/, "").replace(/\/api$/, "")}/api/activities?limit=500`;
 
 const MOCK_ACTIVITIES = [
-  { id: "desert-safari", slug: "dubai-desert-safari", title: "Dubai Desert Safari & BBQ Dinner", destinations: ["Dubai"], activities: ["Desert Safari"], tripTypes: ["Adventure", "Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 4999, currency: "INR", image: "/images/4.jpg" },
-  { id: "burj-khalifa", slug: "burj-khalifa-sky", title: "Burj Khalifa At The Top", destinations: ["Dubai"], activities: ["City Experience"], tripTypes: ["Family", "Luxury"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 3499, currency: "INR", image: "/images/5.jpg" },
-  { id: "marina-cruise", slug: "dubai-marina-dhow", title: "Dubai Marina Dhow Cruise", destinations: ["Dubai"], activities: ["Cruises"], tripTypes: ["Couples", "Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 5750, currency: "INR", image: "/images/06.jpg" },
-  { id: "abu-dhabi", slug: "abu-dhabi-city-tour", title: "Abu Dhabi Grand City Tour", destinations: ["Abu Dhabi"], activities: ["Cultural"], tripTypes: ["Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 7250, currency: "INR", image: "/images/7.jpg" },
-  { id: "kashmir-gondola", slug: "gulmarg-gondola", title: "Gulmarg Gondola & Alpine Day", destinations: ["Kashmir"], activities: ["Mountain Experience"], tripTypes: ["Adventure", "Family"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 4200, currency: "INR", image: "/images/destination-04.jpg" },
-  { id: "bali-temples", slug: "bali-temples-waterfalls", title: "Bali Temples & Waterfalls Trail", destinations: ["Bali"], activities: ["Cultural"], tripTypes: ["Couples", "Adventure"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 6800, currency: "INR", image: "/images/destination-02.jpg" },
-  { id: "maldives-cruise", slug: "maldives-sunset-cruise", title: "Maldives Sunset Dolphin Cruise", destinations: ["Maldives"], activities: ["Cruises"], tripTypes: ["Couples", "Luxury"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 8900, currency: "INR", image: "/images/destination-03.jpg" },
-  { id: "singapore-night", slug: "singapore-night-safari", title: "Singapore Night Safari", destinations: ["Singapore"], activities: ["Wildlife"], tripTypes: ["Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 5400, currency: "INR", image: "/images/destination-05.jpg" },
-  { id: "himachal-camp", slug: "himachal-desert-camp", title: "Spiti Cold Desert Camp Adventure", destinations: ["Himachal"], activities: ["Desert Safari"], tripTypes: ["Adventure"], difficulty: ["Moderate"], duration: { days: 2, nights: 1 }, price: 8900, currency: "INR", image: "/images/destination-f.jpg" },
+  { id: "desert-safari", slug: "dubai-desert-safari", title: "Dubai Desert Safari & BBQ Dinner", destinations: ["Dubai"], activities: ["Desert Safari"], tripTypes: ["Adventure", "Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 4999, currency: "INR", image: "/images/destinations/dubai/desert-safari.jpg" },
+  { id: "burj-khalifa", slug: "burj-khalifa-sky", title: "Burj Khalifa At The Top", destinations: ["Dubai"], activities: ["City Experience"], tripTypes: ["Family", "Luxury"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 3499, currency: "INR", image: "/images/destinations/dubai/burj-khalifa.jpg" },
+  { id: "marina-cruise", slug: "dubai-marina-dhow", title: "Dubai Marina Dhow Cruise", destinations: ["Dubai"], activities: ["Cruises"], tripTypes: ["Couples", "Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 5750, currency: "INR", image: "/images/destinations/dubai/dubai-marina.jpg" },
+  { id: "abu-dhabi", slug: "abu-dhabi-city-tour", title: "Abu Dhabi Grand City Tour", destinations: ["Abu Dhabi"], activities: ["Cultural"], tripTypes: ["Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 7250, currency: "INR", image: "/images/destinations/dubai/hero.jpg" },
+  { id: "kashmir-gondola", slug: "gulmarg-gondola", title: "Gulmarg Gondola & Alpine Day", destinations: ["Kashmir"], activities: ["Mountain Experience"], tripTypes: ["Adventure", "Family"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 4200, currency: "INR", image: "/images/destinations/kashmir/gulmarg-gondola.jpg" },
+  { id: "bali-temples", slug: "bali-temples-waterfalls", title: "Bali Temples & Waterfalls Trail", destinations: ["Bali"], activities: ["Cultural"], tripTypes: ["Couples", "Adventure"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 6800, currency: "INR", image: "/images/destinations/bali/ulun-danu-beratan.jpg" },
+  { id: "maldives-cruise", slug: "maldives-sunset-cruise", title: "Maldives Sunset Dolphin Cruise", destinations: ["Maldives"], activities: ["Cruises"], tripTypes: ["Couples", "Luxury"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 8900, currency: "INR", image: "/images/destinations/maldives/dolphin-cruise.jpg" },
+  { id: "singapore-night", slug: "singapore-night-safari", title: "Singapore Night Safari", destinations: ["Singapore"], activities: ["Wildlife"], tripTypes: ["Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 5400, currency: "INR", image: "/images/destinations/singapore/gardens-by-the-bay.jpg" },
+  { id: "himachal-camp", slug: "himachal-desert-camp", title: "Spiti Cold Desert Camp Adventure", destinations: ["Himachal"], activities: ["Desert Safari"], tripTypes: ["Adventure"], difficulty: ["Moderate"], duration: { days: 2, nights: 1 }, price: 8900, currency: "INR", image: "/images/destinations/himachal/solang-valley.jpg" },
   { id: "dubai-aquarium", slug: "dubai-aquarium", title: "Dubai Aquarium & Underwater Zoo", destinations: ["Dubai"], activities: ["Family Attraction"], tripTypes: ["Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 2999, currency: "INR", image: "/images/a1.jpg" },
   { id: "dubai-helicopter", slug: "dubai-helicopter-tour", title: "Dubai Skyline Helicopter Tour", destinations: ["Dubai"], activities: ["Air Experience"], tripTypes: ["Luxury", "Adventure"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 16900, currency: "INR", image: "/images/a2.jpg" },
   { id: "abu-dhabi-themepark", slug: "yas-island-theme-parks", title: "Yas Island Theme Park Day", destinations: ["Abu Dhabi"], activities: ["Theme Parks"], tripTypes: ["Family", "Adventure"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 8999, currency: "INR", image: "/images/a3.jpg" },
-  { id: "bali-rafting", slug: "bali-river-rafting", title: "Ayung River Rafting Adventure", destinations: ["Bali"], activities: ["Water Adventure"], tripTypes: ["Adventure"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 4599, currency: "INR", image: "/images/a4.jpg" },
-  { id: "bali-sunset", slug: "uluwatu-sunset-dance", title: "Uluwatu Sunset & Kecak Dance", destinations: ["Bali"], activities: ["Cultural"], tripTypes: ["Couples", "Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 3900, currency: "INR", image: "/images/destination-a.jpg" },
-  { id: "singapore-sentosa", slug: "sentosa-island-pass", title: "Sentosa Island Adventure Pass", destinations: ["Singapore"], activities: ["Theme Parks"], tripTypes: ["Family", "Adventure"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 7600, currency: "INR", image: "/images/destination-b.jpg" },
-  { id: "singapore-gardens", slug: "gardens-by-the-bay", title: "Gardens by the Bay & Marina Tour", destinations: ["Singapore"], activities: ["City Experience"], tripTypes: ["Family", "Couples"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 3200, currency: "INR", image: "/images/destination-c.jpg" },
-  { id: "maldives-snorkel", slug: "maldives-snorkelling", title: "Maldives Reef Snorkelling Safari", destinations: ["Maldives"], activities: ["Water Adventure"], tripTypes: ["Adventure", "Couples"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 7900, currency: "INR", image: "/images/destination-d.jpg" },
-  { id: "kashmir-shikara", slug: "dal-lake-shikara", title: "Dal Lake Shikara & Old City Tour", destinations: ["Kashmir"], activities: ["Cultural"], tripTypes: ["Family", "Couples"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 2800, currency: "INR", image: "/images/destination-e.jpg" },
-  { id: "himachal-paragliding", slug: "bir-billing-paragliding", title: "Bir Billing Paragliding Flight", destinations: ["Himachal"], activities: ["Air Experience"], tripTypes: ["Adventure"], difficulty: ["Challenging"], duration: { days: 1, nights: 0 }, price: 4500, currency: "INR", image: "/images/01_1.jpg" },
-  { id: "himachal-trek", slug: "triund-sunrise-trek", title: "Triund Sunrise Trek", destinations: ["Himachal"], activities: ["Mountain Experience"], tripTypes: ["Adventure"], difficulty: ["Moderate"], duration: { days: 2, nights: 1 }, price: 5200, currency: "INR", image: "/images/02_1.jpg" },
-  { id: "swiss-jungfrau", slug: "jungfrau-top-of-europe", title: "Jungfrau Top of Europe Excursion", destinations: ["Switzerland"], activities: ["Mountain Experience"], tripTypes: ["Family", "Luxury"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 18900, currency: "INR", image: "/images/03_1.jpg" },
+  { id: "bali-rafting", slug: "bali-river-rafting", title: "Ayung River Rafting Adventure", destinations: ["Bali"], activities: ["Water Adventure"], tripTypes: ["Adventure"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 4599, currency: "INR", image: "/images/destinations/bali/tegallalang-rice-terrace.jpg" },
+  { id: "bali-sunset", slug: "uluwatu-sunset-dance", title: "Uluwatu Sunset & Kecak Dance", destinations: ["Bali"], activities: ["Cultural"], tripTypes: ["Couples", "Family"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 3900, currency: "INR", image: "/images/destinations/bali/uluwatu-temple.jpg" },
+  { id: "singapore-sentosa", slug: "sentosa-island-pass", title: "Sentosa Island Adventure Pass", destinations: ["Singapore"], activities: ["Theme Parks"], tripTypes: ["Family", "Adventure"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 7600, currency: "INR", image: "/images/destinations/singapore/universal-studios.jpg" },
+  { id: "singapore-gardens", slug: "gardens-by-the-bay", title: "Gardens by the Bay & Marina Tour", destinations: ["Singapore"], activities: ["City Experience"], tripTypes: ["Family", "Couples"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 3200, currency: "INR", image: "/images/destinations/singapore/gardens-by-the-bay.jpg" },
+  { id: "maldives-snorkel", slug: "maldives-snorkelling", title: "Maldives Reef Snorkelling Safari", destinations: ["Maldives"], activities: ["Water Adventure"], tripTypes: ["Adventure", "Couples"], difficulty: ["Moderate"], duration: { days: 1, nights: 0 }, price: 7900, currency: "INR", image: "/images/destinations/maldives/coral-reef.jpg" },
+  { id: "kashmir-shikara", slug: "dal-lake-shikara", title: "Dal Lake Shikara & Old City Tour", destinations: ["Kashmir"], activities: ["Cultural"], tripTypes: ["Family", "Couples"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 2800, currency: "INR", image: "/images/destinations/kashmir/dal-lake-shikara.jpg" },
+  { id: "himachal-paragliding", slug: "bir-billing-paragliding", title: "Bir Billing Paragliding Flight", destinations: ["Himachal"], activities: ["Air Experience"], tripTypes: ["Adventure"], difficulty: ["Challenging"], duration: { days: 1, nights: 0 }, price: 4500, currency: "INR", image: "/images/destinations/himachal/solang-valley.jpg" },
+  { id: "himachal-trek", slug: "triund-sunrise-trek", title: "Triund Sunrise Trek", destinations: ["Himachal"], activities: ["Mountain Experience"], tripTypes: ["Adventure"], difficulty: ["Moderate"], duration: { days: 2, nights: 1 }, price: 5200, currency: "INR", image: "/images/destinations/himachal/hadimba-temple.jpg" },
+  { id: "swiss-jungfrau", slug: "jungfrau-top-of-europe", title: "Jungfrau Top of Europe Excursion", destinations: ["Switzerland"], activities: ["Mountain Experience"], tripTypes: ["Family", "Luxury"], difficulty: ["Easy"], duration: { days: 1, nights: 0 }, price: 18900, currency: "INR", image: "/images/destinations/switzerland/jungfraujoch.jpg" },
 ].map(normalizeActivity);
 
 function asArray(value) {
@@ -171,21 +171,21 @@ function ActivityCard({ activity, viewMode }) {
 }
 
 function ActivitiesResults() {
-  // API state
-  const [allActivities, setAllActivities] = useState([]);
-  const [apiLoading, setApiLoading] = useState(true);
+  // API state — initialize with MOCK_ACTIVITIES immediately to avoid empty render & scroll locking
+  const [allActivities, setAllActivities] = useState(MOCK_ACTIVITIES);
+  const [apiLoading, setApiLoading] = useState(false);
 
   useEffect(() => {
-    setApiLoading(true);
     fetch(ACTIVITIES_API, { cache: "no-store" })
       .then((r) => r.ok ? r.json() : { items: [] })
       .then((data) => {
         const items = Array.isArray(data.items) ? data.items.map(normalizeActivity) : [];
-        const liveIds = new Set(items.map((item) => item.id || item.slug));
-        setAllActivities([...items, ...MOCK_ACTIVITIES.filter((item) => !liveIds.has(item.id || item.slug))]);
-        setApiLoading(false);
+        if (items.length > 0) {
+          const liveIds = new Set(items.map((item) => item.id || item.slug));
+          setAllActivities([...items, ...MOCK_ACTIVITIES.filter((item) => !liveIds.has(item.id || item.slug))]);
+        }
       })
-      .catch(() => { setAllActivities(MOCK_ACTIVITIES); setApiLoading(false); });
+      .catch(() => { setAllActivities(MOCK_ACTIVITIES); });
   }, []);
 
   // Derive filter options dynamically from DB data
@@ -407,6 +407,24 @@ function ActivitiesResults() {
 }
 
 export default function Activities() {
+  useEffect(() => {
+    // Tear down any leftover ScrollSmoother from previous routes to restore full native scroll
+    if (typeof window !== "undefined") {
+      try {
+        if (window.ScrollSmoother?.get) {
+          const s = window.ScrollSmoother.get();
+          if (s) s.kill();
+        }
+      } catch (_) {}
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.height = "";
+      document.documentElement.style.overflow = "";
+      document.documentElement.style.position = "";
+      document.documentElement.style.height = "";
+    }
+  }, []);
+
   return (
     <>
       {/* Cursor */}
@@ -417,123 +435,24 @@ export default function Activities() {
           <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
         </svg>
       </div>
-      {/* Smooth-wrapper */}
-      <div id="smooth-wrapper">
-        {/* Navbar */}
-        <div id="smooth-content">
-          <main className="o-hidden">
-            {/* Page Heading */}
-            <section className="activity-page-heading">
-              <div className="container">
-                <div className="section-subtitle">Find Your Next Adventure</div>
-                <div className="section-title">Trip Search <i>Result</i></div>
-                <span className="activity-heading-underline"></span>
-              </div>
-            </section>
-            {/* Results */}
-            <Suspense fallback={<div className="container"><p>Loading activities...</p></div>}>
-              <ActivitiesResults />
-            </Suspense>
-          </main>
-          {/* Footer */}
-          <SiteFooter />
-          <footer className="footer">
-            <div className="container">
-              <div className="row justify-content-center">
-                <div className="col-md-7 mb-45 text-center">
-                  <div className="subscribe">
-                    <div className="section-subtitle wow fadeInRight">Subscribe to travel</div>
-                    <div className="section-title d-rotate wow mb-30"><span className="rotate-text text-white">Travel deals to your inbox<i>!</i></span></div>
-                    <div className="newsletter">
-                      <form action="#">
-                        <input type="email" placeholder="Enter your email address" required />
-                        <button type="submit"><i className="fa-light fa-arrow-right"></i></button>
-                      </form>
-                    </div>
-                    <p>We are committed to protecting your <a href="#0" className="text-decoration-line-bottom">privacy policy.</a></p>
-                  </div>
-                </div>
-              </div>
-              {/* Instagram */}
-              <div className="insta">
-                <div className="container">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="item">
-                        <div className="img">
-                          <a href="#0"> <img src="/images/03_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/01_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/02_2.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/04.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/05.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="img">
-                          <a href="#0"> <img src="/images/06.jpg" alt="" /> </a> <i className="fa-brands fa-instagram"></i>
-                        </div>
-                        <div className="follow">
-                          <a href="#0" className="text-bg"> <span><i className="fa-brands fa-instagram"></i> / Karnish Tourism</span></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Bottom */}
-            <div className="bottom">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-3 col-md-12">
-                    <p>© All Rights Reserved <a href="https://lexonit.com" target="_blank">lexonit.com</a></p>
-                  </div>
-                  <div className="col-lg-7 col-md-12 text-center">
-                    <div className="links">
-                      <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/tours">Tours</a></li>
-                        <li><a href="/destination">Destinations</a></li>
-                        <li><a href="/blog">Blog</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-12">
-                    <div className="social-icons text-end">
-                      <ul className="list-inline">
-                        <li><a href="#"><i className="fa-brands fa-instagram"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-twitter"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-dribbble"></i></a></li>
-                        <li><a href="#"><i className="fa-brands fa-facebook-f"></i></a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-text-style5">Karnish Tourism</div>
-          </footer>
-        </div>
-      </div>
 
-      <Script id="script-jquery" src="/js/jquery-3.6.0.min.js" strategy="afterInteractive" />
-      <Script id="script-jquery-migrate" src="/js/jquery-migrate-3.4.0.min.js" strategy="afterInteractive" />
-      <Script id="script-plugins" src="/js/plugins.js" strategy="afterInteractive" />
-      <Script id="script-imagesloaded" src="/js/imagesloaded.pkgd.min.js" strategy="afterInteractive" />
-      <Script id="script-gsap" src="/js/gsap.min.js" strategy="afterInteractive" />
-      <Script id="script-scrollsmoother" src="/js/ScrollSmoother.min.js" strategy="afterInteractive" />
-      <Script id="script-scrolltrigger" src="/js/ScrollTrigger.min.js" strategy="afterInteractive" />
-      <Script id="script-smoother-script" src="/js/smoother-script.js" strategy="afterInteractive" />
-      <Script id="script-springer" src="/js/springer.min.js" strategy="afterInteractive" />
-      <Script id="script-lenis" src="/js/lenis.min.js" strategy="afterInteractive" />
-      <Script id="script-custom" src="/js/custom.js" strategy="afterInteractive" />
+      <main className="activity-page-main" style={{ minHeight: "100vh" }}>
+        {/* Page Heading */}
+        <section className="activity-page-heading">
+          <div className="container">
+            <div className="section-subtitle">Find Your Next Adventure</div>
+            <div className="section-title">Trip Search <i>Result</i></div>
+            <span className="activity-heading-underline"></span>
+          </div>
+        </section>
+        {/* Results */}
+        <Suspense fallback={<div className="container" style={{ textAlign: "center", padding: "60px 20px" }}><p>Loading activities...</p></div>}>
+          <ActivitiesResults />
+        </Suspense>
+      </main>
+
+      {/* Footer */}
+      <SiteFooter />
     </>
   );
 }

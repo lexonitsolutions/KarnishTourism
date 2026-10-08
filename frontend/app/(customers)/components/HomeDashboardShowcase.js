@@ -7,28 +7,28 @@ import Link from "next/link";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 const MOCK_DESTINATIONS = [
-  { id: "dubai", slug: "dubai", title: "Dubai", country: "United Arab Emirates", imageUrl: "/images/destination-01.jpg" },
-  { id: "bali", slug: "bali", title: "Bali", country: "Indonesia", imageUrl: "/images/destination-02.jpg" },
-  { id: "maldives", slug: "maldives", title: "Maldives", country: "Indian Ocean", imageUrl: "/images/destination-03.jpg" },
-  { id: "kashmir", slug: "kashmir", title: "Kashmir", country: "India", imageUrl: "/images/destination-04.jpg" },
-  { id: "singapore", slug: "singapore", title: "Singapore", country: "Singapore", imageUrl: "/images/destination-05.jpg" },
-  { id: "switzerland", slug: "switzerland", title: "Switzerland", country: "Europe", imageUrl: "/images/destination-06.jpg" },
+  { id: "dubai", slug: "dubai", title: "Dubai", country: "United Arab Emirates", imageUrl: "/images/destinations/dubai/hero.jpg" },
+  { id: "bali", slug: "bali", title: "Bali", country: "Indonesia", imageUrl: "/images/destinations/bali/hero.jpg" },
+  { id: "maldives", slug: "maldives", title: "Maldives", country: "Indian Ocean", imageUrl: "/images/destinations/maldives/hero.jpg" },
+  { id: "kashmir", slug: "kashmir", title: "Kashmir", country: "India", imageUrl: "/images/destinations/kashmir/hero.jpg" },
+  { id: "singapore", slug: "singapore", title: "Singapore", country: "Singapore", imageUrl: "/images/destinations/singapore/hero.jpg" },
+  { id: "switzerland", slug: "switzerland", title: "Switzerland", country: "Europe", imageUrl: "/images/destinations/switzerland/hero.jpg" },
 ];
 const MOCK_INTERNATIONAL = [
-  { id: "dubai-escape", slug: "dubai-city-desert", title: "Dubai City & Desert Escape", destination: { title: "Dubai, UAE" }, durationDays: 6, price: 84500, currency: "INR", status: "active", imageUrl: "/images/destination-a.jpg", summary: "Skyline stays, old Dubai, a premium desert safari and private transfers.", inclusions: ["Hotels", "Transfers", "Breakfast", "Safari"] },
-  { id: "bali-discovery", slug: "bali-island-discovery", title: "Bali Island Discovery", destination: { title: "Bali, Indonesia" }, durationDays: 7, price: 72499, currency: "INR", status: "active", imageUrl: "/images/destination-b.jpg", summary: "Temples, rice terraces, beach sunsets and a private island day tour.", inclusions: ["Flights", "Resort", "Tours", "Breakfast"] },
-  { id: "swiss-panorama", slug: "swiss-panorama-trail", title: "Swiss Panorama Trail", destination: { title: "Lucerne & Interlaken" }, durationDays: 8, price: 148900, currency: "INR", status: "active", imageUrl: "/images/destination-c.jpg", summary: "Scenic rail journeys, alpine villages and hand-picked lakefront stays.", inclusions: ["Hotels", "Rail Pass", "Breakfast", "Excursions"] },
+  { id: "dubai-escape", slug: "dubai-city-desert", title: "Dubai City & Desert Escape", destination: { title: "Dubai, UAE" }, durationDays: 6, price: 84500, currency: "INR", status: "active", imageUrl: "/images/destinations/dubai/desert-safari.jpg", summary: "Skyline stays, old Dubai, a premium desert safari and private transfers.", inclusions: ["Hotels", "Transfers", "Breakfast", "Safari"] },
+  { id: "bali-discovery", slug: "bali-island-discovery", title: "Bali Island Discovery", destination: { title: "Bali, Indonesia" }, durationDays: 7, price: 72499, currency: "INR", status: "active", imageUrl: "/images/destinations/bali/tegallalang-rice-terrace.jpg", summary: "Temples, rice terraces, beach sunsets and a private island day tour.", inclusions: ["Flights", "Resort", "Tours", "Breakfast"] },
+  { id: "swiss-panorama", slug: "swiss-panorama-trail", title: "Swiss Panorama Trail", destination: { title: "Lucerne & Interlaken" }, durationDays: 8, price: 148900, currency: "INR", status: "active", imageUrl: "/images/destinations/switzerland/jungfraujoch.jpg", summary: "Scenic rail journeys, alpine villages and hand-picked lakefront stays.", inclusions: ["Hotels", "Rail Pass", "Breakfast", "Excursions"] },
 ];
 const MOCK_DOMESTIC = [
-  { id: "kashmir-retreat", slug: "kashmir-alpine-retreat", title: "Kashmir Alpine Retreat", destination: { title: "Srinagar & Gulmarg" }, durationDays: 6, price: 67900, currency: "INR", status: "active", imageUrl: "/images/01.jpg", summary: "Houseboat nights, mountain panoramas and private valley sightseeing.", inclusions: ["Flights", "Hotels", "Transfers", "Breakfast"] },
-  { id: "kerala-backwaters", slug: "kerala-backwaters", title: "Kerala Backwater Escape", destination: { title: "Kochi, Munnar & Alleppey" }, durationDays: 7, price: 58900, currency: "INR", status: "active", imageUrl: "/images/02.jpg", summary: "Tea gardens, a private houseboat and a relaxed coastal finale.", inclusions: ["Hotels", "Houseboat", "Meals", "Transfers"] },
-  { id: "rajasthan-royal", slug: "royal-rajasthan", title: "Royal Rajasthan Circuit", destination: { title: "Jaipur, Jodhpur & Udaipur" }, durationDays: 8, price: 74900, currency: "INR", status: "active", imageUrl: "/images/03.jpg", summary: "Heritage palaces, desert culture and curated local dining experiences.", inclusions: ["Hotels", "Chauffeur", "Breakfast", "Guides"] },
+  { id: "kashmir-retreat", slug: "kashmir-alpine-retreat", title: "Kashmir Alpine Retreat", destination: { title: "Srinagar & Gulmarg" }, durationDays: 6, price: 67900, currency: "INR", status: "active", imageUrl: "/images/destinations/kashmir/gulmarg-gondola.jpg", summary: "Houseboat nights, mountain panoramas and private valley sightseeing.", inclusions: ["Flights", "Hotels", "Transfers", "Breakfast"] },
+  { id: "kerala-backwaters", slug: "kerala-backwaters", title: "Kerala Backwater Escape", destination: { title: "Kochi, Munnar & Alleppey" }, durationDays: 7, price: 58900, currency: "INR", status: "active", imageUrl: "/images/destinations/kerala/alleppey-houseboat.jpg", summary: "Tea gardens, a private houseboat and a relaxed coastal finale.", inclusions: ["Hotels", "Houseboat", "Meals", "Transfers"] },
+  { id: "rajasthan-royal", slug: "royal-rajasthan", title: "Royal Rajasthan Circuit", destination: { title: "Jaipur, Jodhpur & Udaipur" }, durationDays: 8, price: 74900, currency: "INR", status: "active", imageUrl: "/images/destinations/rajasthan/amer-fort.jpg", summary: "Heritage palaces, desert culture and curated local dining experiences.", inclusions: ["Hotels", "Chauffeur", "Breakfast", "Guides"] },
 ];
 const MOCK_ACTIVITIES = [
-  { title: "Dubai Desert Safari", place: "Dubai", duration: "6 hours", price: "₹4,999", rating: "4.9", image: "/images/4.jpg", tag: "Bestseller" },
-  { title: "Burj Khalifa Sky Experience", place: "Downtown Dubai", duration: "2 hours", price: "₹3,499", rating: "4.8", image: "/images/5.jpg", tag: "Skip the line" },
-  { title: "Luxury Marina Dhow Cruise", place: "Dubai Marina", duration: "3 hours", price: "₹5,750", rating: "4.7", image: "/images/06.jpg", tag: "Dinner included" },
-  { title: "Abu Dhabi Grand City Tour", place: "Abu Dhabi", duration: "Full day", price: "₹7,250", rating: "4.9", image: "/images/7.jpg", tag: "Small group" },
+  { title: "Dubai Desert Safari", place: "Dubai", duration: "6 hours", price: "₹4,999", rating: "4.9", image: "/images/destinations/dubai/desert-safari.jpg", tag: "Bestseller" },
+  { title: "Burj Khalifa Sky Experience", place: "Downtown Dubai", duration: "2 hours", price: "₹3,499", rating: "4.8", image: "/images/destinations/dubai/burj-khalifa.jpg", tag: "Skip the line" },
+  { title: "Luxury Marina Dhow Cruise", place: "Dubai Marina", duration: "3 hours", price: "₹5,750", rating: "4.7", image: "/images/destinations/dubai/dubai-marina.jpg", tag: "Dinner included" },
+  { title: "Abu Dhabi Grand City Tour", place: "Abu Dhabi", duration: "Full day", price: "₹7,250", rating: "4.9", image: "/images/destinations/dubai/hero.jpg", tag: "Small group" },
 ];
 const MOCK_OFFERS = [
   { id: "earlybird", title: "Early Bird Holiday Sale", description: "Save on selected international departures booked 45 days ahead.", discountType: "percentage", discountValue: 15, code: "EARLY15", featured: true },
