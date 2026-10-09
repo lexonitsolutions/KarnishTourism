@@ -113,6 +113,97 @@ const STARTER_PACKAGES = [
       { day: 5, title: "Fort Kochi Heritage & Chinese Fishing Nets", description: "Visit colonial Fort Kochi, Jewish Synagogue, and ancient Chinese cantilevered fishing nets." },
       { day: 6, title: "Kochi Airport Departure", description: "Breakfast and private transfer to Cochin International Airport." }
     ],
+  },
+  {
+    title: "Maldives Overwater Lagoon Sanctuary",
+    slug: "maldives-overwater-sanctuary",
+    destinationSlug: "maldives",
+    type: "international",
+    durationDays: 5,
+    price: 118000,
+    imageUrl: "/images/destinations/maldives/overwater-villa.jpg",
+    gallery: ["/images/destinations/maldives/overwater-villa.jpg", "/images/destinations/maldives/hero.jpg", "/images/destinations/maldives/coral-reef.jpg"],
+    summary: "Barefoot indulgence in an overwater villa with direct ocean reef access, sunset dolphin cruise, and private candlelight dinner on the beach.",
+    inclusions: ["4 Nights in Luxury Overwater Villa with Private Deck", "All Inclusive: Breakfast, Lunch, Dinner & Select Cocktails", "Speedboat Airport Transfers Both Ways", "Sunset Dolphin Safari & Snorkel Equipment"],
+    exclusions: ["International Flights", "Optional Scuba Diving", "Spa Treatments"],
+    itinerary: [
+      { day: 1, title: "Velana Airport Arrival & Speedboat Transfer", description: "Speedboat pickup from Male airport to private island resort. Overwater villa check-in." },
+      { day: 2, title: "Lagoon Swimming & Coral Reef Snorkelling", description: "Snorkel with tropical fish and sea turtles right off your villa ladder." },
+      { day: 3, title: "Sunset Dolphin Cruise & Dhoni Safari", description: "Evening traditional dhoni cruise to spot playful spinner dolphin pods." },
+      { day: 4, title: "Beachfront Candlelit Dinner Under Stars", description: "Private table setup on the white sand with custom 4-course seafood menu." },
+      { day: 5, title: "Breakfast & Speedboat Transfer to Airport", description: "Farewell tropical breakfast and speedboat transfer back to Male." }
+    ],
+    featured: true,
+    status: "active"
+  },
+  {
+    title: "Futuristic Singapore & Sentosa Fantasy",
+    slug: "singapore-sentosa-fantasy",
+    destinationSlug: "singapore",
+    type: "international",
+    durationDays: 5,
+    price: 62500,
+    imageUrl: "/images/destinations/singapore/gardens-by-the-bay.jpg",
+    gallery: ["/images/destinations/singapore/gardens-by-the-bay.jpg", "/images/destinations/singapore/universal-studios.jpg", "/images/destinations/singapore/hero.jpg"],
+    summary: "Experience Gardens by the Bay Supertrees, Universal Studios thrill rides, night safari, and Marina Bay Sands observation deck.",
+    inclusions: ["4 Nights in 4-Star Downtown Singapore Hotel", "Daily breakfast buffet", "Universal Studios Sentosa All-Day Pass", "Gardens by the Bay Flower Dome & Cloud Forest", "Night Safari with Tram Ride", "Airport transfers"],
+    exclusions: ["Airfare", "Personal expenses", "Visa fee"],
+    itinerary: [
+      { day: 1, title: "Singapore Changi Arrival & Marina Bay Sands", description: "Transfer to hotel. Evening visit to Marina Bay Sands SkyPark." },
+      { day: 2, title: "Gardens by the Bay & Singapore Flyer", description: "Explore Cloud Forest mist waterfall, Flower Dome, and Supertree light show." },
+      { day: 3, title: "Universal Studios Sentosa Island Full Day", description: "Full day of thrilling rollercoasters, 3D rides, and Hollywood zones." },
+      { day: 4, title: "Singapore Night Safari & Wildlife Tram", description: "World's first nocturnal zoo experience with guided open-air tram." },
+      { day: 5, title: "Jewel Changi Rain Vortex & Flight Departure", description: "Explore the giant indoor waterfall at Jewel Changi before departure." }
+    ],
+    featured: true,
+    status: "active"
+  },
+  {
+    title: "Swiss Alpine Wonders & Glacier Rail",
+    slug: "swiss-alpine-wonders",
+    destinationSlug: "switzerland",
+    type: "international",
+    durationDays: 8,
+    price: 148900,
+    imageUrl: "/images/destinations/switzerland/jungfraujoch.jpg",
+    gallery: ["/images/destinations/switzerland/jungfraujoch.jpg", "/images/destinations/switzerland/hero.jpg"],
+    summary: "8-day fairytale rail journey through Zurich, Lucerne, Interlaken, and the Top of Europe Jungfraujoch summit.",
+    inclusions: ["7 Nights in Central Swiss 4-Star Hotels", "Daily breakfast buffet", "Swiss Travel Pass 8 Days Unlimited 2nd Class", "Jungfraujoch Top of Europe Mountain Rail Pass", "Lake Lucerne Steamboat Cruise"],
+    exclusions: ["Airfare", "Schengen Visa", "Lunches & Dinners"],
+    itinerary: [
+      { day: 1, title: "Zurich Arrival & Scenic Train to Lucerne", description: "Arrive in Zurich and take the panoramic lake train to Lucerne." },
+      { day: 2, title: "Chapel Bridge & Mount Titlis Rotair Cable Car", description: "Revolving cable car to 10,000 ft glacier at Mt. Titlis with ice cliff walk." },
+      { day: 3, title: "GoldenPass Line Train to Interlaken", description: "Picturesque journey past alpine chalets and emerald lakes to Interlaken." },
+      { day: 4, title: "Jungfraujoch: Top of Europe Expedition", description: "Rack railway to the highest train station in Europe with ice palace." },
+      { day: 5, title: "Lauterbrunnen Valley of 72 Waterfalls", description: "Stroll the iconic valley that inspired Tolkien's Rivendell." },
+      { day: 6, title: "Zermatt & Matterhorn View", description: "Scenic rail to car-free Zermatt with iconic Matterhorn pyramid views." },
+      { day: 7, title: "Zurich Old Town & Lake Promenade", description: "Return to Zurich for chocolate tastings and luxury shopping." },
+      { day: 8, title: "Zurich Airport Departure", description: "Breakfast and train to Zurich Airport for flight home." }
+    ],
+    featured: true,
+    status: "active"
+  },
+  {
+    title: "Royal Rajasthan Palaces: Jaipur, Jodhpur & Udaipur",
+    slug: "royal-rajasthan-palaces",
+    destinationSlug: "rajasthan",
+    type: "domestic",
+    durationDays: 7,
+    price: 54900,
+    imageUrl: "/images/destinations/rajasthan/amer-fort.jpg",
+    gallery: ["/images/destinations/rajasthan/amer-fort.jpg", "/images/destinations/rajasthan/hero.jpg"],
+    summary: "7-day majestic heritage circuit exploring Pink City Jaipur, Blue City Jodhpur, and City of Lakes Udaipur in private chauffeur luxury.",
+    inclusions: ["6 Nights in Heritage Haveli Hotels", "Daily royal breakfast", "Private AC sedan with experienced chauffeur throughout", "Guided entry tours at Amer Fort, Mehrangarh Fort & City Palace", "Lake Pichola boat cruise in Udaipur"],
+    exclusions: ["Airfare", "Personal shopping", "Tips"],
+    itinerary: [
+      { day: 1, title: "Jaipur Pink City Arrival & Chokhi Dhani", description: "Airport pickup, hotel check-in, and traditional Rajasthani dinner at Chokhi Dhani." },
+      { day: 2, title: "Amer Fort, Hawa Mahal & City Palace", description: "Elephant/jeep ride at Amer Fort, Jal Mahal photo stop, and Hawa Mahal." },
+      { day: 3, title: "Drive to Jodhpur via Ajmer & Pushkar", description: "Visit Brahma temple at Pushkar, drive to Jodhpur Sun City." },
+      { day: 4, title: "Mehrangarh Fort & Umaid Bhawan Palace", description: "Explore the colossal cliffside Mehrangarh Fort and Jaswant Thada marble cenotaph." },
+      { day: 5, title: "Drive to Udaipur via Ranakpur Jain Temples", description: "Marvel at 1444 intricately carved marble pillars at Ranakpur." },
+      { day: 6, title: "Udaipur City Palace & Lake Pichola Cruise", description: "Tour grand City Palace museum and enjoy romantic sunset boat cruise on Lake Pichola." },
+      { day: 7, title: "Udaipur Airport Departure", description: "Breakfast and transfer to Udaipur Maharana Pratap Airport." }
+    ],
     featured: true,
     status: "active"
   }
@@ -152,6 +243,278 @@ async function ensureDestinations() {
       }
     }
     console.log("[Seed] Verified starter tour packages in MongoDB");
+
+    // Seed starter Visas
+    const Visa = require("../models/Visa");
+    const STARTER_VISAS = [
+      {
+        slug: "uae",
+        country: "United Arab Emirates",
+        title: "UAE (Dubai) Tourist & Visit Visa",
+        region: "Middle East",
+        flag: "🇦🇪",
+        imageUrl: "/images/destinations/dubai/hero.jpg",
+        badge: "Fast Track 24h",
+        tagline: "Instant online e-Visa processing for tourism, family visits, and business stopovers in Dubai & Abu Dhabi.",
+        startingPrice: 6899,
+        processingTime: "24 – 48 Hours",
+        validity: "60 Days",
+        stayPeriod: "30 or 60 Days",
+        entryType: "Single & Multiple Entry",
+        approvalRate: "99.6%",
+        expressAvailable: true,
+        expressTime: "4 – 8 Hours",
+        status: "active",
+        featured: true,
+        types: [
+          { id: "uae-30-single", name: "30 Days Tourist Visa (Single Entry)", validity: "60 Days", stay: "30 Days", fee: 6899, expressFee: 8999, description: "Best for short leisure holidays, shopping festivals, and city stopovers." },
+          { id: "uae-60-single", name: "60 Days Tourist Visa (Single Entry)", validity: "60 Days", stay: "60 Days", fee: 12499, expressFee: 14999, description: "Ideal for extended vacations, family reunions, and property inspection visits." }
+        ]
+      },
+      {
+        slug: "singapore",
+        country: "Singapore",
+        title: "Singapore Tourist eVisa",
+        region: "Southeast Asia",
+        flag: "🇸🇬",
+        imageUrl: "/images/destinations/singapore/hero.jpg",
+        badge: "Guaranteed Submission",
+        tagline: "Official Singapore ICA approved e-Visa processing with paperless submission and fast approval.",
+        startingPrice: 2850,
+        processingTime: "3 – 4 Working Days",
+        validity: "Up to 2 Years",
+        stayPeriod: "30 Days per entry",
+        entryType: "Multiple Entry",
+        approvalRate: "99.2%",
+        status: "active",
+        featured: true,
+        types: [
+          { id: "sg-standard", name: "Singapore Multiple Entry eVisa", validity: "Up to 2 Years", stay: "30 Days", fee: 2850, description: "Valid for business, conference, and tourism across Singapore." }
+        ]
+      },
+      {
+        slug: "thailand",
+        country: "Thailand",
+        title: "Thailand Tourist Visa & Fast-Track",
+        region: "Southeast Asia",
+        flag: "🇹🇭",
+        imageUrl: "/images/destinations/thailand/hero.jpg",
+        badge: "Popular Holiday",
+        tagline: "Pre-approved e-Visa sticker assistance and VIP airport fast-track immigration clearance.",
+        startingPrice: 3200,
+        processingTime: "4 – 5 Working Days",
+        validity: "90 Days",
+        stayPeriod: "60 Days",
+        entryType: "Single Entry",
+        approvalRate: "99.8%",
+        status: "active",
+        featured: true,
+        types: [
+          { id: "th-60-single", name: "Tourist Visa (Single Entry - 60 Days)", validity: "90 Days", stay: "60 Days", fee: 3200, description: "Extended stay visa with option to extend 30 days locally in Thailand." }
+        ]
+      }
+    ];
+
+    for (const v of STARTER_VISAS) {
+      const exists = await Visa.findOne({ slug: v.slug });
+      if (!exists) await Visa.create(v);
+    }
+    console.log("[Seed] Verified starter visas in MongoDB");
+
+    // Seed starter Home Dashboard SiteContent sections
+    const SiteContent = require("../models/SiteContent");
+    const STARTER_SECTIONS = [
+      {
+        sectionKey: "hero",
+        title: "Crafted Journeys & Unrivalled Luxury Escapes",
+        subtitle: "Handpicked private tours, 5-star resort retreats, and seamless visa concierges across the world's most sought-after destinations.",
+        badge: "Bespoke Luxury Travel Agency",
+        mediaUrl: "/images/destinations/dubai/hero.jpg",
+        ctaText: "Explore World Packages",
+        ctaLink: "/tours",
+        meta: { highlightStats: ["12,000+ Happy Explorers", "45+ Global Destinations", "99.8% Visa Approval Rate"] }
+      },
+      {
+        sectionKey: "announcement",
+        title: "2026 Early Bird Departure Privilege",
+        subtitle: "Reserve 45 days in advance and unlock up to ₹25,000 instant savings on international itineraries.",
+        badge: "Limited Seasonal Privilege",
+        ctaText: "Claim Discount",
+        ctaLink: "/tours?promo=EARLYBIRD15"
+      },
+      {
+        sectionKey: "about_section",
+        title: "Experience Travel Without Compromise",
+        subtitle: "Every itinerary crafted by Karnish Tourism pairs private chauffeur transfers, luxury hotel properties, and curated local masters.",
+        badge: "Our Promise"
+      }
+    ];
+
+    for (const s of STARTER_SECTIONS) {
+      const exists = await SiteContent.findOne({ sectionKey: s.sectionKey });
+      if (!exists) await SiteContent.create(s);
+    }
+    console.log("[Seed] Verified starter site content sections in MongoDB");
+
+    // Seed starter Offers & Promotions
+    const Offer = require("../models/Offer");
+    const STARTER_OFFERS = [
+      {
+        title: "Early Bird Advance Privilege",
+        code: "EARLY15",
+        discountType: "percentage",
+        discountValue: 15,
+        description: "Book your international holiday 45 days in advance and save up to 15%.",
+        featured: true,
+        status: "active",
+      },
+      {
+        title: "Family Vacation Bonus",
+        code: "FAMILY5K",
+        discountType: "fixed",
+        discountValue: 5000,
+        description: "Save instantly ₹5,000 on group bookings of 4 or more travellers.",
+        featured: true,
+        status: "active",
+      },
+      {
+        title: "Couples & Honeymoon Special",
+        code: "HONEYMOON10",
+        discountType: "percentage",
+        discountValue: 10,
+        description: "10% OFF with complimentary candlelit beach dinner and floral room decor.",
+        featured: true,
+        status: "active",
+      },
+      {
+        title: "Quick Weekend Getaway",
+        code: "WEEKENDESCAPE",
+        discountType: "fixed",
+        discountValue: 3000,
+        description: "Flat ₹3,000 OFF on flexible short breaks across Goa, Kerala & Dubai.",
+        featured: true,
+        status: "active",
+      },
+    ];
+
+    for (const o of STARTER_OFFERS) {
+      const exists = await Offer.findOne({ code: o.code });
+      if (!exists) await Offer.create(o);
+    }
+    console.log("[Seed] Verified starter promotional offers in MongoDB");
+
+    // Seed starter Banners
+    const Banner = require("../models/Banner");
+    const STARTER_BANNERS = [
+      {
+        title: "Explore the World with Karnish Tourism",
+        subtitle: "Thoughtfully curated journeys, exceptional stays and unforgettable memories.",
+        badge: "Luxury Travel Specialists",
+        imageUrl: "/images/destination-01.jpg",
+        linkUrl: "/tours",
+        ctaText: "Discover Itineraries",
+        displayOrder: 1,
+        status: "active",
+        featured: true,
+      },
+      {
+        title: "Dubai Red Dunes & City Skyline",
+        subtitle: "Private 4x4 desert dune safari, Burj Khalifa at the top, and luxury Marina yacht dinner.",
+        badge: "Bestseller",
+        imageUrl: "/images/destinations/dubai/hero.jpg",
+        linkUrl: "/tours/international/dubai",
+        ctaText: "Explore Dubai",
+        displayOrder: 2,
+        status: "active",
+        featured: true,
+      },
+      {
+        title: "Barefoot Overwater Luxury in the Maldives",
+        subtitle: "Overwater villa retreats with direct coral reef ladders and sunset dolphin safaris.",
+        badge: "Romantic Escape",
+        imageUrl: "/images/destinations/maldives/hero.jpg",
+        linkUrl: "/tours/international/maldives",
+        ctaText: "View Maldives",
+        displayOrder: 3,
+        status: "active",
+        featured: true,
+      },
+    ];
+
+    for (const b of STARTER_BANNERS) {
+      const exists = await Banner.findOne({ title: b.title });
+      if (!exists) await Banner.create(b);
+    }
+    console.log("[Seed] Verified starter homepage banners in MongoDB");
+
+    // Seed starter Activities
+    const Activity = require("../models/Activity");
+    const STARTER_ACTIVITIES = [
+      {
+        title: "Red Dunes Desert Safari & BBQ",
+        slug: "red-dunes-desert-safari",
+        place: "Dubai",
+        duration: "6 Hours",
+        price: 4999,
+        rating: 4.9,
+        image: "/images/destinations/dubai/desert-safari.jpg",
+        tag: "Bestseller",
+        description: "Thrilling 4x4 dune bashing across Lahbab red dunes with sunset camel trek, falconry, fire dance and Arabic BBQ buffet.",
+        status: "active",
+      },
+      {
+        title: "Burj Khalifa 124th Floor Sky Experience",
+        slug: "burj-khalifa-sky-experience",
+        place: "Downtown Dubai",
+        duration: "2 Hours",
+        price: 3499,
+        rating: 4.8,
+        image: "/images/destinations/dubai/burj-khalifa.jpg",
+        tag: "Fast Track",
+        description: "High-speed elevator ride to the 124th & 125th observation decks overlooking Dubai skyline and dancing fountain show.",
+        status: "active",
+      },
+      {
+        title: "Luxury Dubai Marina Yacht Cruise",
+        slug: "dubai-marina-yacht-cruise",
+        place: "Dubai Marina",
+        duration: "3 Hours",
+        price: 5750,
+        rating: 4.7,
+        image: "/images/destinations/dubai/dubai-marina.jpg",
+        tag: "Dinner Included",
+        description: "Illuminated glass dhow yacht cruise gliding past Ain Dubai, JBR and Dubai Marina towers with international buffet.",
+        status: "active",
+      },
+      {
+        title: "Abu Dhabi Sheikh Zayed Mosque City Tour",
+        slug: "abu-dhabi-grand-city-tour",
+        place: "Abu Dhabi",
+        duration: "Full Day",
+        price: 7250,
+        rating: 4.9,
+        image: "/images/destinations/dubai/hero.jpg",
+        tag: "Small Group",
+        description: "Marvel at the architectural masterpiece Sheikh Zayed Grand Mosque, Emirates Palace, and Louvre Abu Dhabi museum.",
+        status: "active",
+      },
+    ];
+
+    const dubaiDest = await Destination.findOne({ slug: "dubai" });
+    if (dubaiDest) {
+      for (const a of STARTER_ACTIVITIES) {
+        const exists = await Activity.findOne({ slug: a.slug });
+        if (!exists) {
+          await Activity.create({
+            ...a,
+            destination: dubaiDest._id,
+            imageUrl: a.image,
+            category: a.tag || "Sightseeing",
+          });
+        }
+      }
+      console.log("[Seed] Verified starter activities in MongoDB");
+    }
   } catch (error) {
     console.warn("[Seed] ensureDestinations warning:", error.message);
   }

@@ -9,6 +9,7 @@ const resourceRouter = require("./routes/resources");
 const bookingRouter = require("./routes/bookings");
 const inquiryRouter = require("./routes/inquiries");
 const collaboratorRouter = require("./routes/collaborators");
+const adminRouter = require("./routes/admin");
 const { notFound, errorHandler } = require("./middleware/error");
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 app.get("/", (_req, res) => res.json({ success: true, service: "Karnish Tourism Backend API" }));
 app.get("/api/health", (_req, res) => { const connected = mongoose.connection.readyState === 1; res.status(connected ? 200 : 503).json({ success: connected, database: connected ? "connected" : "disconnected" }); });
 app.use("/api/auth", authRouter);
+app.use("/api/admin", adminRouter);
 app.use("/api/catalog", publicRouter);
 app.use("/api/bookings", bookingRouter);
 app.use("/api/inquiries", inquiryRouter);
@@ -30,6 +32,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 const { ensureDestinations } = require("./services/catalogSeed");
+const { seedTestAccounts } = require("./services/seedUsers");
 
 let server;
 async function start() {
@@ -37,6 +40,7 @@ async function start() {
   try {
     await connectDatabase();
     await ensureDestinations();
+    await seedTestAccounts();
   } catch (error) {
     console.warn("[Backend] Database initial connect warning:", error.message);
   }
