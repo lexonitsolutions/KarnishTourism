@@ -3,7 +3,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useScrollAnimation } from "../utils/useScrollAnimation";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-const mediaUrl = (url) => url?.startsWith("/") ? `${API_BASE}${url}` : url;
+const mediaUrl = (value) => {
+  if (!value) return "";
+  if (value.startsWith("http://") || value.startsWith("https://")) return value;
+  if (value.startsWith("/uploads/")) return `${API_BASE}${value}`;
+  return value;
+};
 
 export default function GalleryPreviewSection({ context = "home" }) {
   const [data, setData] = useState(null);

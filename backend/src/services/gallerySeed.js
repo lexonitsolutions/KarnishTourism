@@ -439,11 +439,6 @@ async function ensureGallery() {
       console.log(`[Seed] Seeded ${INITIAL_MILESTONES.length} gallery milestones`);
     }
 
-    await GalleryMedia.updateOne(
-      { title: "Burj Khalifa & Downtown Dubai Skyline" },
-      { $set: { mediaUrl: "/images/about/capital_burj.jpg", thumbnailUrl: "/images/about/capital_burj.jpg" } }
-    );
-
     await GallerySettings.updateOne(
       { key: "primary" },
       { $set: { heroImage: "/images/gallery/gallery_hero_dubai.jpg" } }
