@@ -237,9 +237,14 @@ export default function GalleryManagement() {
   }, []);
 
   const api = useCallback(async (path = "", options = {}) => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("karnish_token") : null;
     const res = await fetch(`${API_BASE}/api/admin/gallery${path}`, {
       credentials: "include",
-      headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(options.headers || {}),
+      },
       ...options,
     });
     const body = await res.json().catch(() => ({}));
@@ -250,7 +255,7 @@ export default function GalleryManagement() {
   const load = useCallback(async () => {
     setBusy(true);
     try {
-      setData(await api());
+      setData(await api(`?_t=${Date.now()}`));
     } catch (e) {
       tell(e.message);
     } finally {
@@ -341,13 +346,18 @@ export default function GalleryManagement() {
       let mediaUrls = (fd.get("mediaUrls") || "").split(/\r?\n|,/).map((s) => s.trim()).filter(Boolean);
       const storyFiles = fd.getAll("storyFiles").filter((entry) => entry?.size);
       if (storyFiles.length) mediaUrls = [...mediaUrls, ...(await Promise.all(storyFiles.map(upload)))];
+      const mediaType = tab === "videos" ? "video" : (fd.get("mediaType") || editing?.mediaType || "image");
+      let thumbnailUrl = fd.get("thumbnailUrl") || "";
+      if (mediaType === "image" || tab === "photos" || tab === "achievements") {
+        thumbnailUrl = mediaUrl;
+      }
       const payload = {
         ...editing,
         title: fd.get("title"),
         description: fd.get("description"),
         mediaUrl,
-        thumbnailUrl: fd.get("thumbnailUrl") || "",
-        mediaType: tab === "videos" ? "video" : "image",
+        thumbnailUrl,
+        mediaType,
         category: fd.get("category") || "",
         destination: fd.get("destination") || "",
         eventDate: fd.get("eventDate") || null,
@@ -710,14 +720,16 @@ export default function GalleryManagement() {
                       <tr key={item._id}>
                         <td>
                           <div className="ga-thumb-box">
-                            {item.thumbnailUrl ? (
-                              <img src={absoluteMedia(item.thumbnailUrl)} alt="" />
-                            ) : item.mediaType === "video" ? (
-                              <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#0f2454", color: "#38bdf8" }}>
-                                <i className="ti-video-camera" style={{ fontSize: "16px" }} />
-                              </div>
-                            ) : item.mediaUrl || item.mediaUrls?.[0] ? (
-                              <img src={absoluteMedia(item.mediaUrl || item.mediaUrls[0])} alt="" />
+                            {item.mediaType === "video" ? (
+                              item.thumbnailUrl ? (
+                                <img src={absoluteMedia(item.thumbnailUrl)} alt="" />
+                              ) : (
+                                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#0f2454", color: "#38bdf8" }}>
+                                  <i className="ti-video-camera" style={{ fontSize: "16px" }} />
+                                </div>
+                              )
+                            ) : item.mediaUrl || item.thumbnailUrl || item.mediaUrls?.[0] ? (
+                              <img src={absoluteMedia(item.mediaUrl || item.thumbnailUrl || item.mediaUrls?.[0])} alt="" />
                             ) : (
                               <i className="ti-image" />
                             )}
@@ -936,6 +948,9 @@ function Editor({ tab, item, onSubmit, onClose, busy }) {
   const isAchievement = tab === "achievements";
   const isMemory = tab === "memories";
   const isMilestone = tab === "milestones";
+  const [mediaType, setMediaType] = useState(item.mediaType || (tab === "videos" ? "video" : "image"));
+  const [filePreview, setFilePreview] = useState(null);
+  const [currentUrl, setCurrentUrl] = useState(item.mediaUrl || "");
 
   return (
     <div className="adm-modal-backdrop">
@@ -970,7 +985,11 @@ function Editor({ tab, item, onSubmit, onClose, busy }) {
               <>
                 <div className="adm-form-group">
                   <label>Media Type</label>
-                  <select name="mediaType" defaultValue={item.mediaType || "image"}>
+                  <select
+                    name="mediaType"
+                    value={mediaType}
+                    onChange={(e) => setMediaType(e.target.value)}
+                  >
                     <option value="image">Photo / Image</option>
                     <option value="video">Video (MP4, YouTube, Vimeo)</option>
                   </select>
@@ -990,9 +1009,31 @@ function Editor({ tab, item, onSubmit, onClose, busy }) {
                   <input
                     type="file"
                     name="file"
-                    accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
+                    accept={mediaType === "video" ? "video/mp4,video/webm" : "image/jpeg,image/png,image/webp,image/gif"}
                     style={{ padding: "8px" }}
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f && f.type.startsWith("image/")) {
+                        setFilePreview(URL.createObjectURL(f));
+                      } else {
+                        setFilePreview(null);
+                      }
+                    }}
                   />
+                  {(filePreview || (mediaType === "image" && currentUrl)) && (
+                    <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 12, padding: 8, background: "#f8fafc", borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                      <div style={{ width: 60, height: 60, borderRadius: 6, overflow: "hidden", border: "1px solid #cbd5e1", flexShrink: 0 }}>
+                        <img
+                          src={filePreview || absoluteMedia(currentUrl)}
+                          alt="Preview"
+                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        />
+                      </div>
+                      <span style={{ fontSize: 13, color: "#475569", fontWeight: 500 }}>
+                        {filePreview ? "✓ New image selected for upload" : "Current image preview"}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="adm-form-group col-span-2">
@@ -1001,13 +1042,16 @@ function Editor({ tab, item, onSubmit, onClose, busy }) {
                     name="mediaUrl"
                     defaultValue={item.mediaUrl}
                     placeholder="https://... or /images/..."
+                    onChange={(e) => setCurrentUrl(e.target.value)}
                   />
                 </div>
 
-                <div className="adm-form-group">
-                  <label>Video Thumbnail URL (Optional)</label>
-                  <input name="thumbnailUrl" defaultValue={item.thumbnailUrl} placeholder="/images/..." />
-                </div>
+                {mediaType === "video" && (
+                  <div className="adm-form-group col-span-2">
+                    <label>Video Thumbnail / Poster URL (Optional)</label>
+                    <input name="thumbnailUrl" defaultValue={item.thumbnailUrl} placeholder="/images/..." />
+                  </div>
+                )}
 
                 <div className="adm-form-group">
                   <label>Destination (Optional)</label>
