@@ -22,6 +22,25 @@
   --shadow-hover: 0 10px 30px rgba(15, 36, 84, 0.1);
 }
 
+/* Ensure document scrolling is never locked on executive admin portal */
+html,
+body {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100% !important;
+  max-height: none !important;
+}
+
+html.karnish-intro-active,
+html.karnish-intro-active body,
+body.loaded {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
 .adm-shell {
   min-height: 100vh;
   background: var(--clr-bg-light);
@@ -29,6 +48,8 @@
   font-family: var(--font-primary);
   display: flex;
   flex-direction: column;
+  overflow-y: visible !important;
+  scroll-behavior: smooth;
 }
 
 /* ==========================================================================
@@ -259,6 +280,7 @@
 .adm-body {
   flex: 1;
   padding: clamp(24px, 3.5vw, 40px);
+  padding-bottom: 140px !important;
   max-width: 1540px;
   width: 100%;
   margin: 0 auto;
@@ -362,6 +384,31 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow-card);
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.adm-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.adm-table-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.adm-table-scroll::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+.adm-table-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.adm-table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .adm-table-toolbar {
@@ -405,6 +452,7 @@
 
 .adm-table {
   width: 100%;
+  min-width: 1020px;
   border-collapse: collapse;
   text-align: left;
 }
@@ -457,14 +505,23 @@
 .adm-badge.active,
 .adm-badge.confirmed,
 .adm-badge.paid,
-.adm-badge.approved {
+.adm-badge.approved,
+.adm-badge.converted {
   background: #e6f8f1;
   color: #0d8a57;
   border: 1px solid #c2eed9;
 }
 
+.adm-badge.new {
+  background: #e0f2fe;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
+}
+
 .adm-badge.pending,
-.adm-badge.draft {
+.adm-badge.draft,
+.adm-badge.contacted,
+.adm-badge.in_progress {
   background: #fef7ea;
   color: #b47818;
   border: 1px solid #fae8c8;
@@ -473,7 +530,8 @@
 .adm-badge.inactive,
 .adm-badge.suspended,
 .adm-badge.cancelled,
-.adm-badge.rejected {
+.adm-badge.rejected,
+.adm-badge.closed {
   background: #fdeef1;
   color: #dc2626;
   border: 1px solid #f9cad2;

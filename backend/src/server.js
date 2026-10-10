@@ -10,6 +10,7 @@ const bookingRouter = require("./routes/bookings");
 const inquiryRouter = require("./routes/inquiries");
 const collaboratorRouter = require("./routes/collaborators");
 const adminRouter = require("./routes/admin");
+const { galleryRouter, galleryAdminRouter, uploadsDir } = require("./routes/gallery");
 const { notFound, errorHandler } = require("./middleware/error");
 
 const app = express();
@@ -19,10 +20,15 @@ app.disable("x-powered-by");
 app.use(cors({ credentials: true, origin(origin, callback) { if (!origin || allowedOrigins.includes(origin)) return callback(null, true); const error = new Error("Origin not allowed"); error.status = 403; callback(error); } }));
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: false, limit: "1mb" }));
+app.use("/uploads/gallery", express.static(uploadsDir, { immutable: true, maxAge: "30d", index: false }));
+const frontendPublicDir = require("path").resolve(__dirname, "../../frontend/public");
+app.use(express.static(frontendPublicDir));
 app.get("/", (_req, res) => res.json({ success: true, service: "Karnish Tourism Backend API" }));
 app.get("/api/health", (_req, res) => { const connected = mongoose.connection.readyState === 1; res.status(connected ? 200 : 503).json({ success: connected, database: connected ? "connected" : "disconnected" }); });
 app.use("/api/auth", authRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/admin/gallery", galleryAdminRouter);
+app.use("/api/gallery", galleryRouter);
 app.use("/api/catalog", publicRouter);
 app.use("/api/bookings", bookingRouter);
 app.use("/api/inquiries", inquiryRouter);
@@ -33,6 +39,7 @@ app.use(errorHandler);
 
 const { ensureDestinations } = require("./services/catalogSeed");
 const { seedTestAccounts } = require("./services/seedUsers");
+const { ensureGallery } = require("./services/gallerySeed");
 
 let server;
 async function start() {
@@ -40,6 +47,7 @@ async function start() {
   try {
     await connectDatabase();
     await ensureDestinations();
+    await ensureGallery();
     await seedTestAccounts();
   } catch (error) {
     console.warn("[Backend] Database initial connect warning:", error.message);
@@ -58,4 +66,5 @@ async function start() {
 async function shutdown(signal) { console.log(`[Backend] ${signal} received; shutting down`); if (server) await new Promise((resolve) => server.close(resolve)); await disconnectDatabase(); process.exit(0); }
 process.on("SIGINT", () => shutdown("SIGINT")); process.on("SIGTERM", () => shutdown("SIGTERM"));
 if (require.main === module) start().catch((error) => { console.error("[Backend] Startup failed:", error.message); process.exitCode = 1; });
+// SMTP inquiry notification service active
 module.exports = { app, start };

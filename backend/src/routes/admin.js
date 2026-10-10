@@ -14,6 +14,7 @@ const Commission = require("../models/Commission");
 const AuditLog = require("../models/AuditLog");
 const Offer = require("../models/Offer");
 const Banner = require("../models/Banner");
+const Inquiry = require("../models/Inquiry");
 
 const router = express.Router();
 
@@ -51,6 +52,8 @@ router.get("/analytics", async (_req, res, next) => {
       totalCustomers,
       totalCollaborators,
       pendingCollaborators,
+      totalInquiries,
+      newInquiries,
       paidBookings,
       recentBookings,
     ] = await Promise.all([
@@ -62,6 +65,8 @@ router.get("/analytics", async (_req, res, next) => {
         role: { $in: ["collaborator", "b2b"] },
         "collaboratorProfile.approvalStatus": "pending",
       }),
+      Inquiry.countDocuments(),
+      Inquiry.countDocuments({ status: "new" }),
       Booking.find({ paymentStatus: "paid" }).select("totalAmount createdAt"),
       Booking.find()
         .sort({ createdAt: -1 })
@@ -92,6 +97,8 @@ router.get("/analytics", async (_req, res, next) => {
         totalCustomers,
         totalCollaborators,
         pendingCollaborators,
+        totalInquiries,
+        newInquiries,
       },
       monthlyRevenue,
       recentBookings,
@@ -750,6 +757,102 @@ router.delete("/banners/:id", async (req, res, next) => {
     if (!banner) return res.status(404).json({ success: false, error: "Banner not found" });
     await recordAudit(req, "DELETE_BANNER", "Banner", req.params.id);
     res.json({ success: true, message: "Banner deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ==========================================
+// 13. CUSTOMER INQUIRIES & MESSAGES
+// ==========================================
+router.get("/inquiries", async (req, res, next) => {
+  try {
+    const { status, search } = req.query;
+    const filter = {};
+
+    if (status && status !== "all") {
+      filter.status = status;
+    }
+
+    if (search && search.trim()) {
+      const q = search.trim();
+      filter.$or = [
+        { name: { $regex: q, $options: "i" } },
+        { email: { $regex: q, $options: "i" } },
+        { phone: { $regex: q, $options: "i" } },
+        { service: { $regex: q, $options: "i" } },
+        { message: { $regex: q, $options: "i" } },
+      ];
+    }
+
+    const { limit, skip } = pagination(req);
+    const [items, total, counts] = await Promise.all([
+      Inquiry.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate("destination", "title slug")
+        .populate("package", "title slug price")
+        .lean(),
+      Inquiry.countDocuments(filter),
+      Inquiry.aggregate([
+        { $group: { _id: "$status", count: { $sum: 1 } } },
+      ]),
+    ]);
+
+    const statusCounts = counts.reduce((acc, c) => {
+      acc[c._id] = c.count;
+      return acc;
+    }, {});
+
+    const totalCount = await Inquiry.countDocuments();
+
+    res.json({
+      success: true,
+      items,
+      total,
+      stats: {
+        total: totalCount,
+        new: statusCounts.new || 0,
+        contacted: statusCounts.contacted || 0,
+        in_progress: statusCounts.in_progress || 0,
+        converted: statusCounts.converted || 0,
+        closed: statusCounts.closed || 0,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/inquiries/:id/status", async (req, res, next) => {
+  try {
+    const { status } = req.body;
+    const allowed = ["new", "contacted", "in_progress", "converted", "closed"];
+    if (!allowed.includes(status)) {
+      return res.status(400).json({ success: false, error: "Invalid status value" });
+    }
+
+    const item = await Inquiry.findByIdAndUpdate(
+      req.params.id,
+      { $set: { status } },
+      { new: true }
+    );
+    if (!item) return res.status(404).json({ success: false, error: "Inquiry not found" });
+
+    await recordAudit(req, "UPDATE_INQUIRY_STATUS", "Inquiry", item._id, { status });
+    res.json({ success: true, item });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/inquiries/:id", async (req, res, next) => {
+  try {
+    const item = await Inquiry.findByIdAndDelete(req.params.id);
+    if (!item) return res.status(404).json({ success: false, error: "Inquiry not found" });
+    await recordAudit(req, "DELETE_INQUIRY", "Inquiry", req.params.id, { name: item.name });
+    res.json({ success: true, message: "Inquiry deleted" });
   } catch (error) {
     next(error);
   }

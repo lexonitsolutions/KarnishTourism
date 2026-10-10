@@ -5,8 +5,11 @@ import Link from "next/link";
 import Script from "next/script";
 import SiteFooter from "../components/SiteFooter";
 import BusinessCollaborationSection from "../components/BusinessCollaborationSection";
+import GalleryPreviewSection from "../components/GalleryPreviewSection";
+import { useScrollAnimation } from "../utils/useScrollAnimation";
 
 export default function About() {
+  useScrollAnimation();
   const videoRef = useRef(null);
   // Accordion active state for Leadership Principles (Page 4 of Company Profile)
   const [activeAccordion, setActiveAccordion] = useState(0);
@@ -244,10 +247,7 @@ export default function About() {
                   {/* Pillar 1 */}
                   <div className="col-md-3">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/card_hassle_free.jpg" alt="Hassle-Free Tours" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-earth-americas"></i></div>
                       <h5>Hassle-Free Tours</h5>
                       <p>Seamless end-to-end planning with proactive on-ground customer support.</p>
@@ -257,10 +257,7 @@ export default function About() {
                   {/* Pillar 2 */}
                   <div className="col-md-3">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/card_adventure.jpg" alt="Adventure & Thrill" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-compass"></i></div>
                       <h5>Adventure &amp; Thrill</h5>
                       <p>Desert safaris, dune bashing, watersports, and unforgettable outdoor thrills.</p>
@@ -270,10 +267,7 @@ export default function About() {
                   {/* Pillar 3 */}
                   <div className="col-md-3">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/card_world_tours.jpg" alt="Managing Worldwide" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-plane"></i></div>
                       <h5>Managing Worldwide</h5>
                       <p>Leading multi-national travel management across international destinations.</p>
@@ -283,10 +277,7 @@ export default function About() {
                   {/* Pillar 4 */}
                   <div className="col-md-3">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/card_deals.jpg" alt="Exceptional Deals" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-tags"></i></div>
                       <h5>Exceptional Deals</h5>
                       <p>Negotiated partner rates across 500+ contracted luxury hotels and resorts.</p>
@@ -352,10 +343,7 @@ export default function About() {
                   {/* Service 1: Hotel Bookings */}
                   <div className="col-lg-4 col-md-6">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/service_hotel.jpg" alt="Hotel Bookings" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-hotel"></i></div>
                       <h5>Hotel Bookings</h5>
                       <p>Extensive portfolio of over 500 contracted 3 to 5-star hotels across the UAE tailored to suit varying budgets.</p>
@@ -365,10 +353,7 @@ export default function About() {
                   {/* Service 2: Airport Meet & Greet */}
                   <div className="col-lg-4 col-md-6">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/service_meet_greet.jpg" alt="Airport Meet & Greet" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-hand-holding-hand"></i></div>
                       <h5>Airport Meet &amp; Greet</h5>
                       <p>Fast-track clearance for arriving and departing tourists in the UAE for business professionals and families.</p>
@@ -378,10 +363,7 @@ export default function About() {
                   {/* Service 3: Airport & City Transfers */}
                   <div className="col-lg-4 col-md-6">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/service_transfers.jpg" alt="Airport & City Transfers" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-van-shuttle"></i></div>
                       <h5>Airport &amp; City Transfers</h5>
                       <p>Dedicated modern fleet undergoing regular safety inspections and adhering to highest health standards.</p>
@@ -391,10 +373,7 @@ export default function About() {
                   {/* Service 4: Cruise Ground Handler */}
                   <div className="col-lg-4 col-md-6">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/service_cruise.jpg" alt="Cruise Ground Handler" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-ship"></i></div>
                       <h5>Cruise Ground Handler</h5>
                       <p>Exclusive shore excursions and port logistics for MSC, AIDA, Costa, TUI, Hapag-Lloyd, Ponant &amp; MS Europa.</p>
@@ -404,10 +383,7 @@ export default function About() {
                   {/* Service 5: Group & MICE */}
                   <div className="col-lg-4 col-md-6">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/service_mice.jpg" alt="Group & MICE Business" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-users"></i></div>
                       <h5>Group &amp; MICE Business</h5>
                       <p>Corporate events, conferences, incentive travel, and private functions integrating memorable experiences.</p>
@@ -417,10 +393,7 @@ export default function About() {
                   {/* Service 6: Tours & Attractions */}
                   <div className="col-lg-4 col-md-6">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/service_tours.jpg" alt="Tours & Attractions" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-map-location-dot"></i></div>
                       <h5>Tours &amp; Attractions</h5>
                       <p>Over 100 different excursions and guided tours operated by experienced multi-lingual representatives.</p>
@@ -430,10 +403,7 @@ export default function About() {
                   {/* Service 7: Destination Weddings */}
                   <div className="col-lg-4 col-md-6">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/wedding_venue.jpg" alt="Destination Weddings" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-rings-wedding"></i></div>
                       <h5>Destination Weddings</h5>
                       <p>Exclusive access to premier beachfront resorts and dynamic city venues creating unforgettable celebrations.</p>
@@ -443,10 +413,7 @@ export default function About() {
                   {/* Service 8: Corporate Booking Tool (OBT) */}
                   <div className="col-lg-4 col-md-6">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/corporate_booking.jpg" alt="Corporate Booking Tool (OBT)" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-laptop-code"></i></div>
                       <h5>Corporate OBT (B2B)</h5>
                       <p>Real-time corporate flight fares, multi-level approvals, GDS hotel integrations, and detailed savings reports.</p>
@@ -456,10 +423,7 @@ export default function About() {
                   {/* Service 9: Luxury Travel For VIPs */}
                   <div className="col-lg-4 col-md-6">
                     <div className="item mb-25 card-rise-item">
-                      <div className="card-rise-img-wrap">
-                        <img src="/images/about/luxury_vip_car.jpg" alt="Luxury Travel For VIPs" />
-                        <div className="card-rise-overlay"></div>
-                      </div>
+                      <span className="arrow"><i className="ti-arrow-top-right"></i></span>
                       <div className="icon"><i className="fa-thin fa-gem"></i></div>
                       <h5>Luxury Travel For VIPs</h5>
                       <p>Personal travel consultant, private butler services, private jets, charters, yachts, and VIP access.</p>
@@ -568,7 +532,7 @@ export default function About() {
                 <div className="row justify-content-center g-4">
                   {/* Jitendra Gyanani */}
                   <div className="col-lg-4 col-md-6">
-                    <div className="item">
+                    <div className="item ksa-fade-up ksa-d1">
                       <div className="wrapper">
                         <div className="img">
                           <img
@@ -595,7 +559,7 @@ export default function About() {
 
                   {/* Komal Gyanani */}
                   <div className="col-lg-4 col-md-6">
-                    <div className="item">
+                    <div className="item ksa-fade-up ksa-d2">
                       <div className="wrapper">
                         <div className="img">
                           <img
@@ -631,6 +595,7 @@ export default function About() {
               titleItalic="Global Reach"
               description="Whether you are a travel agency, tour operator, hotel group, fleet operator, or activity provider, collaborate with Karnish Tourism to scale world-class travel experiences."
             />
+            <GalleryPreviewSection context="about" />
           </main>
 
           {/* Site Footer */}

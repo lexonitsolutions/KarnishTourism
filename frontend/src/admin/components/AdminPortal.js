@@ -199,12 +199,15 @@ export default function AdminPortal() {
   const [collaborators, setCollaborators] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [auditLogs, setAuditLogs] = useState([]);
+  const [inquiries, setInquiries] = useState([]);
+  const [inquiryStats, setInquiryStats] = useState({ total: 0, new: 0, contacted: 0, in_progress: 0, converted: 0, closed: 0 });
+  const [inquiryFilter, setInquiryFilter] = useState("all");
 
   // Search & Filter
   const [searchTerm, setSearchTerm] = useState("");
 
   // Modals
-  const [modalType, setModalType] = useState(null); // 'package' | 'visa' | 'activity' | 'collaborator' | 'destination' | 'offer' | 'banner'
+  const [modalType, setModalType] = useState(null); // 'package' | 'visa' | 'activity' | 'collaborator' | 'destination' | 'offer' | 'banner' | 'inquiry'
   const [activeItem, setActiveItem] = useState(null);
 
   function notify(msg) {
@@ -212,8 +215,22 @@ export default function AdminPortal() {
     setTimeout(() => setToastMessage(""), 4000);
   }
 
-  // Verify Admin Session on mount
+  // Verify Admin Session on mount & ensure document scrolling is active
   useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.classList.remove(
+        "karnish-intro-active",
+        "karnish-intro-revealing",
+        "karnish-route-transitioning"
+      );
+      document.documentElement.classList.add("karnish-intro-done");
+      document.body.classList.remove("loaded");
+      document.documentElement.style.overflowY = "auto";
+      document.documentElement.style.height = "auto";
+      document.body.style.overflowY = "auto";
+      document.body.style.height = "auto";
+    }
+
     async function verify() {
       try {
         const res = await authRequest("/me");
@@ -222,6 +239,11 @@ export default function AdminPortal() {
           return;
         }
         setCurrentUser(res.user);
+        if (typeof window !== "undefined") {
+          const params = new URLSearchParams(window.location.search);
+          const tabParam = params.get("tab");
+          if (tabParam) setActiveTab(tabParam);
+        }
         loadDashboardData();
       } catch (_e) {
         router.replace("/?auth=signin&next=/admin");
@@ -244,7 +266,7 @@ export default function AdminPortal() {
   async function loadDashboardData() {
     setLoading(true);
     try {
-      const [anData, pkData, vsData, acData, scData, cuData, coData, bkData, alData, dsData, ofData, bnData] =
+      const [anData, pkData, vsData, acData, scData, cuData, coData, bkData, alData, dsData, ofData, bnData, inqData] =
         await Promise.all([
           api("/analytics").catch(() => ({ stats: {} })),
           api("/packages?limit=100").catch(() => ({ items: [] })),
@@ -258,6 +280,7 @@ export default function AdminPortal() {
           api("/destinations?limit=100").catch(() => ({ items: [] })),
           api("/offers").catch(() => ({ items: [] })),
           api("/banners").catch(() => ({ items: [] })),
+          api("/inquiries?limit=100").catch(() => ({ items: [], stats: {} })),
         ]);
 
       setAnalytics(anData);
@@ -272,6 +295,8 @@ export default function AdminPortal() {
       setDestinations(dsData.items || []);
       setOffers(ofData.items || []);
       setBanners(bnData.items || []);
+      setInquiries(inqData.items || []);
+      setInquiryStats(inqData.stats || {});
     } catch (e) {
       notify(`Error loading admin data: ${e.message}`);
     } finally {
@@ -282,6 +307,87 @@ export default function AdminPortal() {
   async function handleLogout() {
     await authRequest("/logout", { method: "POST" });
     router.replace("/");
+  }
+
+  // --- INQUIRY ACTIONS ---
+  async function updateInquiryStatus(id, newStatus) {
+    let previousInquiries = inquiries;
+    let oldStatus = null;
+
+    // 1. Immediately update UI (Optimistic update)
+    setInquiries((prev) => {
+      previousInquiries = prev;
+      return prev.map((item) => {
+        if (item._id === id) {
+          oldStatus = item.status || "new";
+          return { ...item, status: newStatus };
+        }
+        return item;
+      });
+    });
+
+    if (activeItem && activeItem._id === id) {
+      setActiveItem((prev) => (prev ? { ...prev, status: newStatus } : null));
+    }
+
+    if (oldStatus && oldStatus !== newStatus) {
+      setInquiryStats((prev) => ({
+        ...prev,
+        [oldStatus]: Math.max(0, (prev[oldStatus] || 1) - 1),
+        [newStatus]: (prev[newStatus] || 0) + 1,
+      }));
+    }
+
+    // 2. Perform backend update silently in background
+    try {
+      await api(`/inquiries/${id}/status`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: newStatus }),
+      });
+      notify(`Status updated to ${newStatus}`);
+      // Refresh inquiries count silently without blocking screen
+      api("/inquiries?limit=100")
+        .then((inqData) => {
+          if (inqData?.items) setInquiries(inqData.items);
+          if (inqData?.stats) setInquiryStats(inqData.stats);
+        })
+        .catch(() => {});
+    } catch (err) {
+      // Revert if failed
+      setInquiries(previousInquiries);
+      notify(`Failed to update status: ${err.message}`);
+    }
+  }
+
+  async function deleteInquiry(id) {
+    if (!confirm("Are you sure you want to remove this inquiry?")) return;
+    const previousInquiries = inquiries;
+    const removedItem = inquiries.find((i) => i._id === id);
+
+    // 1. Immediately remove from UI (Optimistic removal)
+    setInquiries((prev) => prev.filter((i) => i._id !== id));
+    if (removedItem?.status) {
+      setInquiryStats((prev) => ({
+        ...prev,
+        total: Math.max(0, (prev.total || 1) - 1),
+        [removedItem.status]: Math.max(0, (prev[removedItem.status] || 1) - 1),
+      }));
+    }
+
+    // 2. Perform backend delete silently
+    try {
+      await api(`/inquiries/${id}`, { method: "DELETE" });
+      notify("Inquiry deleted");
+      api("/inquiries?limit=100")
+        .then((inqData) => {
+          if (inqData?.items) setInquiries(inqData.items);
+          if (inqData?.stats) setInquiryStats(inqData.stats);
+        })
+        .catch(() => {});
+    } catch (err) {
+      setInquiries(previousInquiries);
+      notify(`Failed: ${err.message}`);
+    }
   }
 
   // --- PACKAGE ACTIONS ---
@@ -689,6 +795,7 @@ export default function AdminPortal() {
             <ul className="navbar-nav mx-auto align-items-xl-center">
               {[
                 ["overview", "Overview"],
+                ["inquiries", "Inquiries"],
                 ["destinations", "Destinations"],
                 ["packages", "Tours"],
                 ["offers", "Offers"],
@@ -715,6 +822,11 @@ export default function AdminPortal() {
                   </button>
                 </li>
               ))}
+              <li className="nav-item">
+                <Link className="nav-link adm-tab-nav-btn" href="/admin/gallery">
+                  <RollingNavText text="Gallery" />
+                </Link>
+              </li>
             </ul>
 
             {/* Desktop Right Utilities: Live Website Link + Account Button */}
@@ -828,6 +940,26 @@ export default function AdminPortal() {
                       {analytics?.stats?.pendingCollaborators || 0} pending review
                     </span>
                   </div>
+                  <div
+                    className="adm-kpi-card"
+                    style={{ cursor: "pointer", transition: "transform 0.2s ease, border-color 0.2s ease" }}
+                    onClick={() => setActiveTab("inquiries")}
+                    title="Click to view all Customer Inquiries"
+                  >
+                    <span className="adm-kpi-label">Customer Inquiries</span>
+                    <h3 className="adm-kpi-val" style={{ color: "var(--clr-primary, #2095ae)" }}>
+                      {analytics?.stats?.totalInquiries ?? inquiryStats.total ?? inquiries.length}
+                    </h3>
+                    <span
+                      className="adm-kpi-sub"
+                      style={{
+                        color: (analytics?.stats?.newInquiries ?? inquiryStats.new ?? 0) > 0 ? "var(--adm-gold, #f59e0b)" : "var(--adm-teal, #10b981)",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {analytics?.stats?.newInquiries ?? inquiryStats.new ?? 0} new received →
+                    </span>
+                  </div>
                 </div>
 
                 {/* Recent Bookings preview */}
@@ -859,6 +991,240 @@ export default function AdminPortal() {
                       ))}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            )}
+
+            {/* INQUIRIES TAB */}
+            {activeTab === "inquiries" && (
+              <div>
+                <div className="adm-section-header">
+                  <div>
+                    <h2>Customer Inquiries & Messages</h2>
+                    <p>Review, track, and manage all customer inquiries and booking requests.</p>
+                  </div>
+                  <div className="adm-actions-group">
+                    <button
+                      className="adm-btn adm-btn-secondary"
+                      onClick={loadDashboardData}
+                      title="Refresh customer inquiries list"
+                    >
+                      ↻ Refresh
+                    </button>
+                  </div>
+                </div>
+
+                {/* Inquiries Quick Status Bar */}
+                <div className="adm-kpi-grid" style={{ marginBottom: "24px" }}>
+                  <div className="adm-kpi-card" style={{ cursor: "pointer" }} onClick={() => setInquiryFilter("all")}>
+                    <span className="adm-kpi-label">Total Inquiries</span>
+                    <h3 className="adm-kpi-val">{inquiryStats.total || inquiries.length}</h3>
+                    <span className="adm-kpi-sub">All inbound messages</span>
+                  </div>
+                  <div className="adm-kpi-card" style={{ cursor: "pointer" }} onClick={() => setInquiryFilter("new")}>
+                    <span className="adm-kpi-label">New / Unread</span>
+                    <h3 className="adm-kpi-val" style={{ color: "#0284c7" }}>{inquiryStats.new || 0}</h3>
+                    <span className="adm-kpi-sub">Awaiting reply</span>
+                  </div>
+                  <div className="adm-kpi-card" style={{ cursor: "pointer" }} onClick={() => setInquiryFilter("contacted")}>
+                    <span className="adm-kpi-label">Contacted</span>
+                    <h3 className="adm-kpi-val" style={{ color: "#b47818" }}>{inquiryStats.contacted || 0}</h3>
+                    <span className="adm-kpi-sub">In communication</span>
+                  </div>
+                  <div className="adm-kpi-card" style={{ cursor: "pointer" }} onClick={() => setInquiryFilter("converted")}>
+                    <span className="adm-kpi-label">Converted</span>
+                    <h3 className="adm-kpi-val" style={{ color: "#0d8a57" }}>{inquiryStats.converted || 0}</h3>
+                    <span className="adm-kpi-sub">Successfully booked</span>
+                  </div>
+                  <div className="adm-kpi-card" style={{ cursor: "pointer" }} onClick={() => setInquiryFilter("closed")}>
+                    <span className="adm-kpi-label">Closed</span>
+                    <h3 className="adm-kpi-val" style={{ color: "#dc2626" }}>{inquiryStats.closed || 0}</h3>
+                    <span className="adm-kpi-sub">Resolved inquiries</span>
+                  </div>
+                </div>
+
+                <div className="adm-table-wrap">
+                  <div className="adm-table-toolbar" style={{ flexWrap: "wrap", gap: "12px", justifyContent: "space-between" }}>
+                    <input
+                      type="text"
+                      className="adm-search-input"
+                      placeholder="Search inquiries by customer name, email, phone, service, or message..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      style={{ minWidth: "280px", flex: "1 1 280px" }}
+                    />
+                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignItems: "center" }}>
+                      {[
+                        ["all", "All"],
+                        ["new", "New"],
+                        ["contacted", "Contacted"],
+                        ["in_progress", "In Progress"],
+                        ["converted", "Converted"],
+                        ["closed", "Closed"],
+                      ].map(([stKey, stLabel]) => (
+                        <button
+                          key={stKey}
+                          type="button"
+                          className={`adm-btn ${inquiryFilter === stKey ? "adm-btn-primary" : "adm-btn-secondary"}`}
+                          style={{ padding: "6px 14px", fontSize: "12px" }}
+                          onClick={() => setInquiryFilter(stKey)}
+                        >
+                          {stLabel}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="adm-table-scroll">
+                    <table className="adm-table">
+                      <thead>
+                        <tr>
+                          <th>Customer</th>
+                          <th>Contact Info</th>
+                          <th>Service / Tour</th>
+                          <th>Customer Message</th>
+                          <th>Received Date</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {inquiries
+                          .filter((inq) => {
+                            if (inquiryFilter !== "all" && inq.status !== inquiryFilter) return false;
+                            if (!searchTerm.trim()) return true;
+                            const term = searchTerm.toLowerCase();
+                            return (
+                              inq.name?.toLowerCase().includes(term) ||
+                              inq.email?.toLowerCase().includes(term) ||
+                              inq.phone?.toLowerCase().includes(term) ||
+                              inq.service?.toLowerCase().includes(term) ||
+                              inq.message?.toLowerCase().includes(term) ||
+                              inq.destination?.title?.toLowerCase().includes(term) ||
+                              inq.package?.title?.toLowerCase().includes(term)
+                            );
+                          })
+                          .map((inq) => (
+                            <tr key={inq._id}>
+                              <td>
+                                <strong>{inq.name}</strong>
+                                {inq.numberOfTravelers && (
+                                  <div style={{ fontSize: "12px", color: "#64748b" }}>
+                                    👥 {inq.numberOfTravelers} guest{inq.numberOfTravelers > 1 ? "s" : ""}
+                                  </div>
+                                )}
+                              </td>
+                              <td>
+                                <div>
+                                  <a href={`mailto:${inq.email}`} style={{ color: "#2095ae", textDecoration: "none", fontWeight: "600" }}>
+                                    ✉ {inq.email}
+                                  </a>
+                                </div>
+                                {inq.phone && (
+                                  <div style={{ fontSize: "12px", marginTop: "4px" }}>
+                                    <a href={`tel:${inq.phone}`} style={{ color: "#64748b", textDecoration: "none" }}>
+                                      📞 {inq.phone}
+                                    </a>
+                                  </div>
+                                )}
+                              </td>
+                              <td>
+                                <span className="adm-badge" style={{ background: "#f1f5f9", color: "#334155", border: "1px solid #cbd5e1", marginBottom: "4px" }}>
+                                {inq.service || "General Inquiry"}
+                                </span>
+                                {(inq.destination?.title || inq.package?.title) && (
+                                  <div style={{ fontSize: "12px", color: "#0f2454", fontWeight: "600" }}>
+                                    📍 {inq.package?.title || inq.destination?.title}
+                                  </div>
+                                )}
+                                {inq.travelDate && (
+                                  <div style={{ fontSize: "11px", color: "#64748b" }}>
+                                    📅 {new Date(inq.travelDate).toLocaleDateString("en-GB")}
+                                  </div>
+                                )}
+                              </td>
+                              <td style={{ maxWidth: "260px" }}>
+                                <div
+                                  style={{
+                                    fontSize: "13px",
+                                    color: "#334155",
+                                    lineHeight: "1.4",
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: 2,
+                                    WebkitBoxOrient: "vertical",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                  }}
+                                  title={inq.message}
+                                >
+                                  {inq.message || <em style={{ color: "#94a3b8" }}>No message provided</em>}
+                                </div>
+                              </td>
+                              <td style={{ whiteSpace: "nowrap", fontSize: "12px", color: "#64748b" }}>
+                                {inq.createdAt
+                                  ? new Date(inq.createdAt).toLocaleString("en-GB", {
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })
+                                  : "N/A"}
+                              </td>
+                              <td>
+                                <select
+                                  className={`adm-badge ${inq.status || "new"}`}
+                                  value={inq.status || "new"}
+                                  onChange={(e) => updateInquiryStatus(inq._id, e.target.value)}
+                                  style={{
+                                    cursor: "pointer",
+                                    outline: "none",
+                                    border: "1px solid currentColor",
+                                    fontWeight: "700",
+                                  }}
+                                >
+                                  <option value="new">New</option>
+                                  <option value="contacted">Contacted</option>
+                                  <option value="in_progress">In Progress</option>
+                                  <option value="converted">Converted</option>
+                                  <option value="closed">Closed</option>
+                                </select>
+                              </td>
+                              <td>
+                                <div style={{ display: "flex", gap: "6px" }}>
+                                  <button
+                                    className="adm-btn adm-btn-secondary"
+                                    style={{ padding: "5px 10px", fontSize: "12px" }}
+                                    onClick={() => {
+                                      setActiveItem(inq);
+                                      setModalType("inquiry");
+                                    }}
+                                    title="View full inquiry details"
+                                  >
+                                    View
+                                  </button>
+                                  <button
+                                    className="adm-btn adm-btn-danger"
+                                    style={{ padding: "5px 10px", fontSize: "12px" }}
+                                    onClick={() => deleteInquiry(inq._id)}
+                                    title="Delete inquiry"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        {inquiries.length === 0 && (
+                          <tr>
+                            <td colSpan={7} style={{ textAlign: "center", padding: "40px", color: "#64748b" }}>
+                              No customer inquiries found yet. Inquiries sent from the website contact and tour inquiry forms will be displayed here.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             )}
@@ -2115,6 +2481,235 @@ export default function AdminPortal() {
                 <button type="submit" className="adm-btn adm-btn-primary">Confirm Approval Decision</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* 5. INQUIRY DETAILS MODAL */}
+      {modalType === "inquiry" && activeItem && (
+        <div className="adm-modal-backdrop">
+          <div className="adm-modal-card" style={{ maxWidth: "680px" }}>
+            <div className="adm-modal-head">
+              <h3>Customer Inquiry Details</h3>
+              <button onClick={() => setModalType(null)}>✕</button>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              {/* Customer Header Info */}
+              <div
+                style={{
+                  padding: "16px",
+                  background: "var(--adm-surface-subtle, #f8fafc)",
+                  border: "1px solid var(--adm-border, #e2e8f0)",
+                  borderRadius: "8px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "12px",
+                }}
+              >
+                <div>
+                  <h4 style={{ margin: 0, fontSize: "18px", color: "var(--clr-heading, #0f2454)" }}>
+                    {activeItem.name}
+                  </h4>
+                  <div style={{ fontSize: "13px", color: "#64748b", marginTop: "4px" }}>
+                    Received on{" "}
+                    {activeItem.createdAt
+                      ? new Date(activeItem.createdAt).toLocaleString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : "N/A"}
+                  </div>
+                </div>
+                <div>
+                  <label
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "700",
+                      textTransform: "uppercase",
+                      color: "#64748b",
+                      display: "block",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    Status
+                  </label>
+                  <select
+                    className={`adm-badge ${activeItem.status || "new"}`}
+                    value={activeItem.status || "new"}
+                    onChange={(e) => {
+                      const updated = e.target.value;
+                      updateInquiryStatus(activeItem._id, updated);
+                      setActiveItem({ ...activeItem, status: updated });
+                    }}
+                    style={{
+                      cursor: "pointer",
+                      outline: "none",
+                      border: "1px solid currentColor",
+                      fontWeight: "700",
+                      fontSize: "12px",
+                    }}
+                  >
+                    <option value="new">New</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="converted">Converted</option>
+                    <option value="closed">Closed</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Contact & Travel Details Grid */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "12px",
+                }}
+              >
+                <div style={{ padding: "12px", border: "1px solid #e2e8f0", borderRadius: "8px" }}>
+                  <span style={{ fontSize: "11px", textTransform: "uppercase", color: "#64748b", fontWeight: "700", display: "block" }}>
+                    Email Address
+                  </span>
+                  <a
+                    href={`mailto:${activeItem.email}`}
+                    style={{ color: "#2095ae", fontWeight: "600", textDecoration: "none", fontSize: "14px", wordBreak: "break-all" }}
+                  >
+                    {activeItem.email}
+                  </a>
+                </div>
+                <div style={{ padding: "12px", border: "1px solid #e2e8f0", borderRadius: "8px" }}>
+                  <span style={{ fontSize: "11px", textTransform: "uppercase", color: "#64748b", fontWeight: "700", display: "block" }}>
+                    Phone / Mobile
+                  </span>
+                  <a
+                    href={`tel:${activeItem.phone}`}
+                    style={{ color: "#0f2454", fontWeight: "600", textDecoration: "none", fontSize: "14px" }}
+                  >
+                    {activeItem.phone || "Not provided"}
+                  </a>
+                </div>
+                <div style={{ padding: "12px", border: "1px solid #e2e8f0", borderRadius: "8px" }}>
+                  <span style={{ fontSize: "11px", textTransform: "uppercase", color: "#64748b", fontWeight: "700", display: "block" }}>
+                    Service Requested
+                  </span>
+                  <span style={{ color: "#0f2454", fontWeight: "600", fontSize: "14px" }}>
+                    {activeItem.service || "General Inquiry"}
+                  </span>
+                </div>
+                <div style={{ padding: "12px", border: "1px solid #e2e8f0", borderRadius: "8px" }}>
+                  <span style={{ fontSize: "11px", textTransform: "uppercase", color: "#64748b", fontWeight: "700", display: "block" }}>
+                    Travelers / Date
+                  </span>
+                  <span style={{ color: "#0f2454", fontWeight: "600", fontSize: "14px" }}>
+                    {activeItem.numberOfTravelers ? `${activeItem.numberOfTravelers} Guests` : "N/A"}
+                    {activeItem.travelDate ? ` • ${new Date(activeItem.travelDate).toLocaleDateString("en-GB")}` : ""}
+                  </span>
+                </div>
+              </div>
+
+              {/* Package / Destination context if any */}
+              {(activeItem.destination || activeItem.package) && (
+                <div style={{ padding: "12px", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "8px" }}>
+                  <span style={{ fontSize: "11px", textTransform: "uppercase", color: "#166534", fontWeight: "700", display: "block" }}>
+                    Related Tour / Destination
+                  </span>
+                  <div style={{ color: "#14532d", fontWeight: "700", fontSize: "14px" }}>
+                    {activeItem.package?.title || activeItem.destination?.title}
+                    {activeItem.package?.price ? ` (₹${activeItem.package.price.toLocaleString("en-IN")})` : ""}
+                  </div>
+                </div>
+              )}
+
+              {/* Inquiry Message */}
+              <div>
+                <label style={{ fontSize: "12px", textTransform: "uppercase", color: "#64748b", fontWeight: "700", display: "block", marginBottom: "6px" }}>
+                  Customer Message:
+                </label>
+                <div
+                  style={{
+                    padding: "16px",
+                    background: "#ffffff",
+                    border: "1px solid #cbd5e1",
+                    borderRadius: "8px",
+                    fontSize: "14px",
+                    color: "#1e293b",
+                    lineHeight: "1.6",
+                    whiteSpace: "pre-wrap",
+                    maxHeight: "220px",
+                    overflowY: "auto",
+                  }}
+                >
+                  {activeItem.message || "No message provided."}
+                </div>
+              </div>
+
+              {/* Direct Customer Communication Actions */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  marginTop: "8px",
+                  padding: "14px",
+                  background: "#f8fafc",
+                  borderRadius: "8px",
+                  border: "1px solid #e2e8f0",
+                }}
+              >
+                <a
+                  href={`mailto:${activeItem.email}?subject=Re:%20Karnish%20Tourism%20Inquiry%20-%20${encodeURIComponent(activeItem.service || "Travel Package")}&body=Dear%20${encodeURIComponent(activeItem.name)},%0A%0AThank%20you%20for%20contacting%20Karnish%20Tourism.`}
+                  className="adm-btn adm-btn-primary"
+                  style={{ textDecoration: "none", flex: 1, textAlign: "center" }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  ✉ Reply via Email
+                </a>
+                {activeItem.phone && (
+                  <a
+                    href={`https://wa.me/${activeItem.phone.replace(/[^0-9]/g, "")}?text=Hello%20${encodeURIComponent(activeItem.name)},%20thank%20you%20for%20contacting%20Karnish%20Tourism.`}
+                    className="adm-btn"
+                    style={{
+                      textDecoration: "none",
+                      flex: 1,
+                      textAlign: "center",
+                      background: "#25D366",
+                      color: "#ffffff",
+                      border: "none",
+                    }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    💬 WhatsApp Customer
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <div className="adm-modal-foot">
+              <button
+                type="button"
+                className="adm-btn adm-btn-danger"
+                onClick={() => {
+                  setModalType(null);
+                  deleteInquiry(activeItem._id);
+                }}
+              >
+                Delete Inquiry
+              </button>
+              <button
+                type="button"
+                className="adm-btn adm-btn-secondary"
+                onClick={() => setModalType(null)}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

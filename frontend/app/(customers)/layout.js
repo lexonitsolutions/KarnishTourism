@@ -1,5 +1,6 @@
 import "./globals.css";
 import "./responsive.css";
+import "./scroll-animations.css";
 import { Suspense } from "react";
 import CustomerExperience from "./components/CustomerExperience";
 import Navbar from "./components/Navbar";

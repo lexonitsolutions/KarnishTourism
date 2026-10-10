@@ -165,6 +165,7 @@ export default function Navbar() {
   const isActivities = pathname === "/activities";
   const isVisas = pathname === "/visas" || pathname.startsWith("/visas");
   const isServices = pathname === "/services" || pathname.startsWith("/service");
+  const isGallery = pathname === "/gallery";
   const isContact = pathname === "/contact";
 
   return (
@@ -249,6 +250,11 @@ export default function Navbar() {
               <li className="nav-item">
                 <Link className={`nav-link ${isServices ? "active" : ""}`} href="/services">
                   <RollingNavText text="Services" />
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className={`nav-link ${isGallery ? "active" : ""}`} href="/gallery">
+                  <RollingNavText text="Gallery" />
                 </Link>
               </li>
               <li className="nav-item">

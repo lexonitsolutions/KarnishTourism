@@ -2,6 +2,7 @@ const Inquiry = require("../models/Inquiry");
 const Destination = require("../models/Destination");
 const TourPackage = require("../models/TourPackage");
 const { slugify } = require("../utils/query");
+const { sendInquiryNotification } = require("../services/emailService");
 
 const escapeRegex = (str) => String(str).replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 
@@ -54,6 +55,20 @@ exports.create = async (req, res, next) => {
     if (req.user?.id) payload.user = req.user.id;
 
     const item = await Inquiry.create(payload);
+
+    // Dispatch SMTP email notification to shaikjafarsadhik2521@gmail.com
+    sendInquiryNotification({
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      service: req.body.service,
+      message: item.message,
+      destinationName: req.body.destinationTitle || req.body.destination,
+      packageName: req.body.packageTitle || req.body.package,
+    }).catch((err) => {
+      console.error("[Email Notification Failed]:", err.message);
+    });
+
     res.status(201).json({ success: true, item });
   } catch (error) {
     next(error);

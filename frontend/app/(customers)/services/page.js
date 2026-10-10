@@ -5,8 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteFooter from "../components/SiteFooter";
 import BusinessCollaborationSection from "../components/BusinessCollaborationSection";
+import { useScrollAnimation } from "../utils/useScrollAnimation";
 
 export default function Services() {
+  useScrollAnimation();
   useEffect(() => {
     // Kill any lingering ScrollSmoother instance from other pages
     if (typeof window !== "undefined" && window.ScrollSmoother?.get?.()) {
@@ -321,6 +323,231 @@ export default function Services() {
                     color: #5e6282;
                     margin-bottom: 0;
                   }
+
+                  /* Visa cards hover animations */
+                  .kt-visa-card {
+                    position: relative;
+                    background: #ffffff;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 16px;
+                    padding: 26px 22px;
+                    box-shadow: 0 6px 20px rgba(15, 36, 84, 0.04);
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                                box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                                border-color 0.35s ease;
+                    will-change: transform, box-shadow;
+                    overflow: hidden;
+                    cursor: pointer;
+                  }
+
+                  .kt-visa-card::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 3.5px;
+                    background: linear-gradient(90deg, #2095ae, #0f2454);
+                    opacity: 0;
+                    transform: scaleX(0.2);
+                    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+                  }
+
+                  .kt-visa-card:hover {
+                    transform: translateY(-8px);
+                    border-color: rgba(32, 149, 174, 0.38);
+                    box-shadow: 0 20px 45px rgba(15, 36, 84, 0.1), 0 6px 16px rgba(32, 149, 174, 0.08);
+                  }
+
+                  .kt-visa-card:hover::before {
+                    opacity: 1;
+                    transform: scaleX(1);
+                  }
+
+                  .kt-visa-top {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 12px;
+                  }
+
+                  .kt-visa-flag {
+                    font-size: 28px;
+                    display: inline-block;
+                    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                  }
+
+                  .kt-visa-card:hover .kt-visa-flag {
+                    transform: scale(1.15) rotate(4deg);
+                  }
+
+                  .kt-visa-badge {
+                    background: #e0f2fe;
+                    color: #0369a1;
+                    font-size: 11px;
+                    font-weight: 700;
+                    padding: 4px 10px;
+                    border-radius: 999px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.03em;
+                    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+                  }
+
+                  .kt-visa-card:hover .kt-visa-badge {
+                    background: #2095ae;
+                    color: #ffffff;
+                    transform: translateY(-1px);
+                  }
+
+                  .kt-visa-title {
+                    font-size: 17.5px;
+                    color: #0f2454;
+                    margin-bottom: 8px;
+                    font-weight: 700;
+                    transition: color 0.3s ease;
+                  }
+
+                  .kt-visa-card:hover .kt-visa-title {
+                    color: #2095ae;
+                  }
+
+                  .kt-visa-meta {
+                    display: flex;
+                    gap: 16px;
+                    font-size: 12px;
+                    color: #64748b;
+                    margin-bottom: 16px;
+                  }
+
+                  .kt-visa-meta i {
+                    color: #2095ae;
+                    margin-right: 4px;
+                  }
+
+                  .kt-visa-footer {
+                    padding-top: 14px;
+                    border-top: 1px solid #f1f5f9;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  }
+
+                  .kt-visa-price-label {
+                    display: block;
+                    font-size: 10px;
+                    color: #94a3b8;
+                    text-transform: uppercase;
+                  }
+
+                  .kt-visa-price {
+                    font-size: 18px;
+                    color: #0f2454;
+                    font-weight: 700;
+                    transition: color 0.3s ease;
+                  }
+
+                  .kt-visa-card:hover .kt-visa-price {
+                    color: #2095ae;
+                  }
+
+                  .kt-visa-btn {
+                    background: #0f2454;
+                    color: #ffffff !important;
+                    font-size: 12.5px;
+                    font-weight: 600;
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    text-decoration: none !important;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    transition: background 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+                  }
+
+                  .kt-visa-btn i {
+                    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+                  }
+
+                  .kt-visa-card:hover .kt-visa-btn {
+                    background: #2095ae;
+                    box-shadow: 0 6px 18px rgba(32, 149, 174, 0.35);
+                    transform: translateY(-2px);
+                  }
+
+                  .kt-visa-card:hover .kt-visa-btn i {
+                    transform: translateX(4px);
+                  }
+
+                  .kt-visa-viewall-card {
+                    background: linear-gradient(135deg, #0f2454 0%, #081636 100%);
+                    border-radius: 16px;
+                    padding: 30px 24px;
+                    color: #ffffff;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    box-shadow: 0 10px 30px rgba(15, 36, 84, 0.16);
+                    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                                box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+                    position: relative;
+                    overflow: hidden;
+                    cursor: pointer;
+                  }
+
+                  .kt-visa-viewall-card:hover {
+                    transform: translateY(-8px);
+                    box-shadow: 0 24px 55px rgba(15, 36, 84, 0.28), 0 8px 24px rgba(32, 149, 174, 0.2);
+                  }
+
+                  .kt-visa-viewall-card .ti-world {
+                    font-size: 38px;
+                    color: #d39948;
+                    margin-bottom: 14px;
+                    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                  }
+
+                  .kt-visa-viewall-card:hover .ti-world {
+                    transform: scale(1.18) rotate(15deg);
+                  }
+
+                  .kt-visa-viewall-card h5 {
+                    color: #ffffff;
+                    font-size: 19px;
+                    margin-bottom: 8px;
+                  }
+
+                  .kt-visa-viewall-card p {
+                    font-size: 13px;
+                    color: rgba(255, 255, 255, 0.78);
+                    margin-bottom: 20px;
+                  }
+
+                  .kt-visa-viewall-btn {
+                    background: #2095ae;
+                    color: #ffffff !important;
+                    font-size: 13px;
+                    font-weight: 600;
+                    padding: 10px 24px;
+                    border-radius: 25px;
+                    text-decoration: none !important;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+                  }
+
+                  .kt-visa-viewall-btn:hover {
+                    background: #198096;
+                    box-shadow: 0 8px 20px rgba(32, 149, 174, 0.4);
+                    transform: translateY(-2px);
+                  }
                 `}</style>
                 <div className="row">
                   <div className="col-md-12 text-center mt-30 duru-slide-right">
@@ -360,81 +587,33 @@ export default function Services() {
                     { slug: "canada", name: "Canada Visitor Visa", flag: "🇨🇦", time: "20 – 35 Days", price: "₹16,800", badge: "10-Year Stamp" },
                     { slug: "australia", name: "Australia Subclass 600", flag: "🇦🇺", time: "15 – 25 Days", price: "₹17,200", badge: "100% Digital" },
                     { slug: "singapore", name: "Singapore e-Visa", flag: "🇸🇬", time: "3 – 5 Days", price: "₹3,899", badge: "Authorized Agent" },
-                  ].map((item) => (
-                    <div key={item.slug} className="col-lg-4 col-md-6">
-                      <div
-                        style={{
-                          background: "#ffffff",
-                          border: "1px solid #e2e8f0",
-                          borderRadius: "12px",
-                          padding: "24px",
-                          boxShadow: "0 8px 24px rgba(15, 36, 84, 0.05)",
-                          height: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                          transition: "all 0.3s ease",
-                        }}
-                      >
+                  ].map((item, index) => (
+                    <div key={item.slug} className={`col-lg-4 col-md-6 ksa-fade-up ksa-d${(index % 3) + 1}`}>
+                      <div className="kt-visa-card">
                         <div>
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-                            <span style={{ fontSize: "28px" }}>{item.flag}</span>
-                            <span
-                              style={{
-                                background: "#e0f2fe",
-                                color: "#0369a1",
-                                fontSize: "11px",
-                                fontWeight: "700",
-                                padding: "4px 8px",
-                                borderRadius: "4px",
-                                textTransform: "uppercase",
-                              }}
-                            >
-                              {item.badge}
-                            </span>
+                          <div className="kt-visa-top">
+                            <span className="kt-visa-flag">{item.flag}</span>
+                            <span className="kt-visa-badge">{item.badge}</span>
                           </div>
-                          <h5 style={{ fontSize: "17px", color: "#0f2454", marginBottom: "8px", fontWeight: "600" }}>{item.name}</h5>
-                          <div style={{ display: "flex", gap: "16px", fontSize: "12px", color: "#64748b", marginBottom: "16px" }}>
+                          <h5 className="kt-visa-title">{item.name}</h5>
+                          <div className="kt-visa-meta">
                             <span>
-                              <i className="ti-time" style={{ color: "#2095ae", marginRight: "4px" }} />
+                              <i className="ti-time" />
                               {item.time}
                             </span>
                             <span>
-                              <i className="ti-shield" style={{ color: "#2095ae", marginRight: "4px" }} />
+                              <i className="ti-shield" />
                               99.4% Approval
                             </span>
                           </div>
                         </div>
 
-                        <div
-                          style={{
-                            paddingTop: "14px",
-                            borderTop: "1px solid #f1f5f9",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
+                        <div className="kt-visa-footer">
                           <div>
-                            <small style={{ display: "block", fontSize: "10px", color: "#94a3b8", textTransform: "uppercase" }}>From</small>
-                            <strong style={{ fontSize: "18px", color: "#0f2454" }}>{item.price}</strong>
+                            <small className="kt-visa-price-label">From</small>
+                            <strong className="kt-visa-price">{item.price}</strong>
                           </div>
-                          <a
-                            href={`/visas/${item.slug}`}
-                            style={{
-                              background: "#0f2454",
-                              color: "#ffffff",
-                              fontSize: "12px",
-                              fontWeight: "600",
-                              padding: "8px 16px",
-                              borderRadius: "20px",
-                              textDecoration: "none",
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: "6px",
-                              transition: "background 0.2s",
-                            }}
-                          >
+                          <a href={`/visas/${item.slug}`} className="kt-visa-btn">
                             Apply Now <i className="ti-arrow-right" />
                           </a>
                         </div>
@@ -443,42 +622,14 @@ export default function Services() {
                   ))}
 
                   {/* View All Visas Card */}
-                  <div className="col-lg-4 col-md-6">
-                    <div
-                      style={{
-                        background: "linear-gradient(135deg, #0f2454 0%, #081636 100%)",
-                        borderRadius: "12px",
-                        padding: "28px",
-                        color: "#ffffff",
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                        boxShadow: "0 8px 24px rgba(15, 36, 84, 0.15)",
-                      }}
-                    >
-                      <i className="ti-world" style={{ fontSize: "36px", color: "#d39948", marginBottom: "14px" }} />
-                      <h5 style={{ color: "#ffffff", fontSize: "19px", marginBottom: "8px" }}>Explore 30+ Countries</h5>
-                      <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.78)", marginBottom: "20px" }}>
+                  <div className="col-lg-4 col-md-6 ksa-scale-up">
+                    <div className="kt-visa-viewall-card">
+                      <i className="ti-world" />
+                      <h5>Explore 30+ Countries</h5>
+                      <p>
                         Need an e-Visa for Vietnam, Saudi Arabia, Thailand, Malaysia, or Turkey? Browse our full visa desk.
                       </p>
-                      <a
-                        href="/visas"
-                        style={{
-                          background: "#2095ae",
-                          color: "#ffffff",
-                          fontSize: "13px",
-                          fontWeight: "600",
-                          padding: "10px 22px",
-                          borderRadius: "25px",
-                          textDecoration: "none",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
+                      <a href="/visas" className="kt-visa-viewall-btn">
                         Visit Visa Desk <i className="ti-arrow-right" />
                       </a>
                     </div>

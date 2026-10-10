@@ -1,0 +1,1 @@
+export default function Loading() { return <main className="kg-page"><div className="kg-hero kg-skeleton" /><section className="kg-section"><div className="container"><div className="kg-loading-grid">{Array.from({ length: 8 }, (_, i) => <span key={i} />)}</div></div></section></main>; }

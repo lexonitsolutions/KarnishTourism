@@ -79,7 +79,7 @@ function PartnerAccountPopover({ partner, isMobile = false, onClose, onLogout })
                   width: 46,
                   height: 46,
                   borderRadius: "50%",
-                  background: "linear-gradient(135deg, #2095ae, #0f2454)",
+                  background: "#0f2454",
                   color: "#ffffff",
                   display: "grid",
                   placeItems: "center",

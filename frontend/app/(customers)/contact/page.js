@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import HomeLegacyScripts from "../components/HomeLegacyScripts";
 import SiteFooter from "../components/SiteFooter";
 import "./contact.css";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = API_BASE.endsWith("/api") ? API_BASE : `${API_BASE}/api`;
 
 const PHONE_DISPLAY = "+971 50 123 4567";
 const PHONE_LINK = "+971501234567";
@@ -12,29 +14,58 @@ const EMAIL = "support@karnishtourism.com";
 const WHATSAPP = `https://wa.me/971501234567?text=${encodeURIComponent("Hello Karnish Tourism, I would like help planning my trip.")}`;
 
 export default function Contact() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | submitting | success | error
+  const [errorMessage, setErrorMessage] = useState("");
+  const [submittedData, setSubmittedData] = useState(null);
 
-  function submitInquiry(event) {
+  async function submitInquiry(event) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const message = [
-      "Hello Karnish Tourism, I would like to send an inquiry.",
-      `Name: ${data.get("name")}`,
-      `Phone: ${data.get("phone")}`,
-      `Email: ${data.get("email")}`,
-      `Service: ${data.get("service")}`,
-      `Message: ${data.get("message")}`,
-    ].join("\n");
-    window.open(`https://wa.me/971501234567?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
-    setSent(true);
-    event.currentTarget.reset();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+
+    const payload = {
+      name: String(data.get("name") || "").trim(),
+      phone: String(data.get("phone") || "").trim(),
+      email: String(data.get("email") || "").trim(),
+      service: String(data.get("service") || "Holiday planning").trim(),
+      message: String(data.get("message") || "").trim(),
+    };
+
+    if (!payload.name || !payload.email || !payload.phone) {
+      setErrorMessage("Please complete all required fields (*).");
+      return;
+    }
+
+    setStatus("submitting");
+    setErrorMessage("");
+
+    try {
+      const res = await fetch(`${API_URL}/inquiries`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(json.message || "Failed to submit inquiry. Please try again.");
+      }
+
+      setSubmittedData(payload);
+      setStatus("success");
+      form.reset();
+    } catch (err) {
+      console.error("Inquiry submission error:", err);
+      setErrorMessage(err.message || "Unable to send inquiry. Please try again or contact us directly.");
+      setStatus("error");
+    }
   }
 
   return (
     <>
-      <div id="smooth-wrapper">
-        <div id="smooth-content">
-          <main className="kc-page">
+      <main className="kc-page">
             <header className="pg-hero section-padding">
               <div className="container">
                 <div className="row mb-60 justify-content-center">
@@ -99,17 +130,57 @@ export default function Contact() {
             <section className="kc-contact-section">
               <div className="kc-shell kc-contact-grid">
                 <div className="kc-form-panel">
-                  <div className="kc-section-heading"><span>Tell us what you need</span><h2>Send an inquiry</h2><p>Share a few details and a travel specialist will contact you with the right next steps.</p></div>
-                  {sent ? (
-                    <div className="kc-success" role="status"><span><i className="ti-check" /></span><h3>Your inquiry is ready in WhatsApp.</h3><p>Review the message and tap Send to connect with our travel desk.</p><button type="button" onClick={() => setSent(false)}>Create another inquiry</button></div>
+                  <div className="kc-section-heading"><h2>Send an inquiry</h2><p>Share a few details and a travel specialist will contact you with the right next steps.</p></div>
+                  {status === "success" ? (
+                    <div className="kc-success" role="status">
+                      <span><i className="ti-check" /></span>
+                      <h3>Your inquiry has been received!</h3>
+                      <p>
+                        Thank you, <strong>{submittedData?.name}</strong>. An email notification has been dispatched to our travel desk. A specialist will review your request and get back to you shortly at <strong>{submittedData?.email}</strong>.
+                      </p>
+                      <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "20px", flexWrap: "wrap" }}>
+                        <a
+                          href={`https://wa.me/971501234567?text=${encodeURIComponent(
+                            `Hello Karnish Tourism, I submitted an inquiry for ${submittedData?.service || "Travel Planning"} (Name: ${submittedData?.name}, Phone: ${submittedData?.phone}).`
+                          )}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="kc-submit"
+                          style={{ textDecoration: "none", background: "#25D366" }}
+                        >
+                          Chat on WhatsApp <i className="fa-brands fa-whatsapp" />
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => setStatus("idle")}
+                          style={{ background: "transparent", border: "1.5px solid #cbd5e1", borderRadius: "12px", padding: "12px 24px", color: "#0f2454", fontWeight: 700, cursor: "pointer" }}
+                        >
+                          Submit another inquiry
+                        </button>
+                      </div>
+                    </div>
                   ) : (
                     <form className="kc-form" onSubmit={submitInquiry}>
-                      <label><span>Full name *</span><input name="name" type="text" placeholder="Your full name" autoComplete="name" required /></label>
-                      <label><span>Phone / WhatsApp *</span><input name="phone" type="tel" placeholder="Country code + number" autoComplete="tel" required /></label>
-                      <label><span>Email address *</span><input name="email" type="email" placeholder="you@example.com" autoComplete="email" required /></label>
-                      <label><span>How can we help?</span><select name="service" defaultValue="Holiday planning"><option>Holiday planning</option><option>Visa assistance</option><option>Hotel booking</option><option>Activities &amp; experiences</option><option>Existing booking support</option><option>Other inquiry</option></select></label>
-                      <label className="kc-field-wide"><span>Your message *</span><textarea name="message" rows="5" placeholder="Destination, dates, travellers and anything else we should know..." required /></label>
-                      <div className="kc-form-footer kc-field-wide"><p><i className="ti-lock" /> Your details are used only to respond to this inquiry.</p><button className="kc-submit" type="submit">Send inquiry <i className="ti-arrow-right" /></button></div>
+                      {errorMessage && (
+                        <div style={{ gridColumn: "1 / -1", background: "#fef2f2", color: "#dc2626", border: "1px solid #fecaca", borderRadius: "10px", padding: "12px 16px", fontSize: "14px", fontWeight: 600 }}>
+                          <i className="ti-alert" style={{ marginRight: 6 }} /> {errorMessage}
+                        </div>
+                      )}
+                      <label><span>Full name *</span><input name="name" type="text" placeholder="Your full name" autoComplete="name" required suppressHydrationWarning disabled={status === "submitting"} /></label>
+                      <label><span>Phone / WhatsApp *</span><input name="phone" type="tel" placeholder="Country code + number" autoComplete="tel" required suppressHydrationWarning disabled={status === "submitting"} /></label>
+                      <label><span>Email address *</span><input name="email" type="email" placeholder="you@example.com" autoComplete="email" required suppressHydrationWarning disabled={status === "submitting"} /></label>
+                      <label><span>How can we help?</span><select name="service" defaultValue="Holiday planning" suppressHydrationWarning disabled={status === "submitting"}><option>Holiday planning</option><option>Visa assistance</option><option>Hotel booking</option><option>Activities &amp; experiences</option><option>Existing booking support</option><option>Other inquiry</option></select></label>
+                      <label className="kc-field-wide"><span>Your message *</span><textarea name="message" rows="5" placeholder="Destination, dates, travellers and anything else we should know..." required suppressHydrationWarning disabled={status === "submitting"} /></label>
+                      <div className="kc-form-footer kc-field-wide">
+                        <p><i className="ti-lock" /> Your details are used only to respond to this inquiry.</p>
+                        <button className="kc-submit" type="submit" disabled={status === "submitting"} suppressHydrationWarning>
+                          {status === "submitting" ? (
+                            <>Sending inquiry... <i className="fa-solid fa-spinner fa-spin" /></>
+                          ) : (
+                            <>Send inquiry <i className="ti-arrow-right" /></>
+                          )}
+                        </button>
+                      </div>
                     </form>
                   )}
                 </div>
@@ -117,7 +188,7 @@ export default function Contact() {
                 <aside className="kc-office-panel">
                   <div className="kc-map-wrap"><iframe title="Karnish Tourism office location in Business Bay, Dubai" src="https://www.google.com/maps?q=Business+Bay,+Dubai,+United+Arab+Emirates&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen /></div>
                   <div className="kc-office-copy">
-                    <span className="kc-office-label">Visit our office</span><h3>Karnish Tourism LLC</h3>
+                    <h3>Karnish Tourism LLC</h3>
                     <ul>
                       <li><i className="fa-solid fa-location-dot" /><span><strong>Office address</strong>Business Bay, Dubai, United Arab Emirates</span></li>
                       <li><i className="fa-regular fa-clock" /><span><strong>Office hours</strong>Monday–Saturday · 9:00 AM–7:00 PM</span></li>
@@ -133,9 +204,6 @@ export default function Contact() {
           </main>
           <SiteFooter />
           <footer className="kc-footer"><div className="kc-shell"><span>© 2026 Karnish Tourism LLC. All rights reserved.</span><nav aria-label="Footer navigation"><Link href="/">Home</Link><Link href="/tours">Tours</Link><Link href="/visas">Visas</Link><Link href="/about">About</Link></nav></div></footer>
-        </div>
-      </div>
-      <HomeLegacyScripts />
     </>
   );
 }

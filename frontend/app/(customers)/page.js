@@ -5,6 +5,7 @@ import HomeDashboardShowcase from "./components/HomeDashboardShowcase";
 import HomeLegacyScripts from "./components/HomeLegacyScripts";
 import SiteFooter from "./components/SiteFooter";
 import BusinessCollaborationSection from "./components/BusinessCollaborationSection";
+import GalleryPreviewSection from "./components/GalleryPreviewSection";
 import "./homeDashboard.css";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -533,6 +534,8 @@ export default function Home() {
 
             {/* Business Collaboration Showcase */}
             <BusinessCollaborationSection />
+
+            <GalleryPreviewSection context="home" />
 
             {/* Travel Journal — DB-driven (published posts) */}
             {homePosts.length > 0 && (
