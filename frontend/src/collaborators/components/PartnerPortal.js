@@ -253,14 +253,16 @@ export default function PartnerPortal({ section = "dashboard" }) {
     async function loadData() {
       setLoading(true);
       try {
+        const token = typeof window !== "undefined" ? localStorage.getItem("karnish_token") : null;
+        const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
         const [dashRes, pkgsRes, bkgRes] = await Promise.all([
-          fetch(`${API_BASE}/api/collaborators/dashboard`, { credentials: "include" })
+          fetch(`${API_BASE}/api/collaborators/dashboard`, { credentials: "include", headers: authHeaders })
             .then((r) => (r.ok ? r.json() : null))
             .catch(() => null),
-          fetch(`${API_BASE}/api/collaborators/packages`, { credentials: "include" })
+          fetch(`${API_BASE}/api/collaborators/packages`, { credentials: "include", headers: authHeaders })
             .then((r) => (r.ok ? r.json() : null))
             .catch(() => null),
-          fetch(`${API_BASE}/api/collaborators/bookings`, { credentials: "include" })
+          fetch(`${API_BASE}/api/collaborators/bookings`, { credentials: "include", headers: authHeaders })
             .then((r) => (r.ok ? r.json() : null))
             .catch(() => null),
         ]);

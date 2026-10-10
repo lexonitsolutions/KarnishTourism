@@ -64,6 +64,18 @@ export default function HeaderAuthBox({ initialMode = "signin", onClose }) {
             body: JSON.stringify({ identifier, password }),
           });
           if (backendRes && (backendRes.success || backendRes.user)) {
+            if (backendRes.token) {
+              try {
+                localStorage.setItem("karnish_token", backendRes.token);
+                document.cookie = `karnish_session=${backendRes.token}; Path=/; Max-Age=${8 * 3600}; SameSite=Lax; Secure`;
+              } catch (_) {}
+            }
+            if (backendRes.user) {
+              try {
+                localStorage.setItem("karnish_demo_user", JSON.stringify(backendRes.user));
+                document.cookie = `karnish_demo_role=${backendRes.user.role}; Path=/; Max-Age=${8 * 3600}; SameSite=Lax; Secure`;
+              } catch (_) {}
+            }
             onClose();
             const targetUrl = backendRes.redirectTo || "/dashboard";
             window.location.href = targetUrl;

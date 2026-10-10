@@ -313,10 +313,14 @@ export default function GalleryManagement() {
     if (!file) return "";
     const max = file.type.startsWith("video/") ? 50 : 12;
     if (file.size > max * 1024 * 1024) throw new Error(`File must be under ${max}MB`);
+    const token = typeof window !== "undefined" ? localStorage.getItem("karnish_token") : null;
     const result = await fetch(`${API_BASE}/api/admin/gallery/upload`, {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": file.type },
+      headers: {
+        "Content-Type": file.type,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: file,
     });
     const body = await result.json();

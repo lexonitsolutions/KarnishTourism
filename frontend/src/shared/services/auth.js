@@ -38,6 +38,13 @@ function demoResponse(path, options) {
   }
   if (path === "/logout") {
     clearDemoUser();
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem("karnish_token");
+        document.cookie = "karnish_session=; Path=/; Max-Age=0; SameSite=Lax";
+        document.cookie = "karnish_demo_role=; Path=/; Max-Age=0; SameSite=Lax";
+      } catch (_) {}
+    }
     return { ok: true, demoMode: true };
   }
   if (path !== "/login" && path !== "/signup" && path !== "/register-partner") {
@@ -67,10 +74,15 @@ function demoResponse(path, options) {
 
 export async function authRequest(path, options = {}) {
   try {
+    const token = typeof window !== "undefined" ? localStorage.getItem("karnish_token") : null;
     const response = await fetch(`${API_URL}/auth${path}`, {
       credentials: "include",
       ...options,
-      headers: { "Content-Type": "application/json", ...options.headers },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...options.headers,
+      },
     });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok && response.status >= 500 && DEMO_AUTH_ENABLED) return demoResponse(path, options);
