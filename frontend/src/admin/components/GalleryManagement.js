@@ -516,12 +516,12 @@ export default function GalleryManagement() {
                 ["/admin?tab=banners", "Banners"],
                 ["/admin?tab=visas", "Visas"],
                 ["/admin?tab=activities", "Activities"],
-                ["/admin/gallery", "Gallery", true],
                 ["/admin?tab=content", "Site Content"],
                 ["/admin?tab=customers", "Customers"],
                 ["/admin?tab=collaborators", "Partners"],
                 ["/admin?tab=bookings", "Bookings"],
                 ["/admin?tab=audit", "Audit Logs"],
+                ["/admin/gallery", "Gallery", true],
               ].map(([href, label, isActive]) => (
                 <li className="nav-item" key={href}>
                   <Link
