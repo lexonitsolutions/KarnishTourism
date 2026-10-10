@@ -1,0 +1,997 @@
+/* ==========================================================================
+   Karnish Tourism — B2B Partner Portal
+   Simple, Classic & Corporate Design System
+   Matches: Admin Console (admin.css), Customer Theme, and Barlow Typography
+   ========================================================================== */
+
+:root {
+  /* Core Brand Color Tokens */
+  --clr-primary: #2095ae;
+  --clr-primary-dark: #167a8f;
+  --clr-primary-light: rgba(32, 149, 174, 0.08);
+  --clr-heading: #0f2454;
+  --clr-body: #5e6282;
+  --clr-body-subtle: #64748b;
+  --clr-white: #ffffff;
+  --clr-bg-light: #f4f5f8;
+  --clr-border: #e6ebf2;
+  --clr-gold: #d39948;
+  --clr-gold-light: #fef7ea;
+  --clr-success: #0d8a57;
+  --clr-success-bg: #e6f8f1;
+  --clr-danger: #dc2626;
+  --clr-danger-bg: #fdeef1;
+
+  --font-primary: "Barlow Semi Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-secondary: "Barlow Condensed", sans-serif;
+
+  --shadow-nav: 0 4px 20px rgba(15, 36, 84, 0.04);
+  --shadow-card: 0 4px 20px rgba(15, 36, 84, 0.06);
+  --shadow-hover: 0 10px 30px rgba(15, 36, 84, 0.1);
+}
+
+/* ==========================================================================
+   Base Shell - Solid Neutral Corporate Background (No Gradients)
+   ========================================================================== */
+.b2b-shell {
+  min-height: 100vh;
+  background-color: var(--clr-bg-light);
+  color: var(--clr-body);
+  font-family: var(--font-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   1. Navbar - Solid White Classic Header (Matches Admin & Customer Navbar)
+   ========================================================================== */
+.b2b-master-navbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #ffffff !important;
+  z-index: 1000;
+  min-height: 94px;
+  height: auto;
+  border-bottom: 1px solid var(--clr-border) !important;
+  box-shadow: var(--shadow-nav);
+  padding: 0 !important;
+  transition: box-shadow 0.25s ease;
+}
+
+.b2b-master-navbar.nav-scroll {
+  box-shadow: 0 8px 25px rgba(15, 36, 84, 0.08);
+}
+
+.b2b-master-navbar .logo-img {
+  height: 72px;
+  width: auto;
+  max-height: 76px;
+  object-fit: contain;
+}
+
+.b2b-brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--clr-primary-light);
+  border: 1px solid rgba(32, 149, 174, 0.25);
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-left: 8px;
+}
+
+.b2b-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--clr-primary);
+}
+
+.b2b-badge-text {
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--clr-heading);
+}
+
+/* Nav Links */
+.b2b-master-navbar .navbar-nav .nav-link,
+.b2b-tab-nav-btn {
+  font-family: var(--font-secondary) !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: var(--clr-heading) !important;
+  margin: 1px 3px !important;
+  padding: 6px 12px !important;
+  line-height: 28px !important;
+  text-transform: uppercase !important;
+  letter-spacing: -0.2px !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  position: relative !important;
+  transition: color 0.2s ease !important;
+  outline: none !important;
+}
+
+.b2b-tab-nav-btn .rolling-text {
+  height: 28px;
+  line-height: 28px;
+}
+
+.b2b-master-navbar .navbar-nav .nav-link:hover,
+.b2b-tab-nav-btn:hover {
+  color: var(--clr-primary) !important;
+}
+
+.b2b-master-navbar .navbar-nav .nav-link.active,
+.b2b-tab-nav-btn.active {
+  color: var(--clr-primary) !important;
+  font-weight: 600 !important;
+}
+
+.b2b-tab-nav-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 12px;
+  right: 12px;
+  height: 3px;
+  background: var(--clr-primary);
+  border-radius: 3px 3px 0 0;
+}
+
+/* Live site pill link */
+.b2b-live-site-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--clr-heading);
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid var(--clr-border);
+  transition: all 0.2s ease;
+}
+
+.b2b-live-site-pill:hover {
+  background: var(--clr-primary-light);
+  border-color: var(--clr-primary);
+  color: var(--clr-primary);
+}
+
+/* Nav person circle button */
+.b2b-master-navbar .nav-person-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--clr-primary-light);
+  border: 1.5px solid rgba(32, 149, 174, 0.3);
+  color: var(--clr-heading);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  outline: none;
+  padding: 0;
+}
+
+.b2b-master-navbar .nav-person-btn i {
+  color: var(--clr-heading);
+  font-size: 18px;
+  transition: color 0.2s ease;
+}
+
+.b2b-master-navbar .nav-person-btn:hover,
+.b2b-master-navbar .nav-person-btn.active {
+  background: var(--clr-primary);
+  border-color: var(--clr-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(32, 149, 174, 0.3);
+}
+
+.b2b-master-navbar .nav-person-btn:hover i,
+.b2b-master-navbar .nav-person-btn.active i {
+  color: #ffffff !important;
+}
+
+.b2b-master-navbar .nav-person-btn-mobile {
+  width: 38px;
+  height: 38px;
+  font-size: 15px;
+}
+
+@media (max-width: 1199px) {
+  .b2b-master-navbar .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    padding: 18px 24px 24px;
+    border-bottom: 1px solid var(--clr-border);
+    box-shadow: 0 15px 35px rgba(15, 36, 84, 0.1);
+  }
+
+  .b2b-master-navbar .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 6px;
+  }
+
+  .b2b-tab-nav-btn {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 8px 12px !important;
+    border-radius: 6px;
+  }
+
+  .b2b-tab-nav-btn.active {
+    background: var(--clr-primary-light) !important;
+  }
+
+  .b2b-tab-nav-btn.active::after {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   2. Body & Classic Card Primitives (Solid White, Clean Elevation)
+   ========================================================================== */
+.b2b-body {
+  flex: 1;
+  padding: clamp(24px, 3.5vw, 40px);
+  max-width: 1540px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Universal Card */
+.b2b-glass-card {
+  background: #ffffff;
+  border: 1px solid var(--clr-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.b2b-glass-card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* Hero Welcome Banner */
+.b2b-hero-banner {
+  background: #ffffff;
+  border: 1px solid var(--clr-border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 26px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.b2b-hero-title h2 {
+  font-family: var(--font-secondary);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--clr-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin: 0 0 4px 0;
+  line-height: 1.15;
+}
+
+.b2b-hero-title p {
+  margin: 0;
+  color: var(--clr-body-subtle);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Status & Tier Badges */
+.b2b-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  background: var(--clr-success-bg);
+  border: 1px solid #c2eed9;
+  color: var(--clr-success);
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.b2b-tier-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  background: var(--clr-gold-light);
+  border: 1px solid #fae8c8;
+  color: #b47818;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   3. KPI Metric Cards (Classic Top Accent Line, Barlow Numbers)
+   ========================================================================== */
+.b2b-kpis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.b2b-kpi-card {
+  background: #ffffff;
+  border: 1px solid var(--clr-border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.b2b-kpi-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--clr-primary);
+}
+
+.b2b-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.b2b-kpi-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.b2b-kpi-label {
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--clr-body-subtle);
+}
+
+.b2b-kpi-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  background: #f8fafc;
+  color: var(--clr-primary);
+  border: 1px solid var(--clr-border);
+}
+
+.b2b-kpi-icon.gold {
+  background: var(--clr-gold-light);
+  color: #b47818;
+  border-color: #fae8c8;
+}
+
+.b2b-kpi-icon.green {
+  background: var(--clr-success-bg);
+  color: var(--clr-success);
+  border-color: #c2eed9;
+}
+
+.b2b-kpi-val {
+  font-family: var(--font-secondary);
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--clr-heading);
+  line-height: 1.1;
+  margin: 0 0 6px 0;
+}
+
+.b2b-kpi-foot {
+  font-size: 12px;
+  color: var(--clr-body-subtle);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.b2b-trend-up {
+  color: var(--clr-success);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   4. Charts & Analytics Panels
+   ========================================================================== */
+.b2b-chart-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 22px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 1024px) {
+  .b2b-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.b2b-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.b2b-chart-title {
+  font-family: var(--font-secondary);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--clr-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin: 0;
+}
+
+.b2b-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  height: 220px;
+  padding: 20px 10px 0;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.b2b-bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+/* Clean Solid Pillars (No Neon Gradients) */
+.b2b-bar-pillar {
+  width: 100%;
+  max-width: 32px;
+  border-radius: 4px 4px 0 0;
+  background: var(--clr-primary);
+  position: relative;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.b2b-bar-pillar:hover {
+  background: var(--clr-heading);
+  transform: scaleY(1.02);
+}
+
+.b2b-bar-label {
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--clr-body-subtle);
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+
+/* Activity Timeline */
+.b2b-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.b2b-activity-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.b2b-activity-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.b2b-activity-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid var(--clr-border);
+  color: var(--clr-primary);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.b2b-activity-desc {
+  font-size: 13px;
+  color: var(--clr-heading);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.b2b-activity-time {
+  font-size: 11px;
+  color: var(--clr-body-subtle);
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   5. Interactive Tour Packages with B2B Net Rates
+   ========================================================================== */
+.b2b-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.b2b-search-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid var(--clr-border);
+  border-radius: 8px;
+  padding: 9px 14px;
+  min-width: 280px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.b2b-search-input:focus-within {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px rgba(32, 149, 174, 0.15);
+}
+
+.b2b-search-input input {
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--clr-heading);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  width: 100%;
+}
+
+.b2b-filter-pill-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.b2b-filter-pill {
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid var(--clr-border);
+  color: var(--clr-heading);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.b2b-filter-pill:hover,
+.b2b-filter-pill.is-active {
+  background: var(--clr-heading);
+  color: #ffffff;
+  border-color: var(--clr-heading);
+}
+
+/* Packages Grid */
+.b2b-pkgs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px;
+}
+
+.b2b-pkg-card {
+  background: #ffffff;
+  border: 1px solid var(--clr-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.b2b-pkg-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.b2b-pkg-img-wrap {
+  position: relative;
+  height: 190px;
+  width: 100%;
+  overflow: hidden;
+  background: #e2e8f0;
+}
+
+.b2b-pkg-img {
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.b2b-pkg-card:hover .b2b-pkg-img {
+  transform: scale(1.03);
+}
+
+.b2b-pkg-badge-float {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--clr-heading);
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-family: var(--font-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.b2b-pkg-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.b2b-pkg-title {
+  font-family: var(--font-secondary);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--clr-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  margin: 0 0 8px 0;
+  line-height: 1.25;
+}
+
+.b2b-pricing-box {
+  background: #f8fafc;
+  border: 1px solid var(--clr-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 14px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.b2b-retail-price {
+  font-size: 12px;
+  color: var(--clr-body-subtle);
+  text-decoration: line-through;
+}
+
+.b2b-net-rate {
+  font-family: var(--font-secondary);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--clr-heading);
+}
+
+.b2b-earn-tag {
+  background: var(--clr-success-bg);
+  border: 1px solid #c2eed9;
+  color: var(--clr-success);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.b2b-pkg-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+/* ==========================================================================
+   6. Data Tables & Status Badges (Matches Admin Table System)
+   ========================================================================== */
+.b2b-table-wrap {
+  overflow-x: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid var(--clr-border);
+  box-shadow: var(--shadow-card);
+}
+
+.b2b-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.b2b-table th {
+  background: #f8fafc;
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--clr-heading);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--clr-border);
+  white-space: nowrap;
+}
+
+.b2b-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--clr-border);
+  color: var(--clr-body);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.b2b-table tr:hover td {
+  background: #f8fafc;
+}
+
+.b2b-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Status Badges */
+.b2b-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.b2b-status-pill.confirmed,
+.b2b-status-pill.paid,
+.b2b-status-pill.active {
+  background: var(--clr-success-bg);
+  color: var(--clr-success);
+  border: 1px solid #c2eed9;
+}
+
+.b2b-status-pill.pending {
+  background: var(--clr-gold-light);
+  color: #b47818;
+  border: 1px solid #fae8c8;
+}
+
+.b2b-status-pill.cancelled {
+  background: var(--clr-danger-bg);
+  color: var(--clr-danger);
+  border: 1px solid #f9cad2;
+}
+
+/* ==========================================================================
+   7. Universal Button Styles (Simple & Classic)
+   ========================================================================== */
+.b2b-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  line-height: 1.25;
+}
+
+.b2b-btn-primary {
+  background: var(--clr-primary);
+  color: #ffffff;
+  border-color: var(--clr-primary);
+  box-shadow: 0 2px 6px rgba(32, 149, 174, 0.2);
+}
+
+.b2b-btn-primary:hover {
+  background: var(--clr-primary-dark);
+  border-color: var(--clr-primary-dark);
+  color: #ffffff;
+}
+
+.b2b-btn-secondary {
+  background: #ffffff;
+  border: 1px solid var(--clr-border);
+  color: var(--clr-heading);
+}
+
+.b2b-btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--clr-heading);
+}
+
+/* ==========================================================================
+   8. Modals - Solid Classic White Dialogs (Matches Admin Modals)
+   ========================================================================== */
+.b2b-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 36, 84, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.b2b-glass-modal {
+  background: #ffffff !important;
+  border: 1px solid var(--clr-border);
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(15, 36, 84, 0.25);
+  width: min(100%, 680px);
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 28px 32px;
+}
+
+.b2b-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.b2b-modal-title {
+  font-family: var(--font-secondary);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--clr-heading);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.b2b-modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--clr-border);
+  background: #f8fafc;
+  color: #64748b;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.b2b-modal-close:hover {
+  background: #e2e8f0;
+  color: var(--clr-heading);
+}
+
+/* Form Controls */
+.b2b-form-group {
+  margin-bottom: 16px;
+}
+
+.b2b-form-label {
+  display: block;
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--clr-heading);
+  margin-bottom: 6px;
+}
+
+.b2b-form-input,
+.b2b-form-select,
+.b2b-form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--clr-border);
+  background: #ffffff;
+  color: var(--clr-heading);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.b2b-form-input:focus,
+.b2b-form-select:focus,
+.b2b-form-textarea:focus {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px rgba(32, 149, 174, 0.15);
+}
+
+/* Mobile backdrop */
+.kt-mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 36, 84, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 998;
+}
+
+/* Reduced Motion Fallbacks */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

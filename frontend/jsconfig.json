@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@customers/*": ["./src/customers/*"],
+      "@collaborators/*": ["./src/collaborators/*"],
+      "@shared/*": ["./src/shared/*"]
     }
   }
 }

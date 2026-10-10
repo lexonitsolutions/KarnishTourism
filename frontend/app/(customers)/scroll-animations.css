@@ -1,0 +1,178 @@
+/*
+ * ============================================================
+ * KARNISH TOURISM - Premium Scroll Animations
+ * ============================================================
+ */
+
+/* --- Base hidden states --- */
+.ksa-fade-up,
+.ksa-fade-left,
+.ksa-fade-right,
+.ksa-fade-in,
+.ksa-scale-up,
+.ksa-flip-up {
+  opacity: 0;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-property: opacity, transform;
+  will-change: opacity, transform;
+}
+
+.ksa-fade-up  { transform: translateY(28px); transition-duration: 600ms; }
+.ksa-fade-up.ksa-d1 { transition-delay: 70ms; }
+.ksa-fade-up.ksa-d2 { transition-delay: 140ms; }
+.ksa-fade-up.ksa-d3 { transition-delay: 210ms; }
+.ksa-fade-up.ksa-d4 { transition-delay: 280ms; }
+.ksa-fade-up.ksa-d5 { transition-delay: 350ms; }
+.ksa-fade-up.ksa-d6 { transition-delay: 420ms; }
+
+.ksa-fade-left  { transform: translateX(-28px); transition-duration: 620ms; }
+.ksa-fade-left.ksa-d1 { transition-delay: 70ms; }
+.ksa-fade-left.ksa-d2 { transition-delay: 140ms; }
+.ksa-fade-left.ksa-d3 { transition-delay: 210ms; }
+
+.ksa-fade-right { transform: translateX(28px); transition-duration: 620ms; }
+.ksa-fade-right.ksa-d1 { transition-delay: 70ms; }
+.ksa-fade-right.ksa-d2 { transition-delay: 140ms; }
+.ksa-fade-right.ksa-d3 { transition-delay: 210ms; }
+
+.ksa-fade-in  { transform: none; transition-duration: 500ms; }
+.ksa-fade-in.ksa-d1 { transition-delay: 80ms; }
+.ksa-fade-in.ksa-d2 { transition-delay: 160ms; }
+
+.ksa-scale-up { transform: scale(0.94) translateY(18px); transition-duration: 580ms; }
+.ksa-scale-up.ksa-d1 { transition-delay: 90ms; }
+.ksa-scale-up.ksa-d2 { transition-delay: 180ms; }
+.ksa-scale-up.ksa-d3 { transition-delay: 270ms; }
+.ksa-scale-up.ksa-d4 { transition-delay: 360ms; }
+.ksa-scale-up.ksa-d5 { transition-delay: 450ms; }
+
+.ksa-flip-up {
+  transform: perspective(800px) rotateX(12deg) translateY(22px);
+  transition-duration: 650ms;
+  backface-visibility: hidden;
+}
+
+/* Visible state */
+.ksa-visible {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Gallery masonry cards */
+.kg-masonry .kg-photo {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 560ms cubic-bezier(0.16, 1, 0.3, 1), transform 560ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.kg-masonry .kg-photo.ksa-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Achievement + Memory cards */
+.kg-achievement,
+.kg-memory {
+  opacity: 0;
+  transform: translateY(22px) scale(0.97);
+  transition: opacity 580ms cubic-bezier(0.16, 1, 0.3, 1), transform 580ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.kg-achievement.ksa-visible,
+.kg-memory.ksa-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Video grid */
+.kg-video-grid > article {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 540ms cubic-bezier(0.16, 1, 0.3, 1), transform 540ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.kg-video-grid > article.ksa-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Gallery section headings */
+.kg-heading {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 500ms cubic-bezier(0.16, 1, 0.3, 1), transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.kg-heading.ksa-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Gallery timeline */
+.kg-timeline article {
+  opacity: 0;
+  transform: translateX(-22px);
+  transition: opacity 560ms cubic-bezier(0.16, 1, 0.3, 1), transform 560ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.kg-timeline article.ksa-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Lightbox animations */
+.kg-lightbox {
+  animation: kgLightboxOpen 250ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.kg-lightbox figure {
+  animation: kgLightboxFigure 320ms 50ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes kgLightboxOpen {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes kgLightboxFigure {
+  from { opacity: 0; transform: scale(0.93) translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* About page card-rise */
+.card-rise-item {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-rise-item.ksa-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Gallery preview thumbnails */
+.kg-preview-photos > a {
+  opacity: 0;
+  transform: scale(0.96) translateY(16px);
+  transition: opacity 540ms cubic-bezier(0.16, 1, 0.3, 1), transform 540ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.kg-preview-photos > a.ksa-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .ksa-fade-up,
+  .ksa-fade-left,
+  .ksa-fade-right,
+  .ksa-fade-in,
+  .ksa-scale-up,
+  .ksa-flip-up,
+  .kg-masonry .kg-photo,
+  .kg-achievement,
+  .kg-memory,
+  .kg-video-grid > article,
+  .kg-heading,
+  .kg-timeline article,
+  .card-rise-item,
+  .kg-preview-photos > a {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

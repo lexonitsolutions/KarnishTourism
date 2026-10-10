@@ -1,0 +1,3 @@
+const mongoose = require("mongoose");
+const schema = new mongoose.Schema({ title: { type: String, required: true, trim: true }, code: { type: String, uppercase: true, unique: true, sparse: true }, description: String, imageUrl: String, discountType: { type: String, enum: ["percentage", "fixed", "perk"], required: true }, discountValue: { type: Number, min: 0 }, startsAt: Date, endsAt: { type: Date, index: true }, featured: { type: Boolean, default: false }, status: { type: String, enum: ["draft", "active", "inactive", "expired"], default: "draft", index: true } }, { timestamps: true });
+module.exports = mongoose.model("Offer", schema);

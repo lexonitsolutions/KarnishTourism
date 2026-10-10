@@ -1,38 +1,23 @@
-# Backend API Server
+# Karnish Tourism API
 
-This folder contains the backend server and API logic for Karnish Tourism.
+Express and Mongoose API for the customer and collaborator applications.
 
-## Directory Structure
+## Setup
 
-```text
-backend/
-├── src/
-│   ├── controllers/    # Request handlers / business logic
-│   ├── models/         # Data models and database schemas
-│   ├── routes/         # API route definitions
-│   ├── services/       # Third-party integrations and internal services
-│   └── server.js       # Main server entrypoint
-├── .env.example        # Environment variable template
-├── package.json        # Backend package and script configurations
-└── README.md
-```
+1. Copy `.env.example` to `.env` and provide `MONGODB_URI` and `JWT_SECRET`.
+2. In MongoDB Atlas, allow the development machine's IP and create a least-privilege database user.
+3. Run `npm run dev:backend` from the repository root.
+4. Check `GET http://localhost:5000/api/health`.
 
-## Running the Backend
+The server uses the `karnish_tourism` database by default. Credentials are never included in health responses or logs.
 
-From the repository root:
-```bash
-# Run backend development server (with auto-reload)
-npm run dev:backend
+## Routes
 
-# Or start directly
-npm run start:backend
-```
+- Auth: `/api/auth/*`
+- Public reads: `/api/destinations`, `/api/tours`, `/api/activities`, `/api/hotels`, `/api/offers`, `/api/reviews`
+- Customer bookings: `/api/bookings`
+- Public inquiry submission: `POST /api/inquiries`
+- Collaborator-scoped reads: `/api/collaborators/*`
+- Backward-compatible reads: `/api/catalog/:resource`
 
-Or from within the `backend/` directory:
-```bash
-cd backend
-npm run dev
-```
-
-## Health Check
-- `http://localhost:5000/api/health`
+List endpoints support `page`, `limit`, `search`, and applicable filters such as `destination`, `type`, and `featured`.

@@ -1,0 +1,1 @@
+export default function ToursNotFound() { return <main className="ktours-not-found"><div><span>404</span><h1>This journey isn’t on our map.</h1><p>The destination or package may have moved. Let’s get you back to inspiring places.</p><a className="ktours-button" href="/tours">Explore all tours <i className="ti-arrow-right" /></a></div></main>; }

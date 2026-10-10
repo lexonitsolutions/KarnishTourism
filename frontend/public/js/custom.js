@@ -72,9 +72,11 @@
         }
 
         /* ==========================================================================
-           3. CURSOR ANIMATION
+           3. CURSOR ANIMATION (Disabled)
            ========================================================================== */
         (function () {
+            // Disabled per user request - hide custom cursor dot
+            return;
             const link = document.querySelectorAll('.hover-this');
             const cursor = document.querySelector('.cursor');
             if (!cursor) return;
@@ -174,6 +176,8 @@
            ========================================================================== */
         $('.rolling-text').each(function () {
             const $el = $(this);
+            // Skip if already initialized by Navbar's React useEffect
+            if ($el.find('.block').length) return;
             const innerText = $el.text();
             $el.empty();
             const $textContainer = $('<div>').addClass('block');
@@ -192,10 +196,20 @@
         /* ==========================================================================
            9. DYNAMIC BACKGROUND IMAGE
            ========================================================================== */
-        var pageSection = $(".bg-img, section");
+        var pageSection = $(".bg-img, section, [data-background]");
         pageSection.each(function () {
-            if ($(this).attr("data-background")) {
-                $(this).css("background-image", "url(" + $(this).data("background") + ")");
+            var bg = $(this).attr("data-background");
+            if (bg) {
+                if (bg.indexOf('assets/img/blog/') !== -1) {
+                    bg = bg.replace('assets/img/blog/', '/images/blog-');
+                } else if (bg.indexOf('assets/img/hero/') !== -1) {
+                    bg = '';
+                } else if (bg.indexOf('assets/img/') !== -1) {
+                    bg = bg.replace('assets/img/', '/images/');
+                }
+                if (bg) {
+                    $(this).css("background-image", "url(" + bg + ")");
+                }
             }
         });
 
@@ -403,14 +417,22 @@
         /* ==========================================================================
            17. GSAP SVG PRELOADER
            ========================================================================== */
-        if (typeof gsap !== "undefined") {
+        if (typeof gsap !== "undefined" && !window.karnishPreloaderHandled) {
             const svg = document.getElementById("svg");
-            if (svg) {
-                const tl = gsap.timeline();
+            const loaderWrap = document.querySelector(".loader-wrap");
+            if (svg && loaderWrap && window.getComputedStyle(loaderWrap).display !== "none") {
+                window.karnishPreloaderHandled = true;
+                const tl = gsap.timeline({
+                    onComplete: function () {
+                        if (typeof window.refreshKarnishScroller === "function") {
+                            window.refreshKarnishScroller();
+                        }
+                    }
+                });
                 const curve = "M0 502S175 272 500 272s500 230 500 230V0H0Z";
                 const flat = "M0 2S175 1 500 1s500 1 500 1V0H0Z";
                 tl.to(".loader-wrap-heading .load-text, .loader-wrap-heading .cont", {
-                    delay: 1.5,
+                    delay: 0.8,
                     y: -100,
                     opacity: 0,
                 });
@@ -434,16 +456,9 @@
                     zIndex: -1,
                     display: "none",
                 });
-                tl.from("header", {
-                    y: 200,
-                }, "-=1.5");
-                tl.from("header .container", {
-                    y: 40,
-                    opacity: 0,
-                    delay: 0.3,
-                }, "-=1.5");
             }
         }
+
         
         
 
@@ -905,34 +920,36 @@
                     }
                 });
                 let cardsList = gsap.utils.toArray(".stackCard");
-                let stickDistance = 0;
-                let lastCardST = ScrollTrigger.create({
-                    trigger: cardsList[cardsList.length - 1],
-                    start: "center center"
-                });
-                cardsList.forEach((card, index) => {
-                    ScrollTrigger.create({
-                        trigger: card,
-                        start: "center center",
-                        end: () => lastCardST.start + stickDistance,
-                        pin: true,
-                        pinSpacing: false,
-                        scrub: true,
-                        snap: true,
-                        ease: "power4.out",
-                        onUpdate: (self) => {
-                            const progress = self.progress;
-                            const EvenOdd = index % 2 === 0;
-                            gsap.to(card, {
-                                scaleX: 1 - progress * 0.2,
-                                x: index * 20,
-                                filter: `grayscale(${progress * 20}%)`,
-                                top: index * 20,
-                                rotate: EvenOdd ? -3 * progress : 3 * progress,
-                            });
-                        }
+                if (cardsList.length > 0) {
+                    let stickDistance = 0;
+                    let lastCardST = ScrollTrigger.create({
+                        trigger: cardsList[cardsList.length - 1],
+                        start: "center center"
                     });
-                });
+                    cardsList.forEach((card, index) => {
+                        ScrollTrigger.create({
+                            trigger: card,
+                            start: "center center",
+                            end: () => lastCardST.start + stickDistance,
+                            pin: true,
+                            pinSpacing: false,
+                            scrub: true,
+                            snap: true,
+                            ease: "power4.out",
+                            onUpdate: (self) => {
+                                const progress = self.progress;
+                                const EvenOdd = index % 2 === 0;
+                                gsap.to(card, {
+                                    scaleX: 1 - progress * 0.2,
+                                    x: index * 20,
+                                    filter: `grayscale(${progress * 20}%)`,
+                                    top: index * 20,
+                                    rotate: EvenOdd ? -3 * progress : 3 * progress,
+                                });
+                            }
+                        });
+                    });
+                }
             }
         }
     
@@ -955,4 +972,5 @@
             travelHeroSlider.enable();
         }
     
+    window.karnishCustomReady = true;
 })(jQuery);
