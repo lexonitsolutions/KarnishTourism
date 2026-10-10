@@ -774,19 +774,27 @@ router.get("/inquiries", async (req, res, next) => {
       filter.status = status;
     }
 
+    if (req.query.type === "collaboration") {
+      filter.isCollaboration = true;
+    } else if (req.query.type === "standard") {
+      filter.isCollaboration = { $ne: true };
+    }
+
     if (search && search.trim()) {
       const q = search.trim();
       filter.$or = [
         { name: { $regex: q, $options: "i" } },
+        { companyName: { $regex: q, $options: "i" } },
         { email: { $regex: q, $options: "i" } },
         { phone: { $regex: q, $options: "i" } },
         { service: { $regex: q, $options: "i" } },
         { message: { $regex: q, $options: "i" } },
+        { requestId: { $regex: q, $options: "i" } },
       ];
     }
 
     const { limit, skip } = pagination(req);
-    const [items, total, counts] = await Promise.all([
+    const [items, total, counts, totalCount, collabCount] = await Promise.all([
       Inquiry.find(filter)
         .sort({ createdAt: -1 })
         .skip(skip)
@@ -798,6 +806,8 @@ router.get("/inquiries", async (req, res, next) => {
       Inquiry.aggregate([
         { $group: { _id: "$status", count: { $sum: 1 } } },
       ]),
+      Inquiry.countDocuments(),
+      Inquiry.countDocuments({ isCollaboration: true }),
     ]);
 
     const statusCounts = counts.reduce((acc, c) => {
@@ -805,14 +815,13 @@ router.get("/inquiries", async (req, res, next) => {
       return acc;
     }, {});
 
-    const totalCount = await Inquiry.countDocuments();
-
     res.json({
       success: true,
       items,
       total,
       stats: {
         total: totalCount,
+        collaborations: collabCount,
         new: statusCounts.new || 0,
         contacted: statusCounts.contacted || 0,
         in_progress: statusCounts.in_progress || 0,
