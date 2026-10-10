@@ -253,9 +253,14 @@ export default function AdminPortal() {
   }, [router]);
 
   async function api(path, options = {}) {
+    const token = typeof window !== "undefined" ? localStorage.getItem("karnish_token") : null;
     const res = await fetch(`${API_BASE}/api/admin${path}`, {
       credentials: "include",
-      headers: { "Content-Type": "application/json", ...options.headers },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...options.headers,
+      },
       ...options,
     });
     const data = await res.json().catch(() => ({}));

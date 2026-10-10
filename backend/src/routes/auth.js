@@ -9,10 +9,11 @@ const { requireFields } = require("../middleware/validate");
 const { slugify } = require("../utils/query");
 
 const router = express.Router();
+const isProd = process.env.NODE_ENV === "production";
 const cookieOptions = {
   httpOnly: true,
-  sameSite: "lax",
-  secure: process.env.NODE_ENV === "production",
+  sameSite: isProd ? "none" : "lax",
+  secure: isProd,
   maxAge: 8 * 60 * 60 * 1000,
   path: "/",
 };
@@ -62,10 +63,11 @@ router.post("/signup", requireFields("fullName", "email", "password"), async (re
       status: "active",
     });
 
+    const token = createToken(user);
     res
-      .cookie(COOKIE_NAME, createToken(user), cookieOptions)
+      .cookie(COOKIE_NAME, token, cookieOptions)
       .status(201)
-      .json({ success: true, user: expose(user), redirectTo: "/dashboard" });
+      .json({ success: true, user: expose(user), token, redirectTo: "/dashboard" });
   } catch (error) {
     next(error);
   }
@@ -132,10 +134,11 @@ router.post(
         },
       });
 
+      const token = createToken(user);
       res
-        .cookie(COOKIE_NAME, createToken(user), cookieOptions)
+        .cookie(COOKIE_NAME, token, cookieOptions)
         .status(201)
-        .json({ success: true, user: expose(user), redirectTo: "/partner" });
+        .json({ success: true, user: expose(user), token, redirectTo: "/partner" });
     } catch (error) {
       next(error);
     }
@@ -164,9 +167,10 @@ router.post("/login", async (req, res, next) => {
     await user.save().catch(() => {});
 
     const redirectTo = resolveHome(user.role);
+    const token = createToken(user);
     res
-      .cookie(COOKIE_NAME, createToken(user), cookieOptions)
-      .json({ success: true, user: expose(user), redirectTo });
+      .cookie(COOKIE_NAME, token, cookieOptions)
+      .json({ success: true, user: expose(user), token, redirectTo });
   } catch (error) {
     next(error);
   }
