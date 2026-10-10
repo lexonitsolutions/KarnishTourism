@@ -1,7 +1,7 @@
 const path = require("path");
 const nodemailer = require("nodemailer");
 
-const DEFAULT_RECIPIENT = "scrubsycnus@gmail.com";
+const DEFAULT_RECIPIENT = "shaikjafarsadhik2521@gmail.com";
 
 let cachedTransporter = null;
 let cachedCredentialsKey = null;
@@ -211,11 +211,10 @@ async function sendInquiryNotification(inquiry) {
     console.log(`Service: ${inquiry.service || "General Inquiry"}`);
     console.log(`Message: ${inquiry.message}`);
     console.log(`------------------------------------------------------`);
-    console.log(`NOTE: To send via live SMTP, configure in backend/.env:`);
-    console.log(`SMTP_HOST=smtp.gmail.com`);
-    console.log(`SMTP_PORT=587`);
-    console.log(`SMTP_USER=your-email@gmail.com`);
-    console.log(`SMTP_PASS=your-gmail-app-password`);
+    console.log(`NOTE: To send live emails on cloud hosts like Render, configure in .env / Render:`);
+    console.log(`BREVO_API_KEY=xkeysib-...`);
+    console.log(`BREVO_SENDER_EMAIL=lexonitservices@gmail.com`);
+    console.log(`INQUIRY_NOTIFICATION_EMAIL=shaikjafarsadhik2521@gmail.com`);
     console.log(`======================================================\n`);
     return { success: true, simulated: true, recipient };
   }
