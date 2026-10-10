@@ -17,6 +17,8 @@ const services = ["Hotels", "Tour Packages", "Activities", "Transportation", "Fl
 const collaborationTypes = ["Sell / promote travel packages", "Hotel collaboration", "Activity collaboration", "Transportation collaboration", "Destination services", "Bulk / B2B requirements", "Custom collaboration", "Other"];
 const initialForm = { companyName: "", contactPerson: "", businessType: "", gstNumber: "", email: "", phone: "", city: "", country: "", servicesOffered: [], volume: "", collaborationTypes: [], requirements: "" };
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
 function ToggleGroup({ options, selected, onChange }) {
   return <div className="bc-check-grid">{options.map((option) => <label key={option} className={selected.includes(option) ? "selected" : ""}><input type="checkbox" checked={selected.includes(option)} onChange={() => onChange(selected.includes(option) ? selected.filter((item) => item !== option) : [...selected, option])} />{option}</label>)}</div>;
 }
@@ -25,25 +27,46 @@ export default function BusinessCollaborationPage() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [requestId, setRequestId] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const update = (field, value) => setForm((current) => ({ ...current, [field]: value }));
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault();
     const required = ["companyName", "contactPerson", "businessType", "email", "phone", "city", "country", "volume"];
-    const nextErrors = Object.fromEntries(required.filter((field) => !form[field].trim()).map((field) => [field, "Required"]));
+    const nextErrors = Object.fromEntries(required.filter((field) => !form[field]?.trim()).map((field) => [field, "Required"]));
     if (!form.servicesOffered.length) nextErrors.servicesOffered = "Select at least one service";
     if (!form.collaborationTypes.length) nextErrors.collaborationTypes = "Select at least one collaboration type";
     if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) nextErrors.email = "Enter a valid business email";
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
+
     const id = `COL-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
     const request = { id, ...form, status: "New", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+
+    setSubmitting(true);
     try {
-      const existing = JSON.parse(localStorage.getItem("karnish_collaboration_requests") || "[]");
-      localStorage.setItem("karnish_collaboration_requests", JSON.stringify([request, ...existing]));
-    } catch {}
-    setRequestId(id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+      const res = await fetch(`${API_BASE}/api/inquiries/collaboration`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, id }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (data?.requestId) {
+        setRequestId(data.requestId);
+      } else {
+        setRequestId(id);
+      }
+    } catch (e) {
+      console.warn("Offline or network issue, saving locally:", e);
+      setRequestId(id);
+    } finally {
+      try {
+        const existing = JSON.parse(localStorage.getItem("karnish_collaboration_requests") || "[]");
+        localStorage.setItem("karnish_collaboration_requests", JSON.stringify([request, ...existing]));
+      } catch {}
+      setSubmitting(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   if (requestId) return <div className="bc-page"><main className="bc-success"><div className="bc-success-card"><span><i className="ti-check" /></span><div className="bc-eyebrow">Business Collaboration</div><h1>Request Submitted Successfully</h1><p>Thank you for your interest in collaborating with us. Our team has received your business request and will review the information provided.</p><div className="bc-request-id"><small>Request ID</small><strong>{requestId}</strong></div><p className="bc-note">We&apos;ll contact you using the email or phone number provided in your request.</p><a href="/services">Back to Services <i className="ti-arrow-right" /></a></div></main><SiteFooter /></div>;
@@ -62,7 +85,9 @@ export default function BusinessCollaborationPage() {
           <fieldset><legend><span>02</span> Contact Information</legend><div className="bc-fields"><label>Business Email*<input suppressHydrationWarning type="email" value={form.email} onChange={(e) => update("email", e.target.value)} className={errors.email ? "invalid" : ""} />{errors.email && <small>{errors.email}</small>}</label><label>Phone Number*<input suppressHydrationWarning type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} placeholder="+971 50 123 4567" className={errors.phone ? "invalid" : ""} />{errors.phone && <small>{errors.phone}</small>}</label><label>City*<input suppressHydrationWarning value={form.city} onChange={(e) => update("city", e.target.value)} className={errors.city ? "invalid" : ""} />{errors.city && <small>{errors.city}</small>}</label><label>Country*<select suppressHydrationWarning value={form.country} onChange={(e) => update("country", e.target.value)} className={errors.country ? "invalid" : ""}><option value="">Select country</option>{["United Arab Emirates", "India", "Saudi Arabia", "United Kingdom", "United States", "Singapore", "Other"].map((item) => <option key={item}>{item}</option>)}</select>{errors.country && <small>{errors.country}</small>}</label></div></fieldset>
           <fieldset><legend><span>03</span> Business Information</legend><label className="bc-group-label">Services Offered*</label><ToggleGroup options={services} selected={form.servicesOffered} onChange={(value) => update("servicesOffered", value)} />{errors.servicesOffered && <p className="bc-error">{errors.servicesOffered}</p>}<label className="bc-volume">Approximate Monthly Booking Volume*<select suppressHydrationWarning value={form.volume} onChange={(e) => update("volume", e.target.value)} className={errors.volume ? "invalid" : ""}><option value="">Select monthly volume</option>{["0–10", "11–50", "51–100", "101–500", "500+"].map((item) => <option key={item}>{item}</option>)}</select>{errors.volume && <small>{errors.volume}</small>}</label></fieldset>
           <fieldset><legend><span>04</span> Collaboration Requirements</legend><label className="bc-group-label">How would you like to collaborate with us?*</label><ToggleGroup options={collaborationTypes} selected={form.collaborationTypes} onChange={(value) => update("collaborationTypes", value)} />{errors.collaborationTypes && <p className="bc-error">{errors.collaborationTypes}</p>}<label className="bc-requirements">Additional Requirements<textarea suppressHydrationWarning rows="5" value={form.requirements} onChange={(e) => update("requirements", e.target.value)} placeholder="Tell us more about your business and what kind of collaboration you are looking for." /></label></fieldset>
-          <button suppressHydrationWarning className="bc-submit" type="submit">Submit Collaboration Request <i className="ti-arrow-right" /></button>
+          <button suppressHydrationWarning className="bc-submit" type="submit" disabled={submitting}>
+            {submitting ? "Submitting Request..." : "Submit Collaboration Request"} <i className="ti-arrow-right" />
+          </button>
         </form>
       </div></section>
     </main><SiteFooter />

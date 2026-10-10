@@ -202,6 +202,7 @@ export default function AdminPortal() {
   const [inquiries, setInquiries] = useState([]);
   const [inquiryStats, setInquiryStats] = useState({ total: 0, new: 0, contacted: 0, in_progress: 0, converted: 0, closed: 0 });
   const [inquiryFilter, setInquiryFilter] = useState("all");
+  const [inquiryCategory, setInquiryCategory] = useState("all"); // 'all' | 'standard' | 'collaboration'
 
   // Search & Filter
   const [searchTerm, setSearchTerm] = useState("");
@@ -1021,10 +1022,15 @@ export default function AdminPortal() {
 
                 {/* Inquiries Quick Status Bar */}
                 <div className="adm-kpi-grid" style={{ marginBottom: "24px" }}>
-                  <div className="adm-kpi-card" style={{ cursor: "pointer" }} onClick={() => setInquiryFilter("all")}>
+                  <div className="adm-kpi-card" style={{ cursor: "pointer" }} onClick={() => { setInquiryCategory("all"); setInquiryFilter("all"); }}>
                     <span className="adm-kpi-label">Total Inquiries</span>
                     <h3 className="adm-kpi-val">{inquiryStats.total || inquiries.length}</h3>
                     <span className="adm-kpi-sub">All inbound messages</span>
+                  </div>
+                  <div className="adm-kpi-card" style={{ cursor: "pointer", borderLeft: "4px solid #059669" }} onClick={() => setInquiryCategory(inquiryCategory === "collaboration" ? "all" : "collaboration")}>
+                    <span className="adm-kpi-label">B2B Collaborations</span>
+                    <h3 className="adm-kpi-val" style={{ color: "#059669" }}>{inquiries.filter((i) => i.isCollaboration).length}</h3>
+                    <span className="adm-kpi-sub">Business partnership requests</span>
                   </div>
                   <div className="adm-kpi-card" style={{ cursor: "pointer" }} onClick={() => setInquiryFilter("new")}>
                     <span className="adm-kpi-label">New / Unread</span>
@@ -1049,11 +1055,30 @@ export default function AdminPortal() {
                 </div>
 
                 <div className="adm-table-wrap">
+                  {/* Category Filter Tabs */}
+                  <div style={{ display: "flex", gap: "8px", marginBottom: "16px", flexWrap: "wrap", borderBottom: "1px solid #e2e8f0", paddingBottom: "12px" }}>
+                    {[
+                      ["all", `All Messages (${inquiries.length})`],
+                      ["standard", `Customer Inquiries (${inquiries.filter((i) => !i.isCollaboration).length})`],
+                      ["collaboration", `🤝 Business Collaborations (${inquiries.filter((i) => i.isCollaboration).length})`],
+                    ].map(([catKey, catLabel]) => (
+                      <button
+                        key={catKey}
+                        type="button"
+                        className={`adm-btn ${inquiryCategory === catKey ? "adm-btn-primary" : "adm-btn-secondary"}`}
+                        style={{ padding: "6px 16px", fontSize: "13px", fontWeight: "600" }}
+                        onClick={() => setInquiryCategory(catKey)}
+                      >
+                        {catLabel}
+                      </button>
+                    ))}
+                  </div>
+
                   <div className="adm-table-toolbar" style={{ flexWrap: "wrap", gap: "12px", justifyContent: "space-between" }}>
                     <input
                       type="text"
                       className="adm-search-input"
-                      placeholder="Search inquiries by customer name, email, phone, service, or message..."
+                      placeholder="Search by name, company, email, phone, service, or message..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       style={{ minWidth: "280px", flex: "1 1 280px" }}
@@ -1084,10 +1109,10 @@ export default function AdminPortal() {
                     <table className="adm-table">
                       <thead>
                         <tr>
-                          <th>Customer</th>
+                          <th>Sender / Business</th>
                           <th>Contact Info</th>
-                          <th>Service / Tour</th>
-                          <th>Customer Message</th>
+                          <th>Service / Type</th>
+                          <th>Message / Notes</th>
                           <th>Received Date</th>
                           <th>Status</th>
                           <th>Actions</th>
@@ -1096,23 +1121,45 @@ export default function AdminPortal() {
                       <tbody>
                         {inquiries
                           .filter((inq) => {
+                            if (inquiryCategory === "collaboration" && !inq.isCollaboration) return false;
+                            if (inquiryCategory === "standard" && inq.isCollaboration) return false;
                             if (inquiryFilter !== "all" && inq.status !== inquiryFilter) return false;
                             if (!searchTerm.trim()) return true;
                             const term = searchTerm.toLowerCase();
                             return (
                               inq.name?.toLowerCase().includes(term) ||
+                              inq.companyName?.toLowerCase().includes(term) ||
+                              inq.businessType?.toLowerCase().includes(term) ||
+                              inq.city?.toLowerCase().includes(term) ||
+                              inq.country?.toLowerCase().includes(term) ||
                               inq.email?.toLowerCase().includes(term) ||
                               inq.phone?.toLowerCase().includes(term) ||
                               inq.service?.toLowerCase().includes(term) ||
                               inq.message?.toLowerCase().includes(term) ||
                               inq.destination?.title?.toLowerCase().includes(term) ||
-                              inq.package?.title?.toLowerCase().includes(term)
+                              inq.package?.title?.toLowerCase().includes(term) ||
+                              inq.requestId?.toLowerCase().includes(term)
                             );
                           })
                           .map((inq) => (
                             <tr key={inq._id}>
                               <td>
                                 <strong>{inq.name}</strong>
+                                {inq.companyName && (
+                                  <div style={{ fontSize: "12px", color: "#0f2454", fontWeight: "700", marginTop: "2px" }}>
+                                    🏢 {inq.companyName}
+                                  </div>
+                                )}
+                                {inq.businessType && (
+                                  <div style={{ fontSize: "11px", color: "#64748b" }}>
+                                    {inq.businessType}{inq.city ? ` • ${inq.city}` : ""}{inq.country ? `, ${inq.country}` : ""}
+                                  </div>
+                                )}
+                                {inq.requestId && (
+                                  <div style={{ fontSize: "11px", color: "#0284c7", fontWeight: "700", marginTop: "2px" }}>
+                                    Ref: {inq.requestId}
+                                  </div>
+                                )}
                                 {inq.numberOfTravelers && (
                                   <div style={{ fontSize: "12px", color: "#64748b" }}>
                                     👥 {inq.numberOfTravelers} guest{inq.numberOfTravelers > 1 ? "s" : ""}
@@ -1134,9 +1181,20 @@ export default function AdminPortal() {
                                 )}
                               </td>
                               <td>
-                                <span className="adm-badge" style={{ background: "#f1f5f9", color: "#334155", border: "1px solid #cbd5e1", marginBottom: "4px" }}>
-                                {inq.service || "General Inquiry"}
-                                </span>
+                                {inq.isCollaboration ? (
+                                  <span className="adm-badge" style={{ background: "#ecfdf5", color: "#059669", border: "1px solid #a7f3d0", fontWeight: "700", marginBottom: "4px" }}>
+                                    🤝 B2B Collaboration
+                                  </span>
+                                ) : (
+                                  <span className="adm-badge" style={{ background: "#f1f5f9", color: "#334155", border: "1px solid #cbd5e1", marginBottom: "4px" }}>
+                                    {inq.service || "General Inquiry"}
+                                  </span>
+                                )}
+                                {inq.volume && (
+                                  <div style={{ fontSize: "11px", color: "#475569", fontWeight: "600", marginTop: "2px" }}>
+                                    📦 Vol: {inq.volume}/mo
+                                  </div>
+                                )}
                                 {(inq.destination?.title || inq.package?.title) && (
                                   <div style={{ fontSize: "12px", color: "#0f2454", fontWeight: "600" }}>
                                     📍 {inq.package?.title || inq.destination?.title}
@@ -2628,6 +2686,66 @@ export default function AdminPortal() {
                     {activeItem.package?.title || activeItem.destination?.title}
                     {activeItem.package?.price ? ` (₹${activeItem.package.price.toLocaleString("en-IN")})` : ""}
                   </div>
+                </div>
+              )}
+
+              {/* B2B Collaboration Profile Card */}
+              {activeItem.isCollaboration && (
+                <div style={{ padding: "16px", background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: "10px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                    <span style={{ fontSize: "12px", textTransform: "uppercase", color: "#166534", fontWeight: "800", letterSpacing: "0.5px" }}>
+                      🏢 B2B Collaboration Profile
+                    </span>
+                    {activeItem.requestId && (
+                      <span className="adm-badge" style={{ background: "#dcfce7", color: "#15803d", fontWeight: "700" }}>
+                        Ref: {activeItem.requestId}
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", fontSize: "13px" }}>
+                    <div>
+                      <span style={{ color: "#475569", fontSize: "11px", fontWeight: "600", display: "block" }}>Company Name</span>
+                      <strong style={{ color: "#0f2454" }}>{activeItem.companyName || "N/A"}</strong>
+                    </div>
+                    <div>
+                      <span style={{ color: "#475569", fontSize: "11px", fontWeight: "600", display: "block" }}>Business Type</span>
+                      <strong style={{ color: "#0f2454" }}>{activeItem.businessType || "N/A"}</strong>
+                    </div>
+                    <div>
+                      <span style={{ color: "#475569", fontSize: "11px", fontWeight: "600", display: "block" }}>Location</span>
+                      <span style={{ color: "#0f2454" }}>{[activeItem.city, activeItem.country].filter(Boolean).join(", ") || "N/A"}</span>
+                    </div>
+                    <div>
+                      <span style={{ color: "#475569", fontSize: "11px", fontWeight: "600", display: "block" }}>Tax / GST Number</span>
+                      <span style={{ color: "#0f2454" }}>{activeItem.gstNumber || "Not provided"}</span>
+                    </div>
+                    <div>
+                      <span style={{ color: "#475569", fontSize: "11px", fontWeight: "600", display: "block" }}>Monthly Booking Volume</span>
+                      <span style={{ color: "#0f2454", fontWeight: "700" }}>{activeItem.volume ? `${activeItem.volume} bookings / mo` : "N/A"}</span>
+                    </div>
+                    <div>
+                      <span style={{ color: "#475569", fontSize: "11px", fontWeight: "600", display: "block" }}>Services Offered</span>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "2px" }}>
+                        {(activeItem.servicesOffered || []).length ? (
+                          activeItem.servicesOffered.map((s) => (
+                            <span key={s} style={{ fontSize: "11px", background: "#ffffff", padding: "2px 6px", borderRadius: "4px", border: "1px solid #cbd5e1" }}>{s}</span>
+                          ))
+                        ) : (
+                          <span style={{ color: "#64748b" }}>None specified</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {activeItem.collaborationTypes?.length > 0 && (
+                    <div style={{ marginTop: "12px", paddingTop: "10px", borderTop: "1px solid #bbf7d0" }}>
+                      <span style={{ color: "#475569", fontSize: "11px", fontWeight: "600", display: "block", marginBottom: "4px" }}>Collaboration Modes</span>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                        {activeItem.collaborationTypes.map((c) => (
+                          <span key={c} style={{ fontSize: "11px", background: "#dcfce7", color: "#166534", padding: "3px 8px", borderRadius: "12px", fontWeight: "600" }}>{c}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 

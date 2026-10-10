@@ -233,12 +233,227 @@ async function sendInquiryNotification(inquiry) {
     return { success: true, messageId: info.messageId, recipient };
   } catch (error) {
     console.error(`[SMTP Error] Failed to send email to ${recipient}:`, error.message);
-    // Don't throw fatal error so inquiry creation succeeds even if SMTP provider rejects
+    return { success: false, error: error.message, recipient };
+  }
+}
+
+/**
+ * Build responsive HTML template for business collaboration notification emails.
+ */
+function buildCollaborationEmailHtml(data) {
+  const formattedDate = new Intl.DateTimeFormat("en-AE", {
+    timeZone: "Asia/Dubai",
+    dateStyle: "full",
+    timeStyle: "short",
+  }).format(new Date());
+
+  const companyName = data.companyName || "N/A";
+  const contactPerson = data.contactPerson || data.name || "N/A";
+  const businessType = data.businessType || "N/A";
+  const email = data.email || "N/A";
+  const phone = data.phone || "N/A";
+  const city = data.city || "N/A";
+  const country = data.country || "N/A";
+  const gstNumber = data.gstNumber || "N/A";
+  const volume = data.volume ? `${data.volume} bookings / month` : "N/A";
+  const services = Array.isArray(data.servicesOffered) && data.servicesOffered.length ? data.servicesOffered.join(", ") : (data.servicesOffered || "N/A");
+  const collaborationTypes = Array.isArray(data.collaborationTypes) && data.collaborationTypes.length ? data.collaborationTypes.join(", ") : (data.collaborationTypes || "N/A");
+  const requirements = data.requirements || data.message || "(No additional requirements provided)";
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 24px 12px; }
+    .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+    .header { background: linear-gradient(135deg, #0f2454 0%, #1e3a8a 100%); color: #ffffff; padding: 28px 32px; }
+    .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
+    .header p { margin: 6px 0 0; color: #93c5fd; font-size: 13px; }
+    .content { padding: 32px; }
+    .badge { display: inline-block; padding: 5px 12px; background: #ecfdf5; color: #059669; font-size: 11px; font-weight: 800; text-transform: uppercase; border-radius: 20px; margin-bottom: 20px; }
+    .field-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+    .field-table td { padding: 10px 14px; border-bottom: 1px solid #edf2f7; font-size: 14px; }
+    .field-label { width: 38%; color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+    .field-value { width: 62%; color: #0f2454; font-weight: 700; }
+    .field-value a { color: #2095ae; text-decoration: none; }
+    .message-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 16px 18px; margin-top: 8px; font-size: 14px; line-height: 1.6; color: #334155; white-space: pre-wrap; }
+    .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; text-align: center; }
+    .btn-primary { background: #0f2454; color: #ffffff !important; }
+    .btn-whatsapp { background: #25D366; color: #ffffff !important; }
+    .footer { background: #f8fafc; padding: 18px 32px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>New Business Collaboration Request</h1>
+      <p>Received on ${formattedDate} (Dubai Time)</p>
+    </div>
+    <div class="content">
+      <span class="badge">B2B Partnership: ${businessType}</span>
+
+      <table class="field-table">
+        <tr>
+          <td class="field-label">Company Name</td>
+          <td class="field-value">${companyName}</td>
+        </tr>
+        <tr>
+          <td class="field-label">Contact Person</td>
+          <td class="field-value">${contactPerson}</td>
+        </tr>
+        <tr>
+          <td class="field-label">Business Type</td>
+          <td class="field-value">${businessType}</td>
+        </tr>
+        <tr>
+          <td class="field-label">Tax / GST Number</td>
+          <td class="field-value">${gstNumber}</td>
+        </tr>
+        <tr>
+          <td class="field-label">Business Email</td>
+          <td class="field-value"><a href="mailto:${email}">${email}</a></td>
+        </tr>
+        <tr>
+          <td class="field-label">Phone / WhatsApp</td>
+          <td class="field-value"><a href="tel:${phone}">${phone}</a></td>
+        </tr>
+        <tr>
+          <td class="field-label">Location</td>
+          <td class="field-value">${city}, ${country}</td>
+        </tr>
+        <tr>
+          <td class="field-label">Monthly Volume</td>
+          <td class="field-value">${volume}</td>
+        </tr>
+        <tr>
+          <td class="field-label">Services Offered</td>
+          <td class="field-value">${services}</td>
+        </tr>
+        <tr>
+          <td class="field-label">Collaboration Types</td>
+          <td class="field-value">${collaborationTypes}</td>
+        </tr>
+      </table>
+
+      <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 6px;">Additional Requirements / Notes:</div>
+      <div class="message-box">${requirements}</div>
+
+      <div style="margin-top: 24px;">
+        <a href="mailto:${email}?subject=${encodeURIComponent(`Re: Business Collaboration Enquiry - ${companyName}`)}" class="btn btn-primary" style="color: #ffffff;">Reply via Email</a>
+        &nbsp;
+        <a href="https://wa.me/${String(phone).replace(/[^0-9]/g, "")}" class="btn btn-whatsapp" style="color: #ffffff;">Open in WhatsApp</a>
+      </div>
+    </div>
+    <div class="footer">
+      Karnish Tourism LLC · B2B Collaboration Portal
+    </div>
+  </div>
+</body>
+</html>
+  `;
+}
+
+/**
+ * Send an email notification when a business submits a collaboration request.
+ */
+async function sendCollaborationNotification(data) {
+  const recipient = process.env.INQUIRY_NOTIFICATION_EMAIL || DEFAULT_RECIPIENT;
+  const fromAddress = process.env.SMTP_FROM || process.env.SMTP_USER || `"Karnish Tourism B2B Desk" <noreply@karnishtourism.com>`;
+  const subject = `[New Collaboration] ${data.companyName || data.name} — ${data.businessType || "B2B Partnership"}`;
+
+  const html = buildCollaborationEmailHtml(data);
+  const text = [
+    `NEW BUSINESS COLLABORATION REQUEST - KARNISH TOURISM`,
+    `====================================================`,
+    `Company:     ${data.companyName || "N/A"}`,
+    `Contact:     ${data.contactPerson || data.name || "N/A"}`,
+    `Type:        ${data.businessType || "N/A"}`,
+    `Email:       ${data.email}`,
+    `Phone:       ${data.phone}`,
+    `Location:    ${data.city || "N/A"}, ${data.country || "N/A"}`,
+    `GST/Tax ID:  ${data.gstNumber || "N/A"}`,
+    `Volume:      ${data.volume || "N/A"} bookings/month`,
+    `Services:    ${Array.isArray(data.servicesOffered) ? data.servicesOffered.join(", ") : data.servicesOffered || "N/A"}`,
+    `Collab Mode: ${Array.isArray(data.collaborationTypes) ? data.collaborationTypes.join(", ") : data.collaborationTypes || "N/A"}`,
+    `Date:        ${new Date().toISOString()}`,
+    ``,
+    `Requirements:`,
+    `${data.requirements || data.message || "(None provided)"}`,
+    `====================================================`,
+  ].join("\n");
+
+  // 1. Brevo HTTP API (Uses Port 443 - Bypasses Render firewall which blocks SMTP ports 587/465)
+  const brevoApiKey = (process.env.BREVO_API_KEY || "").trim();
+  if (brevoApiKey) {
+    try {
+      const senderEmail = (process.env.BREVO_SENDER_EMAIL || process.env.SMTP_USER || "info@karnishtourism.com").trim();
+      const senderName = process.env.BREVO_SENDER_NAME || "Karnish Tourism B2B Desk";
+
+      const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+          "api-key": brevoApiKey,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          sender: { name: senderName, email: senderEmail },
+          to: [{ email: recipient }],
+          replyTo: data.email ? { email: data.email, name: data.contactPerson || data.name } : undefined,
+          subject,
+          htmlContent: html,
+          textContent: text,
+        }),
+      });
+
+      const brevoData = await brevoRes.json().catch(() => ({}));
+      if (brevoRes.ok) {
+        console.log(`[Brevo API] Collaboration email successfully dispatched to ${recipient} (ID: ${brevoData.messageId})`);
+        return { success: true, messageId: brevoData.messageId, recipient, provider: "brevo" };
+      } else {
+        console.error(`[Brevo API Error]:`, brevoData);
+      }
+    } catch (err) {
+      console.error(`[Brevo Fetch Error]:`, err.message);
+    }
+  }
+
+  // 2. Standard Nodemailer SMTP fallback
+  const transporter = getTransporter();
+
+  if (!transporter) {
+    console.log(`\n======================================================`);
+    console.log(`[Collaboration Email Simulated]`);
+    console.log(`To:      ${recipient}`);
+    console.log(`Subject: ${subject}`);
+    console.log(`Company: ${data.companyName} (${data.email}, ${data.phone})`);
+    console.log(`Type:    ${data.businessType}`);
+    console.log(`======================================================\n`);
+    return { success: true, simulated: true, recipient };
+  }
+
+  try {
+    const info = await transporter.sendMail({
+      from: fromAddress,
+      to: recipient,
+      replyTo: data.email,
+      subject,
+      text,
+      html,
+    });
+
+    console.log(`[SMTP] Collaboration email successfully dispatched to ${recipient} (ID: ${info.messageId})`);
+    return { success: true, messageId: info.messageId, recipient };
+  } catch (error) {
+    console.error(`[SMTP Error] Failed to send email to ${recipient}:`, error.message);
     return { success: false, error: error.message, recipient };
   }
 }
 
 module.exports = {
   sendInquiryNotification,
+  sendCollaborationNotification,
   DEFAULT_RECIPIENT,
 };
