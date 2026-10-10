@@ -163,6 +163,43 @@ async function sendInquiryNotification(inquiry) {
     `=====================================`,
   ].join("\n");
 
+  // 1. Brevo HTTP API (Uses Port 443 - Bypasses Render firewall which blocks SMTP ports 587/465)
+  const brevoApiKey = (process.env.BREVO_API_KEY || "").trim();
+  if (brevoApiKey) {
+    try {
+      const senderEmail = (process.env.BREVO_SENDER_EMAIL || process.env.SMTP_USER || "info@karnishtourism.com").trim();
+      const senderName = process.env.BREVO_SENDER_NAME || "Karnish Tourism";
+
+      const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+          "api-key": brevoApiKey,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          sender: { name: senderName, email: senderEmail },
+          to: [{ email: recipient }],
+          replyTo: inquiry.email ? { email: inquiry.email, name: inquiry.name } : undefined,
+          subject,
+          htmlContent: html,
+          textContent: text,
+        }),
+      });
+
+      const brevoData = await brevoRes.json().catch(() => ({}));
+      if (brevoRes.ok) {
+        console.log(`[Brevo API] Inquiry email successfully dispatched to ${recipient} (ID: ${brevoData.messageId})`);
+        return { success: true, messageId: brevoData.messageId, recipient, provider: "brevo" };
+      } else {
+        console.error(`[Brevo API Error]:`, brevoData);
+      }
+    } catch (err) {
+      console.error(`[Brevo Fetch Error]:`, err.message);
+    }
+  }
+
+  // 2. Standard Nodemailer SMTP (Local dev or unblocked servers)
   const transporter = getTransporter();
 
   if (!transporter) {
